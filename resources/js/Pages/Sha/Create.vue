@@ -1,0 +1,90 @@
+<template>
+    <Navbar />
+    <main class="py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <div>Tambah Sha'</div>
+                        </div>
+                        <div class="card-body">
+                            <form @submit.prevent="submit()">
+                                <div class="mb-3">
+                                    <label for="makanan-pokok" class="form-label">Nama Sha'</label>
+                                    <input type="text" class="form-control" v-model="sha.nama" id="makanan-pokok" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="harga" class="form-label">Nominal</label>
+                                    <input type="text" v-on:keypress="NumbersOnly" class="form-control" v-model="sha.harga" id="harga" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <Footer />
+</template>
+<script>
+import Navbar from '../Components/Navbar.vue'
+import Footer from '../Components/Footer.vue'
+import axios from 'axios';
+import Swal from 'sweetalert2'
+import { reactive } from "vue";
+import { router } from '@inertiajs/vue3'
+
+export default {
+    components: { Navbar, Footer },
+    props: {
+        errors: Object
+    },
+    setup() {
+        const sha = reactive({
+            nama: '',
+            harga: ''
+        })
+
+        function submit(){
+            axios.post('/sha', {
+                nama: sha.nama,
+                harga: sha.harga
+            })
+            .then((res) => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: res.data.message
+                })
+
+                return router.get('/sha')
+            })
+            .catch((err) => {
+                return Swal.fire({
+                    icon: 'error',
+                    titel: 'error',
+                    text: 'simpan data gagal'
+                })
+            })
+        }
+
+        function NumbersOnly(evt) {
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+                evt.preventDefault();
+            } else {
+                return true;
+            }
+        }
+
+        return {
+            submit,
+            NumbersOnly,
+            sha
+        }
+    },
+}
+</script>

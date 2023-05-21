@@ -1,0 +1,127 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Sha;
+use App\Models\Zakat;
+//use Barryvdh\DomPDF\PDF;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
+use PDF;
+
+class ZakatLaporanController extends Controller
+{
+    public function index(){
+        return Inertia::render('Zakat/Laporan/Index');
+    }
+
+    public function generateLaporan(Request $request){
+        if($request->filled('bulan')){
+            if(Zakat::where('bulan', $request->bulan)->exists()){
+                $zakatFitrahUang = $this->formatRp((int)Zakat::where([
+                    ['bulan', '=', $request->bulan],
+                    ['jenis_zakat', '=', 'Zakat Fitrah']
+                ])->sum('nominal'));
+                $zakatFitrahBeras = Zakat::where([
+                    ['bulan', '=', $request->bulan],
+                    ['jenis_zakat', '=', 'Zakat Fitrah']
+                ])->sum('berat_beras');
+                $muzakkiFitrahUang = Zakat::where([
+                    ['bulan', '=', $request->bulan],
+                    ['jenis_zakat', '=', 'Zakat Fitrah'],
+                    ['sha_id', '=', 2]
+                ])->count();
+                $muzakkiFitrahBeras = Zakat::where([
+                    ['bulan', '=', $request->bulan],
+                    ['jenis_zakat', '=', 'Zakat Fitrah'],
+                    ['sha_id', '=', 1]
+                ])->count();
+                $zakatMaal = $this->formatRp(Zakat::where([
+                    ['bulan', '=', $request->bulan],
+                    ['jenis_zakat', '=', 'Zakat Maal'],
+                ])->sum('nominal'));
+                $muzakkiZakatMaal = Zakat::where([
+                    ['bulan', '=', $request->bulan],
+                    ['jenis_zakat', '=', 'Zakat Maal']
+                ])->count();
+                $totalMuzakki = Zakat::where('bulan', $request->bulan)->count();
+                $totalSaldoUang = $this->formatRp((int)Zakat::where('bulan', $request->bulan)->sum('nominal'));
+                $totalSaldoBeras = $this->formatRp((int)Zakat::where('bulan', $request->bulan)->sum('berat_beras'));
+            }
+            else{
+                return redirect()->route('zakat.laporan')->with('message', 'Data Tidak Ditemukan');
+            }
+        }
+        else{
+            $zakatFitrahUang = $this->formatRp((int)Zakat::where('jenis_zakat', 'Zakat Fitrah')->sum('nominal'));
+            $zakatFitrahBeras = Zakat::where('jenis_zakat', 'Zakat Fitrah')->sum('berat_beras');
+            $muzakkiFitrahUang = Zakat::where([
+                ['jenis_zakat', '=', 'Zakat Fitrah'],
+                ['sha_id', '=', 2]
+            ])->count();
+            $muzakkiFitrahBeras = Zakat::where([
+                ['jenis_zakat', '=', 'Zakat Fitrah'],
+                ['sha_id', '=', 1]
+            ])->count();
+            $zakatMaal = $this->formatRp((int)Zakat::where('jenis_zakat', 'Zakat Maal')->sum('nominal'));
+            $muzakkiZakatMaal = Zakat::where('jenis_zakat', 'Zakat Maal')->count();
+            $totalMuzakki = Zakat::count();
+            $totalSaldoUang = $this->formatRp((int)Zakat::sum('nominal'));
+            $totalSaldoBeras = Zakat::sum('berat_beras');
+        }
+
+        $date = date("d").' '.$this->setMonth((int)date("m")-1).' '.date("Y");
+        $bulan = $request->bulan;
+
+        $pdf = PDF::loadview('report/Zakat/index', compact(
+            'zakatFitrahUang',
+            'zakatFitrahBeras',
+            'muzakkiFitrahUang',
+            'muzakkiFitrahBeras',
+            'zakatMaal',
+            'muzakkiZakatMaal',
+            'totalMuzakki',
+            'totalSaldoUang',
+            'totalSaldoBeras',
+            'date',
+            'bulan'
+        ));
+    	
+        return $pdf->stream("laporan_zakat.pdf", array("Attachment" => false));
+        // $query = $this->getQuery();
+        // if($query->exists()){
+
+        //     $zakatFitrahUang = $this->formatRp((int)$query->sum('nominal'));
+        //     $totalSaldo = $this->formatRp((int)$query->sum('nominal'));
+        //     $totalBeratBeras = $query->sum('berat_beras');
+
+        //     $pdf = PDF::loadview('report/Zakat/index', compact('zakatFitrahUang', 'totalSaldo', 'totalBeratBeras'));
+    	//     return $pdf->stream("laporan_zakat.pdf", array("Attachment" => false));
+        // }
+        // else{
+        //     return back()->with('message', 'Data Tidak Ditemukan');
+        // }
+    }
+
+    // private function getQuery(){
+    //     $queryString = DB::table('zakat');
+
+    //     //dd(request()->bulan);
+    //     if(request()->filled('bulan')){
+    //         $queryString->where('bulan', request()->bulan);
+    //     }
+
+    //     return $queryString;
+    // }
+
+    private function formatRp($angka){
+        $hasil_rupiah = "Rp " . number_format($angka,0,',','.');
+        return $hasil_rupiah;
+    }
+
+    private function setMonth($num){
+        $month = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+        return $month[$num];
+    }
+}
