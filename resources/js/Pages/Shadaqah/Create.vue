@@ -1,4 +1,5 @@
 <template>
+    <Head title="Tambah Shadaqah" />
     <Navbar />
     <main class="py-5">
         <div class="container">
@@ -66,11 +67,11 @@ import Navbar from '../Components/Navbar.vue';
 import Footer from '../Components/Footer.vue';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import { router } from '@inertiajs/vue3'
+import { router, Head } from '@inertiajs/vue3'
 import { reactive, ref } from 'vue';
 
 export default{
-    components: { Navbar, Footer },
+    components: { Navbar, Footer, Head },
     setup(){
         const form = reactive({
             nama_donatur: '',
@@ -112,11 +113,6 @@ export default{
                 router.get('/shadaqah')
             })
             .catch((err) => {
-                // Swal.fire({
-                //     icon: 'error',
-                //     title: err.data.title,
-                //     text: err.data.text
-                // })
                 validation.value = err.response.data.errors
             })
         }

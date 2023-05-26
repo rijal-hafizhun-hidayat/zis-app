@@ -1,4 +1,5 @@
 <template>
+    <Head title="Pengeluaran" />
     <Navbar />
     <main class="py-5">
         <div class="container">
@@ -74,13 +75,13 @@
 import Navbar from '../Components/Navbar.vue';
 import Footer from '../Components/Footer.vue';
 import Modal from '../Components/Modal.vue';
-import { Link, router } from '@inertiajs/vue3';
+import { Link, router, Head } from '@inertiajs/vue3';
 import moment from 'moment';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { ref, computed } from 'vue'
 export default{
-    components: { Navbar, Footer, Link, Modal },
+    components: { Navbar, Footer, Link, Modal, Head },
     props: {
         pengeluarans: Object,
         total: Number,

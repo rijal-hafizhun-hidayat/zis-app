@@ -20,8 +20,8 @@ class ZakatController extends Controller
     public function index(){
         $zakats = DB::table('zakat')
             ->join('sha', 'zakat.sha_id', '=', 'sha.id')
-            ->select('zakat.id', 'zakat.nama_donatur', 'zakat.nomor_hp', 'zakat.jenis_zakat', 'sha.nama', 'zakat.berat_beras', 'zakat.jumlah', 'zakat.nominal', 'zakat.bukti_pembayaran', 'zakat.confirmed', 'zakat.created_at', 'zakat.updated_at')
-            ->latest()
+            ->select('zakat.id', 'zakat.nama_donatur', 'zakat.nomor_hp', 'zakat.jenis_zakat', 'sha.nama', 'zakat.berat_beras', 'zakat.jumlah', 'zakat.nominal', 'zakat.bukti_pembayaran', 'zakat.confirmed', 'zakat.created_at AS waktu_zakat', 'zakat.updated_at')
+            ->latest('waktu_zakat')
             ->get();
         //dd($zakats);
 
@@ -51,8 +51,6 @@ class ZakatController extends Controller
 
         //dd($credential);
 
-        $credential['bulan'] = $this->setMonth($credential['bulan']);
-
         Zakat::create($credential);
 
         return $this->responseApi(true, 'Berhasil', 'berhasil tambah data', 200);
@@ -60,8 +58,6 @@ class ZakatController extends Controller
 
     public function update(Request $request, $id){
         $credential = $this->hasImage();
-
-        //dd($credential);
 
         if($request->hasFile('bukti_pembayaran')){
             $this->destroyImage($id);
@@ -155,7 +151,7 @@ class ZakatController extends Controller
                 'jenis_zakat' => 'required|string',
                 'sha_id' => 'required|numeric',
                 'berat_beras' => 'nullable|decimal:0,2',
-                'jumlah' => 'required|numeric',
+                'jumlah' => 'nullable|numeric',
                 'nominal' => 'nullable|numeric',
                 'bulan' => 'numeric',
                 'bukti_pembayaran' => 'mimes:jpg,jpeg,png',
@@ -172,21 +168,30 @@ class ZakatController extends Controller
                 'jenis_zakat' => 'required|string',
                 'sha_id' => 'required|numeric',
                 'berat_beras' => 'nullable|decimal:0,2',
-                'jumlah' => 'required|numeric',
+                'jumlah' => 'nullable|numeric',
                 'nominal' => 'nullable|numeric',
                 'bulan' => 'numeric',
                 'confirmed' => 'required|numeric|max_digits:1'
             ]);
         }
 
-        // if($credential['jenis_zakat'] == 'Zakat Maal'){
-        //     $credential['berat_beras'] = null;
-        //     $credential['jumlah'] = null;
-        // }
+        $credential['bulan'] = $this->setMonth($credential['bulan']);
 
-        // if($credential['sha_id'] == 2){
-        //     $credential['berat_beras'] = null;
-        // }
+        return $this->setForm($credential);
+    }
+
+    private function setForm($credential){
+        if($credential['jenis_zakat'] == 'Zakat Maal'){
+            $credential['sha_id'] = 2;
+            $credential['jumlah'] = null;
+            $credential['berat_beras'] = null;
+        }
+        else if($credential['jenis_zakat'] == 'Zakat Fitrah' && $credential['sha_id'] == 1){
+            $credential['nominal'] = null;
+        }
+        else if($credential['jenis_zakat'] == 'Zakat Fitrah' && $credential['sha_id'] == 2){
+            $credential['berat_beras'] = null;
+        }
 
         return $credential;
     }

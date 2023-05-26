@@ -89,31 +89,7 @@ class ZakatLaporanController extends Controller
         ));
     	
         return $pdf->stream("laporan_zakat.pdf", array("Attachment" => false));
-        // $query = $this->getQuery();
-        // if($query->exists()){
-
-        //     $zakatFitrahUang = $this->formatRp((int)$query->sum('nominal'));
-        //     $totalSaldo = $this->formatRp((int)$query->sum('nominal'));
-        //     $totalBeratBeras = $query->sum('berat_beras');
-
-        //     $pdf = PDF::loadview('report/Zakat/index', compact('zakatFitrahUang', 'totalSaldo', 'totalBeratBeras'));
-    	//     return $pdf->stream("laporan_zakat.pdf", array("Attachment" => false));
-        // }
-        // else{
-        //     return back()->with('message', 'Data Tidak Ditemukan');
-        // }
     }
-
-    // private function getQuery(){
-    //     $queryString = DB::table('zakat');
-
-    //     //dd(request()->bulan);
-    //     if(request()->filled('bulan')){
-    //         $queryString->where('bulan', request()->bulan);
-    //     }
-
-    //     return $queryString;
-    // }
 
     private function formatRp($angka){
         $hasil_rupiah = "Rp " . number_format($angka,0,',','.');

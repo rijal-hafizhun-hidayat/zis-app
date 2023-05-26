@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('nomor_hp');
             $table->integer('sha_id');
             $table->decimal('berat_beras', $precision = 8, $scale = 1)->nullable();
-            $table->integer('jumlah');
+            $table->integer('jumlah')->nullable();
             $table->bigInteger('nominal')->nullable();
             $table->string('bulan');
             $table->text('bukti_pembayaran')->nullable();

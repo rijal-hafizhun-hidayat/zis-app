@@ -47,7 +47,7 @@ export default{
 
     /* DEKSTOP CSS */
     @media (min-width: 992px) {
-        li{
+        li .nav-link{
             cursor: pointer;
         }
         
@@ -84,6 +84,10 @@ export default{
     @media (max-width: 992px) {
         nav{
             background-color: white !important;
+        }
+
+        li .nav-link{
+            cursor: pointer;
         }
 
         .img-fluid{

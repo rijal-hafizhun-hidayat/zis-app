@@ -1,4 +1,5 @@
 <template>
+    <Head title="Edit Shadaqah" />
     <Navbar />
     <main class="py-5">
         <div class="container">
@@ -75,9 +76,9 @@ import Modal from '../Components/Modal.vue';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { reactive, ref } from 'vue';
-import { router } from '@inertiajs/vue3'
+import { router, Head } from '@inertiajs/vue3'
 export default{
-    components: { Navbar, Footer, Modal },
+    components: { Navbar, Footer, Modal, Head },
     props: {
         shadaqah: Object
     },
@@ -87,7 +88,7 @@ export default{
             nama_donatur: props.shadaqah.nama_donatur,
             nomor_hp: props.shadaqah.nomor_hp,
             jenis_bantuan: props.shadaqah.jenis_bantuan,
-            keterangan: props.shadaqah.keterangan,
+            keterangan: props.shadaqah.keterangan == null ? '' : props.shadaqah.keterangan,
             nominal: props.shadaqah.nominal,
             old_bukti_pembayaran: props.shadaqah.bukti_pembayaran,
             new_bukti_pembayaran: '',

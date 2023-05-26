@@ -45,6 +45,17 @@ class AuthController extends Controller
  
         $request->session()->regenerateToken();
 
-        return response()->json(true, 404);
+        return $this->responseApi(true, 'berhasil', 'berhasil logout', 200);
+    }
+
+    private function responseApi($status, $title, $text, $code){
+        $response = [
+            'status' => $status,
+            'title' => $title,
+            'text' => $text,
+            'code' => $code
+        ];
+
+        return response()->json($response, $code);
     }
 }

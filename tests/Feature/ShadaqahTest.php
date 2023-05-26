@@ -14,12 +14,6 @@ class ShadaqahTest extends TestCase
     /**
      * A basic feature test example.
      */
-    public function test_example(): void
-    {
-        $response = $this->get('/');
-
-        $response->assertStatus(200);
-    }
 
     public function test_get_shadaqah_page(): void{
         $user = User::create([
@@ -180,13 +174,16 @@ class ShadaqahTest extends TestCase
             'nominal' => $shadaqah->nominal,
             'bukti_pembayaran' => $shadaqah->bukti_pembayaran,
             'confirmed' => $shadaqah->confirmed
-        ])->assertOk();
+        ]);
+
+        $this->assertDatabaseHas('shadaqah', [
+            'nama_donatur' => 'hafizhun',
+            'nomor_hp' => 628139378414
+        ]);
     }
 
     public function test_store_image_shadaqah(): void{
         $shadaqah = Shadaqah::factory()->create();
-
-        //dd($shadaqah->id, $shadaqah->nama_donatur);
 
         $this->withSession([
             'isLogin' => true,
@@ -219,12 +216,16 @@ class ShadaqahTest extends TestCase
         $this->put(route('shadaqah.confirmed', ['id' => $shadaqah->id]), [
             'confirmed' => 1
         ])->assertOk();
+
+        $this->assertDatabaseHas('shadaqah', [
+            'confirmed' => 1
+        ]);
     }
 
     public function test_validation_upload_image(): void{
         $shadaqah = Shadaqah::factory()->make();
 
-        $this->withSession([
+        $response = $this->withSession([
             'isLogin' => true,
             'role' => 1
         ])->post(route('shadaqah.store'), [
@@ -236,6 +237,24 @@ class ShadaqahTest extends TestCase
             'nominal' => $shadaqah->nominal,
             'bukti_pembayaran' => $shadaqah->bukti_pembayaran,
             'confirmed' => $shadaqah->confirmed
-        ])->assertOk();
+        ]);
+
+        $response->assertOk();
+    }
+
+    public function test_cetak_laporan_shadaqah(): void{
+        $user = User::create([
+            'name' => 'admin',
+            'username' => 'admin',
+            'password' => '$2y$10$tnj4cSkso6MebjPHD.S8Me4U1EA9hH0vWvZUKCPcamR2InWVa1gmW',
+            'role' => 1
+        ]);
+
+        $response = $this->actingAs($user)->withSession([
+            'isLogin' => true,
+            'role' => $user->role
+        ])->post(route('shadaqah.laporan'));
+
+        $response->assertOk();
     }
 }

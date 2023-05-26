@@ -146,14 +146,14 @@ Route::middleware(['isLogin'])->group(function() {
     //API ZAKAT
     Route::post('/zakat', [ZakatController::class, 'store'])->name('zakat.store');
     Route::delete('/zakat/{id}', [ZakatController::class, 'destroy'])->name('zakat.destroy');
-    Route::post('/zakat/{id}', [ZakatController::class, 'update'])->name('zakat.update');
+    Route::put('/zakat/{id}', [ZakatController::class, 'update'])->name('zakat.update');
     Route::put('/zakat/confirmed/{id}', [ZakatController::class, 'confirmed'])->name('zakat.confirmed');
     Route::get('/getNominalSha/{id}', [ZakatController::class, 'getNominalSha'])->name('getNominalSha');
 
     //API PENGELUARAN
     Route::post('/pengeluaran', [PengeluaranController::class, 'store'])->name('pengeluaran.store');
     Route::delete('/pengeluaran/{id}', [PengeluaranController::class, 'destroy'])->name('pengeluaran.destroy');
-    Route::post('/pengeluaran/{id}', [PengeluaranController::class, 'update'])->name('pengeluaran.update');
+    Route::put('/pengeluaran/{id}', [PengeluaranController::class, 'update'])->name('pengeluaran.update');
     Route::put('/pengeluaran/confirmed/{id}', [PengeluaranController::class, 'confirmed'])->name('pengeluaran.confirmed');
 });
 

@@ -1,4 +1,5 @@
 <template>
+    <Head title="Edit Infaq" />
     <Navbar />
     <main class="py-5">
         <div class="container">
@@ -68,10 +69,10 @@ import Modal from '../Components/Modal.vue';
 import { reactive, ref } from 'vue';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import { router } from '@inertiajs/vue3'
+import { router, Head } from '@inertiajs/vue3'
 
 export default {
-    components: { Navbar, Footer, Modal, Modal },
+    components: { Navbar, Footer, Modal, Modal, Head },
     props: {
         infaq: Object
     },

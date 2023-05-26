@@ -1,4 +1,5 @@
 <template>
+    <Head title="Donasi" />
     <NavBar />
     <Jumbotron />
     <Content />
@@ -13,8 +14,9 @@ import Footer from '../Home/Components/Footer.vue';
 import Jumbotron from './Components/Jumbotron.vue';
 import Content from './Components/Content.vue'
 import Donasi from './Components/Donasi.vue'
+import { Head } from '@inertiajs/vue3'
 export default{
-    components: { NavBar, Footer, Jumbotron, Content, Donasi }
+    components: { NavBar, Footer, Jumbotron, Content, Donasi, Head }
 }
 </script>
 <style scoped>

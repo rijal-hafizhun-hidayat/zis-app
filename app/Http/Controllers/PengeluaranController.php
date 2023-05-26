@@ -33,8 +33,6 @@ class PengeluaranController extends Controller
 
         $credential['bulan'] = $this->setMonth($credential['bulan']);
 
-        //dd($credential);
-
         Pengeluaran::create($credential);
 
         return $this->responseApi(true, 'Berhasil', 'berhasil tambah data', 200);
@@ -46,19 +44,11 @@ class PengeluaranController extends Controller
         Pengeluaran::destroy($id);
 
         return $this->responseApi(true, 'Berhasil', 'berhasil hapus data', 200);
-        // if($this->destroyImage($id)){
-            
-        // }
-        // else{
-        //     return $this->responseApi(false, 'Gagal', 'Bukti Pembayaran Tidak Ditemukan di Database', 400);
-        // }
     }
 
     public function update(Request $request, $id){
 
         $credential = $this->hasImage();
-
-        //dd($credential);
 
         if($request->hasFile('bukti_pengeluaran')){
             $this->destroyImage($id);
@@ -151,7 +141,6 @@ class PengeluaranController extends Controller
     private function setForm($credential){
         if($credential['jenis_dana'] == 'Infaq' || $credential['jenis_dana'] == 'Shadaqah'){
             $credential['nama_organisasi'] = null;
-            //return $credential;
         }
 
         return $credential;

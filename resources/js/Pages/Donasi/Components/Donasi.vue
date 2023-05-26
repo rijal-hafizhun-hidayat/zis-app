@@ -64,7 +64,7 @@
                 
                 <div class="mt-4">
                     <label for="buktiDonasi" class="form-label">Upload Bukti Pengiriman Donasi Anda: </label>
-                    <input type="file" @input="donasi.bukti_donasi = $event.target.files[0]" class="ms-3" name="bukti_donasi" id="buktiDonasi" :class="{ 'is-invalid': validation.bukti_donasi }">
+                    <input type="file" @input="donasi.bukti_donasi = $event.target.files[0]" class="ms-3" name="bukti_donasi" accept="image/*" id="buktiDonasi" :class="{ 'is-invalid': validation.bukti_donasi }">
                     <div v-if="validation.bukti_donasi" class="invalid-feedback">
                         {{ validation.bukti_donasi[0] }}
                     </div>
@@ -84,7 +84,7 @@ export default{
     },
     setup(){
         const donasi = reactive({
-            nama_donasi: '',
+            nama_donatur: '',
             nomor_hp: '',
             jenis_donasi: '',
             satuan: '',

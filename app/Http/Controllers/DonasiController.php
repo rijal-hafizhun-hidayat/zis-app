@@ -19,7 +19,11 @@ class DonasiController extends Controller
     public function getDonasi(){
         $response = [
             'status' => true,
-            'data' => Pengeluaran::where('jenis_dana', 'Zakat')->latest()->get(),
+            'data' => [
+                'zakat' => Pengeluaran::where('jenis_dana', 'Zakat')->latest()->get(),
+                'infaq' => Pengeluaran::where('jenis_dana', 'Infaq')->latest()->get(),
+                'shadaqah' => Pengeluaran::where('jenis_dana', 'Shadaqah')->latest()->get()
+            ],
             'code' => 200,
         ];
 
@@ -27,6 +31,7 @@ class DonasiController extends Controller
     }
 
     public function store(){
+        // dd(request()->file('nama_donatur'));
         $credential = $this->formRequest();
 
         if($credential['jenis_donasi'] == 'Zakat Fitrah' || $credential['jenis_donasi'] == 'Zakat Maal'){
@@ -132,18 +137,18 @@ class DonasiController extends Controller
             'berat_beras' => 'nullable|decimal:0,2',
             'bulan' => 'required|numeric',
             'metode_pembayaran' => 'required|string',
-            'bukti_donasi' => 'required|mimes:jpg,jpeg,png',
+            'bukti_donasi' => 'required|image',
             'confirmed' => 'required|numeric'
         ]);
 
         if($credential['jenis_donasi'] == 'Zakat Fitrah' || $credential['jenis_donasi'] == 'Zakat Maal'){
-            $path = 'Zakat';
+            $path = 'Zakat/';
         }
         else if($credential['jenis_donasi'] == 'Infaq'){
-            $path = 'Infaq';
+            $path = 'Infaq/';
         }
         else if($credential['jenis_donasi'] == 'Shadaqah'){
-            $path = 'Shadaqah';
+            $path = 'Shadaqah/';
         }
 
         $credential['bukti_donasi'] = $this->storeImage($path);

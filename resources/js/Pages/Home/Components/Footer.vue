@@ -22,16 +22,9 @@
 </template>
 
 <style scoped>
-    /* .row{
-        margin-top: 100px;
-    } */
-    /* .col-sm-6{
-        margin-top: 150px;
-    }
 
-    .col-sm-3{
-        margin-top: 150px;
-    } */
+/* DEKSTOP CSS */
+@media (min-width: 992px){
     .row{
         padding-bottom: 30px;
     }
@@ -42,7 +35,8 @@
     }
     
     img{
-        max-width:none}
+        max-width:none
+    }
 
     .col-sm-3 .group-p{
         margin-top: 50px;
@@ -56,5 +50,31 @@
         margin-top: 50px;
         color: #737373;
     }
+}
+
+/* MOBILE CSS */
+@media (max-width: 992px){
+    img{
+        width: 200px;
+    }
+    .col-sm-3 h1{
+        margin-top: 30px;
+    }
+    .col-sm-3 .group-p{
+        margin-top: 30px;
+        color: #737373;
+    }
+
+    .col-sm-4 p{
+        margin-top: 20px;
+        color: #737373;
+    }
+    .col-sm-5{
+        padding-bottom: 20px;
+    }
+    .col-sm-5 h1{
+        margin-top: 20px;
+    }
+}
 
 </style>

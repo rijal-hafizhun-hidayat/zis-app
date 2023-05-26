@@ -1,4 +1,5 @@
 <template>
+    <Head title="Edit Zakat" />
     <Navbar />
     <main class="py-5">
         <div class="container">
@@ -68,11 +69,11 @@ import Navbar from '../Components/Navbar.vue';
 import Footer from '../Components/Footer.vue';
 import Modal from '../Components/Modal.vue';
 import { reactive } from 'vue';
-import { router } from '@inertiajs/vue3'
+import { router, Head } from '@inertiajs/vue3'
 import axios from 'axios';
 import Swal from 'sweetalert2';
 export default{
-    components: { Navbar, Footer, Modal },
+    components: { Navbar, Footer, Modal, Head },
     props: {
         zakat: Object,
         shas: Object
@@ -93,20 +94,8 @@ export default{
         })
 
         function submit(){
-            
-            setForm()
 
-            axios.post(`/zakat/${props.zakat.id}`,{
-                nama_donatur: zakat.nama_donatur,
-                nomor_hp: zakat.nomor_hp,
-                jenis_zakat: zakat.jenis_zakat,
-                sha_id: zakat.sha_id,
-                jumlah: zakat.jumlah,
-                berat_beras: zakat.berat_beras,
-                nominal: zakat.nominal,
-                bukti_pembayaran: zakat.new_bukti_pembayaran,
-                confirmed: zakat.confirmed
-            } ,{
+            axios.post(`/zakat/${props.zakat.id}`,dataAppend() ,{
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -165,14 +154,11 @@ export default{
             let data = new FormData();
             
             data.append('nama_donatur', zakat.nama_donatur)
+            data.append('nomor_hp', zakat.nomor_hp)
             data.append('jenis_zakat', zakat.jenis_zakat)
             data.append('sha_id', zakat.sha_id)
-
-            if(zakat.jenis_zakat == 'Zakat Fitrah' && zakat.sha_id == 1){
-                data.append('jumlah', zakat.jumlah)
-                data.append('berat_beras', zakat.berat_beras)
-            }
-
+            data.append('jumlah', zakat.jumlah)
+            data.append('berat_beras', zakat.berat_beras)
             data.append('nominal', zakat.nominal)
             data.append('bukti_pembayaran', zakat.new_bukti_pembayaran)
             data.append('confirmed', zakat.confirmed)
@@ -182,14 +168,6 @@ export default{
             return data;
         }
 
-        function setForm(){
-            if(zakat.jenis_zakat == 'Zakat Maal'){
-                zakat.sha_id = 2
-                zakat.berat_beras = '',
-                zakat.jumlah = ''
-            }
-        }
-
         return {
             zakat,
             submit,
@@ -197,8 +175,7 @@ export default{
             NumbersOnly,
             setTotalNominal,
             setBeratBeras,
-            dataAppend,
-            setForm
+            dataAppend
         }
     }
 }

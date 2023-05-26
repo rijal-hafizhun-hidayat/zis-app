@@ -2,19 +2,20 @@
 
 namespace Tests\Feature;
 
-use App\Models\Infaq;
+use App\Models\Sha;
 use App\Models\User;
+use App\Models\Zakat;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class InfaqTest extends TestCase
+class ZakatTest extends TestCase
 {
     use RefreshDatabase;
     /**
      * A basic feature test example.
      */
-    public function test_get_infaq_page(): void
+    public function test_get_zakat_page(): void
     {
         $user = User::create([
             'name' => 'admin',
@@ -22,22 +23,22 @@ class InfaqTest extends TestCase
             'password' => '$2y$10$tnj4cSkso6MebjPHD.S8Me4U1EA9hH0vWvZUKCPcamR2InWVa1gmW',
             'role' => 1
         ]);
-
+        
         $response = $this->actingAs($user)->withSession([
             'isLogin' => true,
             'role' => $user->role
-        ])->get('/infaq');
+        ])->get(route('zakat'));
 
         $response->assertOk();
     }
 
-    public function test_get_infaq_page_not_authenticade(): void{
-        $response = $this->get(route('infaq'));
+    public function test_get_zakat_page_if_not_authenticate(): void{
+        $response = $this->get(route('zakat'));
 
         $response->assertFound();
     }
 
-    public function test_store_infaq(): void{
+    public function test_store_zakat(): void{
         $user = User::create([
             'name' => 'admin',
             'username' => 'admin',
@@ -48,12 +49,15 @@ class InfaqTest extends TestCase
         $response = $this->actingAs($user)->withSession([
             'isLogin' => true,
             'role' => $user->role
-        ])->post(route('infaq.store'), [
+        ])->post(route('zakat.store'), [
             'nama_donatur' => 'rijal hafizhun hidayat',
+            'jenis_zakat' => 'Zakat Fitrah',
             'nomor_hp' => 628139378414,
-            'metode_pembayaran' => 'Rekening',
-            'nominal' => 34000,
-            'bulan' => 5,
+            'sha_id' => 1,
+            'berat_beras' => 4.5,
+            'jumlah' => 1,
+            'nominal' => '',
+            'bulan' => 3,
             'bukti_pembayaran' => '',
             'confirmed' => 0
         ]);
@@ -61,7 +65,7 @@ class InfaqTest extends TestCase
         $response->assertOk();
     }
 
-    public function test_validation_store_infaq(): void{
+    public function test_validation_store_zakat(): void{
         $user = User::create([
             'name' => 'admin',
             'username' => 'admin',
@@ -72,12 +76,15 @@ class InfaqTest extends TestCase
         $response = $this->actingAs($user)->withSession([
             'isLogin' => true,
             'role' => $user->role
-        ])->post(route('infaq.store'), [
+        ])->post(route('zakat.store'), [
             'nama_donatur' => '',
-            'nomor_hp' => null,
-            'metode_pembayaran' => 'Rekening',
-            'nominal' => 'rijal hafizhun hidayat',
-            'bulan' => 5,
+            'jenis_zakat' => '',
+            'nomor_hp' => 628139378414,
+            'sha_id' => 1,
+            'berat_beras' => 4.5,
+            'jumlah' => 1,
+            'nominal' => '',
+            'bulan' => 3,
             'bukti_pembayaran' => '',
             'confirmed' => 0
         ]);
@@ -85,7 +92,7 @@ class InfaqTest extends TestCase
         $response->assertInvalid();
     }
 
-    public function test_delete_infaq_by_id(): void{
+    public function test_delete_zakat_by_id(): void{
         $user = User::create([
             'name' => 'admin',
             'username' => 'admin',
@@ -93,17 +100,17 @@ class InfaqTest extends TestCase
             'role' => 1
         ]);
 
-        $infaq = Infaq::factory()->create();
+        $zakat = Zakat::factory()->create();
 
         $response = $this->actingAs($user)->withSession([
             'isLogin' => true,
             'role' => $user->role
-        ])->delete(route('infaq.destroy', ['id' => $infaq->id]));
+        ])->delete(route('zakat.destroy', ['id' => $zakat->id]));
 
         $response->assertOk();
     }
 
-    public function test_put_infaq_by_id(): void{
+    public function test_put_zakat_by_id(): void{
         $user = User::create([
             'name' => 'admin',
             'username' => 'admin',
@@ -111,28 +118,31 @@ class InfaqTest extends TestCase
             'role' => 1
         ]);
 
-        $infaq = Infaq::factory()->create();
+        $zakat = Zakat::factory()->create();
 
         $this->actingAs($user)->withSession([
             'isLogin' => true,
-            'role' => 1
-        ])->put(route('infaq.update', ['id' => $infaq->id]), [
+            'role' => $user->role
+        ])->put(route('zakat.update', ['id' => $zakat->id]), [
             'nama_donatur' => 'rijal hafizhun hidayat',
+            'jenis_zakat' => 'Zakat Maal',
             'nomor_hp' => 628139378414,
-            'metode_pembayaran' => 'Rekening',
-            'nominal' => 34000,
-            'bulan' => 5,
-            'bukti_pembayaran' => $infaq->bukti_pembayaran,
+            'sha_id' => 2,
+            'berat_beras' => '',
+            'jumlah' => '',
+            'nominal' => 245000,
+            'bulan' => 3,
+            'bukti_pembayaran' => '',
             'confirmed' => 0
         ]);
 
-        $this->assertDatabaseHas('infaq', [
+        $this->assertDatabaseHas('zakat', [
             'nama_donatur' => 'rijal hafizhun hidayat',
-            'nomor_hp' => 628139378414
+            'jenis_zakat' => 'Zakat Maal'
         ]);
     }
 
-    public function test_validation_put_infaq_by_id(): void{
+    public function test_validation_update_zakat(): void{
         $user = User::create([
             'name' => 'admin',
             'username' => 'admin',
@@ -140,17 +150,20 @@ class InfaqTest extends TestCase
             'role' => 1
         ]);
 
-        $infaq = Infaq::factory()->create();
+        $zakat = Zakat::factory()->create();
 
         $response = $this->actingAs($user)->withSession([
             'isLogin' => true,
             'role' => $user->role
-        ])->put(route('infaq.update', ['id' => $infaq->id]), [
+        ])->put(route('zakat.update', ['id' => $zakat->id]), [
             'nama_donatur' => '',
-            'nomor_hp' => null,
-            'metode_pembayaran' => 'Rekening',
-            'nominal' => 'rijal hafizhun hidayat',
-            'bulan' => 5,
+            'jenis_zakat' => 10000,
+            'nomor_hp' => 628139378414,
+            'sha_id' => 2,
+            'berat_beras' => '',
+            'jumlah' => '',
+            'nominal' => 245000,
+            'bulan' => 3,
             'bukti_pembayaran' => '',
             'confirmed' => 0
         ]);
@@ -158,7 +171,7 @@ class InfaqTest extends TestCase
         $response->assertInvalid();
     }
 
-    public function test_confirmed_pembayaran_infaq(): void{
+    public function test_validation_upload_image_in_store_zakat(): void{
         $user = User::create([
             'name' => 'admin',
             'username' => 'admin',
@@ -166,19 +179,58 @@ class InfaqTest extends TestCase
             'role' => 1
         ]);
 
-        $infaq = Infaq::factory()->create();
+        $zakat = Zakat::factory()->make();
 
-        $this->actingAs($user)->withSession([
+        $response = $this->actingAs($user)->withSession([
             'isLogin' => true,
             'role' => $user->role
-        ])->put(route('infaq.confirmed', ['id' => $infaq->id]));
-
-        $this->assertDatabaseHas('infaq', [
-            'confirmed' => 1
+        ])->post(route('zakat.store'), [
+            'nama_donatur' => 'rijal hafizhun hidayat',
+            'jenis_zakat' => 'Zakat Fitrah',
+            'nomor_hp' => 628139378414,
+            'sha_id' => 1,
+            'berat_beras' => 4.5,
+            'jumlah' => 1,
+            'nominal' => '',
+            'bulan' => 3,
+            'bukti_pembayaran' => $zakat->bukti_pembayaran,
+            'confirmed' => 0
         ]);
+
+        $response->assertValid();
     }
 
-    public function test_cetak_laporan_infaq(): void{
+    public function test_validation_upload_image_in_update_zakat(): void{
+        $user = User::create([
+            'name' => 'admin',
+            'username' => 'admin',
+            'password' => '$2y$10$tnj4cSkso6MebjPHD.S8Me4U1EA9hH0vWvZUKCPcamR2InWVa1gmW',
+            'role' => 1
+        ]);
+
+        $zakat = Zakat::factory()->create();
+        $zakatUpdate = Zakat::factory()->make();
+
+        $response = $this->actingAs($user)->withSession([
+            'isLogin' => true,
+            'role' => $user->role
+        ])->put(route('zakat.update', ['id' => $zakat->id]), [
+            'nama_donatur' => 'kevin maulana',
+            'jenis_zakat' => 'Zakat Maal',
+            'nomor_hp' => 628139378414,
+            'sha_id' => 2,
+            'berat_beras' => '',
+            'jumlah' => '',
+            'nominal' => 245000,
+            'bulan' => 3,
+            'bukti_pembayaran' => $zakatUpdate->bukti_pembayaran,
+            'confirmed' => 0
+        ]);
+
+        $response->assertValid();
+    }
+
+    public function test_cetak_laporan_zakat() :void{
         $user = User::create([
             'name' => 'admin',
             'username' => 'admin',
@@ -189,7 +241,7 @@ class InfaqTest extends TestCase
         $response = $this->actingAs($user)->withSession([
             'isLogin' => true,
             'role' => $user->role
-        ])->post(route('infaq.laporan'));
+        ])->post(route('zakat.laporan'));
 
         $response->assertOk();
     }

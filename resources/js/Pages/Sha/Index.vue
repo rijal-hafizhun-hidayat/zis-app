@@ -1,4 +1,5 @@
 <template>
+    <Head title="Sha'" />
     <NavBar />
     <main class="py-5">
         <div class="container">
@@ -43,13 +44,13 @@
 <script>
 import NavBar from '../Components/Navbar.vue'
 import Footer from '../Components/Footer.vue'
-import { Link } from '@inertiajs/vue3'
+import { Link, Head } from '@inertiajs/vue3'
 import { ref, computed } from 'vue'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 
 export default {
-    components: { NavBar, Footer, Link },
+    components: { NavBar, Footer, Link, Head },
     props: {
         shas: Object
     },

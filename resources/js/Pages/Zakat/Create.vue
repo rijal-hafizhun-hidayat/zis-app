@@ -115,8 +115,6 @@ export default{
 
         const empty = ref(null)
 
-        //const inputFile = ref(null)
-
         function NumbersOnly(evt) {
             evt = (evt) ? evt : window.event;
             var charCode = (evt.which) ? evt.which : evt.keyCode;
@@ -131,8 +129,6 @@ export default{
             console.log(zakat)
             const d = new Date();
             let month = d.getMonth();
-
-            setForm()
 
             axios.post('/zakat', {
                 nama_donatur: zakat.nama_donatur,
@@ -187,20 +183,11 @@ export default{
             }
         }
 
-        function setForm(){
-            if(zakat.jenis_zakat == 'Zakat Maal'){
-                zakat.sha_id = 2
-                zakat.berat_beras = '',
-                zakat.jumlah = ''
-            }
-        }
-
         return {
             submit,
             NumbersOnly,
             setTotalNominal,
             setBeratBeras,
-            setForm,
             zakat,
             empty,
             validation

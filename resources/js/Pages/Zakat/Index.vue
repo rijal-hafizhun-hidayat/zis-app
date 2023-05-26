@@ -14,7 +14,7 @@
                             <input type="search" v-model="searchQuery" class="search-form" placeholder="Cari Nama Donatur .....">
                             <!-- <Link href="#" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i></Link> -->
                             <button class="btn btn-primary btn-sm" @click="create()"><i class="fa-solid fa-plus"></i></button>
-                            <button @click="report()" class="btn btn-success">cetak</button>
+                            <!-- <button @click="report()" class="btn btn-success">cetak</button> -->
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -40,7 +40,7 @@
                                             <th scope="row">{{ index+1 }}</th>
                                             <td>{{ zakat.nama_donatur }}</td>
                                             <td>{{ zakat.nomor_hp }}</td>
-                                            <td>{{ timezone(zakat.created_at) }}</td>
+                                            <td>{{ timezone(zakat.waktu_zakat) }}</td>
                                             <td>{{ zakat.jenis_zakat }}</td>
                                             <td>{{ zakat.nama }}</td>
                                             <td>{{ zakat.berat_beras }}</td>
@@ -68,6 +68,7 @@
                                     </tbody>
                                 </table>
                             </div>
+                            <!-- <Pagination class="mt-4" :links="zakats.links"/> -->
                         </div>
                     </div>
                 </div>
@@ -80,13 +81,14 @@
 import NavBar from '../Components/Navbar.vue'
 import Footer from '../Components/Footer.vue'
 import Modal from '../Components/Modal.vue'
+import Pagination from './Components/Pagination.vue'
 import { ref, computed } from 'vue'
 import { Link, router, Head } from '@inertiajs/vue3'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import moment from 'moment';
 export default {
-    components: { NavBar, Footer, Link, Head, Modal },
+    components: { NavBar, Footer, Link, Head, Modal, Pagination },
     props: {
         zakats: Object,
         total: Number,
@@ -94,7 +96,7 @@ export default {
         image: String
     },
     setup(props) {
-        console.log(props.image)
+        console.log(props.zakats)
         const searchQuery = ref('')
 
         const searchedZakats = computed(() => {

@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\sha>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Sha>
  */
-class shaFactory extends Factory
+class ShaFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,7 +17,8 @@ class shaFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'nama' => 'Beras',
+            'harga' => fake()->randomNumber(5, true),
         ];
     }
 }

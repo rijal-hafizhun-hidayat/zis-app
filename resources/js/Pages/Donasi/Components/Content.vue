@@ -1,31 +1,88 @@
 <template>
     <div class="container">
         <div class="row">
-            <p><span>DKM Masjid Keramat Megu</span> telah berhasil mengumpulkan total zakat sekitar Rp. dan telah disalurkan ke pihak-pihak yang membutuhkan. Berikut adalah rinciannya</p>
-            <div class="table-wrapper">
-                <table class="table table-responsive">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Nama Organisasi</th>
-                            <th scope="col">Jumlah Mustahik</th>
-                            <th scope="col">Berat Beras / Kg</th>
-                            <th scope="col">Uang</th>
-                            <th scope="col">Tanggal</th>
-                        </tr>
-                    </thead>
-                    <tbody class="table-group-divider">
-                        <tr v-for="(donasi, index) in donasis">
-                            <th scope="row">{{ index+1 }}</th>
-                            <td>{{ donasi.nama_organisasi }}</td>
-                            <td>{{ donasi.jumlah_mustahiq }}</td>
-                            <td>{{ donasi.berat_beras }}</td>
-                            <td v-if="donasi.nominal">{{ numberWithDots(donasi.nominal) }}</td>
-                            <td v-else></td>
-                            <td>{{ timezone(donasi.created_at) }}</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <p><span>DKM Masjid Keramat Megu</span> telah berhasil mengumpulkan total dana sekitar Rp. dan telah digunakan dan disalurkan ke pihak-pihak yang membutuhkan dan kegiatan yang bermanfaat. Berikut adalah rinciannya</p>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Pengeluaran Zakat</h5>
+                    <div class="table-wrapper">
+                        <table class="table table-responsive">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Nama Organisasi</th>
+                                    <th scope="col">Jumlah Mustahik</th>
+                                    <th scope="col">Berat Beras / Kg</th>
+                                    <th scope="col">Uang</th>
+                                    <th scope="col">Tanggal</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-group-divider">
+                                <tr v-for="(zakat, index) in zakats">
+                                    <th scope="row">{{ index+1 }}</th>
+                                    <td>{{ zakat.nama_organisasi }}</td>
+                                    <td>{{ zakat.jumlah_mustahiq }}</td>
+                                    <td>{{ zakat.berat_beras }}</td>
+                                    <td v-if="zakat.nominal">{{ numberWithDots(zakat.nominal) }}</td>
+                                    <td v-else></td>
+                                    <td>{{ timezone(zakat.created_at) }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h5 class="card-title">Pengeluaran Infaq</h5>
+                    <div class="table-wrapper">
+                        <table class="table table-responsive">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Kebutuhan</th>
+                                    <th scope="col">Nominal</th>
+                                    <th scope="col">Tanggal</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-group-divider">
+                                <tr v-for="(infaq, index) in infaqs">
+                                    <th scope="row">{{ index+1 }}</th>
+                                    <td>{{ infaq.kebutuhan }}</td>
+                                    <td v-if="infaq.nominal">{{ numberWithDots(infaq.nominal) }}</td>
+                                    <td v-else></td>
+                                    <td>{{ timezone(infaq.created_at) }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h5 class="card-title">Pengeluaran Shadaqah</h5>
+                    <div class="table-wrapper">
+                        <table class="table table-responsive">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Kebutuhan</th>
+                                    <th scope="col">Nominal</th>
+                                    <th scope="col">Tanggal</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-group-divider">
+                                <tr v-for="(shadaqah, index) in shadaqahs">
+                                    <th scope="row">{{ index+1 }}</th>
+                                    <td>{{ shadaqah.kebutuhan }}</td>
+                                    <td v-if="shadaqah.nominal">{{ numberWithDots(shadaqah.nominal) }}</td>
+                                    <td v-else></td>
+                                    <td>{{ timezone(shadaqah.created_at) }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -37,11 +94,16 @@ import moment from 'moment';
 import { ref, onMounted } from 'vue'
 export default{
     setup(){
-        const donasis = ref([])
+        const zakats = ref([])
+        const infaqs = ref([])
+        const shadaqahs = ref([])
+        
         onMounted(() => {
             axios.get('/getDonasi')
             .then((res) => {
-                donasis.value = res.data.data
+                zakats.value = res.data.data.zakat
+                infaqs.value = res.data.data.infaq
+                shadaqahs.value = res.data.data.shadaqah
             })
             .catch((err) => {
                 console.log(err)
@@ -58,7 +120,9 @@ export default{
         }
 
         return {
-            donasis,
+            zakats,
+            infaqs,
+            shadaqahs,
             timezone,
             numberWithDots
         }
@@ -73,9 +137,8 @@ export default{
         font-weight: bold;
     }
 
-    .table-wrapper {
-        margin-top: 50px;
+    /* .table-wrapper {
         max-height: 250px;
         overflow: auto;
-    }
+    } */
 </style>
