@@ -149,6 +149,8 @@ Route::middleware(['isLogin'])->group(function() {
     Route::put('/zakat/{id}', [ZakatController::class, 'update'])->name('zakat.update');
     Route::put('/zakat/confirmed/{id}', [ZakatController::class, 'confirmed'])->name('zakat.confirmed');
     Route::get('/getNominalSha/{id}', [ZakatController::class, 'getNominalSha'])->name('getNominalSha');
+    Route::post('/searchZakat', [ZakatController::class, 'searchZakat'])->name('searchZakat');
+    Route::get('/testGrabRequest', [ZakatController::class, 'testGrabReques'])->name('testGrabReques');
 
     //API PENGELUARAN
     Route::post('/pengeluaran', [PengeluaranController::class, 'store'])->name('pengeluaran.store');

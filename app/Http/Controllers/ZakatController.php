@@ -21,9 +21,9 @@ class ZakatController extends Controller
         $zakats = DB::table('zakat')
             ->join('sha', 'zakat.sha_id', '=', 'sha.id')
             ->select('zakat.id', 'zakat.nama_donatur', 'zakat.nomor_hp', 'zakat.jenis_zakat', 'sha.nama', 'zakat.berat_beras', 'zakat.jumlah', 'zakat.nominal', 'zakat.bukti_pembayaran', 'zakat.confirmed', 'zakat.created_at AS waktu_zakat', 'zakat.updated_at')
+            ->where('nama_donatur', 'like', '%'.request()->search.'%')
             ->latest('waktu_zakat')
             ->get();
-        //dd($zakats);
 
         return Inertia::render('Zakat/Index', [
             // 'zakats' => $this->changeDate($zakats)
@@ -31,6 +31,21 @@ class ZakatController extends Controller
             'total' => Zakat::sum('nominal'),
             'totalBeratBeras' => Zakat::whereNotNull('berat_beras')->sum('berat_beras')
         ]);
+    }
+
+    public function test(){
+        dd(request()->search);
+    }
+
+    public function searchZakat(Request $request){
+        //$data = Zakat::where('nama_donatur', 'like', '%'.$request->search.'%');
+
+        $response = [
+            'status' => true,
+            'data' => Zakat::where('nama_donatur', 'like', '%'.$request->search.'%')->paginate(5)
+        ];
+
+        return response()->json($response, 200);
     }
 
     public function create(){

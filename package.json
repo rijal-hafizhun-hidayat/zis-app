@@ -17,6 +17,7 @@
         "@inertiajs/vue3": "^1.0.2",
         "@vitejs/plugin-vue": "^4.1.0",
         "chart.js": "^4.2.1",
+        "laravel-vue-pagination": "^4.1.0",
         "moment": "^2.29.4",
         "sweetalert2": "^11.7.3",
         "vue-chartjs": "^5.2.0"

@@ -18,7 +18,7 @@
                             <Link href="/infaq/add" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i></Link>
                         </div>
                         <div class="card-body">
-                            <div class="table-responsive">
+                            <div style="height: 400px; overflow: auto" class="table-responsive">
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>

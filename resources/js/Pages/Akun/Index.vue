@@ -16,27 +16,29 @@
                             <Link href="/akun/add" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i></Link>
                         </div>
                         <div class="card-body">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Nama</th>
-                                        <th scope="col">Username</th>
-                                        <th scope="col">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="table-group-divider">
-                                    <tr v-for="(akun, index) in searchedAkuns" :key="akun.id">
-                                        <th scope="row">{{ index+1 }}</th>
-                                        <td>{{ akun.name }}</td>
-                                        <td>{{ akun.username }}</td>
-                                        <td>
-                                            <Link @click="destroy(akun.id)" as="button" class="btn btn-danger me-2"><i class="fa-solid fa-trash"></i></Link>
-                                            <Link :href="`/akun/${akun.id}`" class="btn btn-warning"><i class="fa-solid fa-pen-to-square"></i></Link>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                           <div style="height: 400px; overflow: auto" class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Nama</th>
+                                            <th scope="col">Username</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="table-group-divider">
+                                        <tr v-for="(akun, index) in searchedAkuns" :key="akun.id">
+                                            <th scope="row">{{ index+1 }}</th>
+                                            <td>{{ akun.name }}</td>
+                                            <td>{{ akun.username }}</td>
+                                            <td>
+                                                <Link @click="destroy(akun.id)" as="button" class="btn btn-danger me-2"><i class="fa-solid fa-trash"></i></Link>
+                                                <Link :href="`/akun/${akun.id}`" class="btn btn-warning"><i class="fa-solid fa-pen-to-square"></i></Link>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div> 
                         </div>
                     </div>
                 </div>

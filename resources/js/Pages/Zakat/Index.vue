@@ -17,7 +17,7 @@
                             <!-- <button @click="report()" class="btn btn-success">cetak</button> -->
                         </div>
                         <div class="card-body">
-                            <div class="table-responsive">
+                            <div style="height: 500px; overflow: auto" class="table-responsive">
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
@@ -58,6 +58,7 @@
                                         </tr>
                                         <tr>
                                             <th colspan="5">Total</th>
+                                            <td></td>
                                             <th>{{ totalBeratBeras }} Kg</th>
                                             <td></td>
                                             <th>{{ numberWithDots(total) }}</th>
@@ -68,7 +69,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <!-- <Pagination class="mt-4" :links="zakats.links"/> -->
+                            <!-- <Pagination class="mt-6" :links="zakats.links" /> -->
                         </div>
                     </div>
                 </div>
@@ -96,8 +97,13 @@ export default {
         image: String
     },
     setup(props) {
-        console.log(props.zakats)
         const searchQuery = ref('')
+        console.log(props.zakats)
+
+        // const zakats = ref([])
+        // zakats.value = props.zakats
+
+        // console.log(zakats.value)
 
         const searchedZakats = computed(() => {
             return props.zakats.filter((zakat) => {
@@ -193,17 +199,40 @@ export default {
             })
         }
 
+        function search(){
+            router.get('/zakat', {
+                search: searchQuery.value
+            })
+        }
+
+        // watch(searchQuery, async (newSearchQuery, oldSearchQuery) => {
+        //     // console.log(newSearchQuery)
+        //     router.get('/zakat', {
+        //         search: newSearchQuery
+        //     })
+        // })
+
         return {
-            searchedZakats,
             searchQuery,
+            searchedZakats,
             destroy,
             create,
             timezone,
             numberWithDots,
             report,
             confirmed,
-            showImage
+            showImage,
+            search
         }
     },
 }
 </script>
+<!-- <style scoped>
+    thead, tbody { display: block; }
+
+    tbody {
+        height: 100px;       /* Just for the demo          */
+        overflow-y: auto;    /* Trigger vertical scroll    */
+        overflow-x: hidden;  /* Hide the horizontal scroll */
+    }
+</style> -->

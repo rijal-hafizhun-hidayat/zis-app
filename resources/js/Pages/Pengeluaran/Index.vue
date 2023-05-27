@@ -8,11 +8,11 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <div>Pengeluaran</div>
-                            <input type="search" v-model="searchQuery" class="search-form" placeholder="Cari .....">
+                            <input type="search" v-model="searchQuery" class="search-form" placeholder="Cari Keterangan.....">
                             <Link href="/pengeluaran/add" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i></Link>
                         </div>
                         <div class="card-body">
-                            <div class="table-responsive">
+                            <div style="height: 400px; overflow: auto" class="table-responsive">
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>

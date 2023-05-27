@@ -1,24 +1,17 @@
 <template>
-    <nav v-if="link.lenght > 3" aria-label="Page navigation example">
-        <ul class="pagination">
-            <li class="page-item">
-                <a class="page-link" href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
+    <nav v-if="links.length > 3" aria-label="Page navigation example">
+        <ul  class="pagination justify-content-center">
+            <li v-for="(link, key) in links" class="page-item">
+                <Link v-if="link.url === null" :key="key" class="page-link" v-html="link.label" />
+                <Link v-else class="page-link" :key="`link-${key}`" :href="link.url" v-html="link.label" :class="{ 'active':link.active }"/>
             </li>
         </ul>
     </nav>
 </template>
 <script>
+    import { Link } from '@inertiajs/vue3'
     export default {
+        components: { Link },
         props: {
             links: Array
         },
