@@ -69,14 +69,19 @@ export default {
                 return router.get('/dashboard')
             })
             .catch((err) => {
-                validation.value = err.response.data.errors
-                //console.log(err.response.data)
+                if(err.response.data.errors){
+                    validation.value = err.response.data.errors
+                }
+                else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: err.response.data.title,
+                        text: err.response.data.text,
+                    })
 
-                // return Swal.fire({
-                //     icon: 'error',
-                //     title: 'Gagal',
-                //     text: 'Username atau password salah',
-                // })
+                    form.password = '',
+                    validation.value = ''
+                }
             })
         }
 

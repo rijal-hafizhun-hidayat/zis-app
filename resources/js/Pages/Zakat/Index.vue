@@ -131,7 +131,7 @@ export default {
                     .then((res) => {
                         Swal.fire({
                             icon: 'success',
-                            title: res.data.text,
+                            title: res.data.title,
                             text: res.data.text
                         })
 

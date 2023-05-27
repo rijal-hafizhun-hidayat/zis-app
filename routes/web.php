@@ -22,6 +22,7 @@ use App\Http\Controllers\PengeluaranLaporanController;
 use App\Http\Controllers\DonasiController;
 use App\Models\Infaq;
 use FontLib\Table\Type\name;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
@@ -168,3 +169,8 @@ Route::post('/donasi', [DonasiController::class, 'store'])->name('donasi.store')
 Route::get('/getSatuan', [DonasiController::class, 'getSatuan'])->name('getSatuan');
 Route::get('/getNominal/{id}', [DonasiController::class, 'getNominal'])->name('getNominal');
 //Auth::routes();
+
+//artisan command
+// Route::get('/migrate', function(){
+//     Artisan::call()
+// });

@@ -10,7 +10,7 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <div>Pemasukan Shadaqah</div>
-                            <input type="search" v-model="searchQuery" class="search-form" placeholder="Cari .....">
+                            <input type="search" v-model="searchQuery" class="search-form" placeholder="Cari Nama.....">
                             <Link href="/shadaqah/add" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i></Link>
                         </div>
                         <div class="card-body">

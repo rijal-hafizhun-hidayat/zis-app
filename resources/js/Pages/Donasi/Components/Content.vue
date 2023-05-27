@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="row">
-            <p><span>DKM Masjid Keramat Megu</span> telah berhasil mengumpulkan total dana sekitar Rp. dan telah digunakan dan disalurkan ke pihak-pihak yang membutuhkan dan kegiatan yang bermanfaat. Berikut adalah rinciannya</p>
+            <p><span>DKM Masjid Keramat Megu</span> telah berhasil mengumpulkan total dana sekitar {{ numberWithDots(pengeluaran.uang) }} dan beras {{ pengeluaran.beras }} Kg telah digunakan untuk kegiatan masyarakat, pendidikan maupun keislaman dan disalurkan kepada pihak-pihak yang membutuhkan. Berikut adalah rinciannya</p>
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Pengeluaran Zakat</h5>
@@ -91,12 +91,16 @@
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import moment from 'moment';
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, reactive } from 'vue'
 export default{
     setup(){
         const zakats = ref([])
         const infaqs = ref([])
         const shadaqahs = ref([])
+        const pengeluaran = reactive({
+            uang: '',
+            beras: ''
+        })
         
         onMounted(() => {
             axios.get('/getDonasi')
@@ -104,6 +108,8 @@ export default{
                 zakats.value = res.data.data.zakat
                 infaqs.value = res.data.data.infaq
                 shadaqahs.value = res.data.data.shadaqah
+                pengeluaran.uang = res.data.data.totalPengeluaranUang,
+                pengeluaran.beras = res.data.data.totalPengeluaranBeras
             })
             .catch((err) => {
                 console.log(err)
@@ -123,6 +129,7 @@ export default{
             zakats,
             infaqs,
             shadaqahs,
+            pengeluaran,
             timezone,
             numberWithDots
         }

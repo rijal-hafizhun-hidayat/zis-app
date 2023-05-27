@@ -22,7 +22,9 @@ class DonasiController extends Controller
             'data' => [
                 'zakat' => Pengeluaran::where('jenis_dana', 'Zakat')->latest()->get(),
                 'infaq' => Pengeluaran::where('jenis_dana', 'Infaq')->latest()->get(),
-                'shadaqah' => Pengeluaran::where('jenis_dana', 'Shadaqah')->latest()->get()
+                'shadaqah' => Pengeluaran::where('jenis_dana', 'Shadaqah')->latest()->get(),
+                'totalPengeluaranUang' => Pengeluaran::sum('nominal'),
+                'totalPengeluaranBeras' => Pengeluaran::sum('berat_beras') 
             ],
             'code' => 200,
         ];

@@ -18,7 +18,7 @@
                                     <label for="harga" class="form-label">Harga / 2,5 Kg</label>
                                     <input type="text" v-on:keypress="NumbersOnly" class="form-control" v-model="sha.harga" id="harga" required>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="submit" class="btn btn-primary">Update</button>
                             </form>
                         </div>
                     </div>

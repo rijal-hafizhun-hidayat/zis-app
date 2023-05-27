@@ -65,6 +65,7 @@ class ZakatController extends Controller
         $credential = $this->hasImage();
 
         //dd($credential);
+        $credential['bulan'] = $this->setMonth($credential['bulan']);
 
         Zakat::create($credential);
 
@@ -189,8 +190,6 @@ class ZakatController extends Controller
                 'confirmed' => 'required|numeric|max_digits:1'
             ]);
         }
-
-        $credential['bulan'] = $this->setMonth($credential['bulan']);
 
         return $this->setForm($credential);
     }

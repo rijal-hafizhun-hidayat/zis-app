@@ -27,21 +27,21 @@
                                     <label for="rekening" class="form-label">Jenis Bantuan</label>
                                     <select class="form-select" v-model="form.jenis_bantuan" aria-label="Default select example" :class="{ 'is-invalid': validation.jenis_bantuan }">
                                         <option disabled selected value="">-- pilih --</option>
-                                        <option value="Cash">Cash</option>
+                                        <option value="Uang">Uang</option>
                                         <option value="Barang">Barang</option>
                                     </select>
                                     <div v-if="validation.jenis_bantuan" class="invalid-feedback">
                                         {{ validation.jenis_bantuan[0] }}
                                     </div>
                                 </div>
-                                <div class="mb-3">
+                                <div v-if="form.jenis_bantuan == 'Uang'" class="mb-3">
                                     <label for="nominal" class="form-label">Nominal</label>
                                     <input type="text" v-on:keypress="numOnly()" class="form-control" v-model="form.nominal" id="nominal" :required="form.jenis_bantuan == 'Cash'" :class="{ 'is-invalid': validation.nominal }">
                                     <div v-if="validation.nominal" class="invalid-feedback">
                                         {{ validation.nominal[0] }}
                                     </div>
                                 </div>
-                                <div class="mb-3">
+                                <div v-if="form.jenis_bantuan == 'Barang'" class="mb-3">
                                     <label for="jumlah" class="form-label">Keterangan</label>
                                     <input type="text" v-model="form.keterangan" class="form-control" id="jumlah" :required="form.jenis_bantuan == 'Barang'" :class="{ 'is-invalid': validation.keterangan }">
                                     <div v-if="validation.keterangan" class="invalid-feedback">
@@ -59,7 +59,7 @@
                                     <label class="form-label pe-2">Bukti Pembayaran:</label>
                                     <Modal :image="form.old_bukti_pembayaran" :path="'Shadaqah'" :id="shadaqah.id"/>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="submit" class="btn btn-primary">Update</button>
                             </form>
                         </div>
                     </div>

@@ -26,16 +26,19 @@ class AuthController extends Controller
             $request->session()->put('role', Auth::user()->role);
             //dd(Auth::user()->role);
 
-            $response = [
-                'status' => true,
-                'code' => 200,
-                'message' => 'login berhasil'
-            ];
+            // $response = [
+            //     'status' => true,
+            //     'code' => 200,
+            //     'message' => 'login berhasil'
+            // ];
 
-            return response()->json($response, 200);
+            // return response()->json($response, 200);
+
+            return $this->responseApi(true, 'berhasil', 'selamat datang', 200);
         }
-
-        return response()->json(false, 404);
+        else{
+            return $this->responseApi(false, 'gagal', 'username atau password salah', 404);
+        }
     }
 
     public function logout(Request $request){

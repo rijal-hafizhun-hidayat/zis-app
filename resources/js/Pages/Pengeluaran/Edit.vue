@@ -74,7 +74,7 @@
                                     <label class="form-label pe-2">Bukti Pengeluaran:</label>
                                     <Modal :image="form.old_bukti_pengeluaran" :path="'Pengeluaran'" :id="form.id"/>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="submit" class="btn btn-primary">Update</button>
                             </form>
                         </div>
                     </div>

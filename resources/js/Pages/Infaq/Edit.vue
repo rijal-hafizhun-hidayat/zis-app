@@ -52,7 +52,7 @@
                                     <label class="form-label pe-2">Bukti Pembayaran:</label>
                                     <Modal :image="form.old_bukti_pembayaran" :path="'Infaq'" :id="infaq.id"/>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="submit" class="btn btn-primary">Update</button>
                             </form>
                         </div>
                     </div>

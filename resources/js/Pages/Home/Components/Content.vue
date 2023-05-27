@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-6">
-                <img class="img-fluid" src="/storage/images/Home/zakat.png" alt="">
+                <img class="img-fluid" id="zakat" src="/storage/images/Home/zakat.png" alt="">
             </div>
             <div class="col-sm-6">
                 <h1 class="mb-5">APA ITU <span class="font-weight">ZAKAT?</span></h1>
@@ -21,12 +21,12 @@
                 <button @click="donasi()">Donasi Sekarang</button>
             </div>
             <div class="col-sm-6 order-first order-sm-last">
-                <img class="img-fluid" src="/storage/images/Home/infaq.png" alt="">
+                <img class="img-fluid float-end" id="infaq" src="/storage/images/Home/infaq.png" alt="">
             </div>
         </div>
         <div class="row">
             <div class="col-sm-6">
-                <img class="img-fluid" src="/storage/images/Home/—Pngtree—muslim women donations to orphans_6963553.png" alt="">
+                <img class="img-fluid" id="sedekah" src="/storage/images/Home/—Pngtree—muslim women donations to orphans_6963553.png" alt="">
             </div>
             <div class="col-sm-6">
                 <h1 class="mb-5">APA ITU <span class="font-weight">SEDEKAH?</span></h1>
@@ -65,6 +65,10 @@ export default{
         .col-sm-6 .font-weight{
             font-weight: 900;
         }
+
+        /* img#infaq{
+            margin-left: 200px;
+        } */
 
         .col-sm-6 p{
             margin-bottom: 50px;
