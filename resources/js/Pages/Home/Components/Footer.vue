@@ -2,7 +2,7 @@
     <div class="container" id="kontak">
         <div class="row">
             <div class="col-sm-4">
-                <img class="img-fluid" src="/storage/images/Home/logo dkm 02.jpg" alt="">
+                <img class="img-fluid" :src="'/storage/images/Home/logo.jpg'" alt="">
                 <p>Dewan Kemakmuran Masjid Keramat Megu</p>
             </div>
             <div class="col-sm-3">

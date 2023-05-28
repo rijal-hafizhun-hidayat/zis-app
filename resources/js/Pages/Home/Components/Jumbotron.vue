@@ -8,7 +8,7 @@
                     <button @click="donasi()">Donasi</button>
                 </div>
                 <div class="col-sm-7">
-                    <img class="img-fluid" src="/storage/images/Home/—Gambarpng—zakat lets to people poor_130223.png" alt="">
+                    <img class="img-fluid" :src="'/storage/images/Home/jumbotron.png'" alt="">
                 </div>
             </div>
         </div>

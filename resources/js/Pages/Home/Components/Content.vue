@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-6">
-                <img class="img-fluid" id="zakat" src="/storage/images/Home/zakat.png" alt="">
+                <img class="img-fluid" id="zakat" :src="'/storage/images/Home/zakat.png'" alt="">
             </div>
             <div class="col-sm-6">
                 <h1 class="mb-5">APA ITU <span class="font-weight">ZAKAT?</span></h1>
@@ -21,12 +21,12 @@
                 <button @click="donasi()">Donasi Sekarang</button>
             </div>
             <div class="col-sm-6 order-first order-sm-last">
-                <img class="img-fluid float-end" id="infaq" src="/storage/images/Home/infaq.png" alt="">
+                <img class="img-fluid float-end" id="infaq" :src="'/storage/images/Home/infaq.png'" alt="">
             </div>
         </div>
         <div class="row">
             <div class="col-sm-6">
-                <img class="img-fluid" id="sedekah" src="/storage/images/Home/—Pngtree—muslim women donations to orphans_6963553.png" alt="">
+                <img class="img-fluid" id="sedekah" :src="'/storage/images/Home/shadaqah.png'" alt="">
             </div>
             <div class="col-sm-6">
                 <h1 class="mb-5">APA ITU <span class="font-weight">SEDEKAH?</span></h1>
@@ -39,6 +39,9 @@
     </div>
 </template>
 <script>
+// import zakatImg from '/storage/images/Home/zakat.png'
+// import infaqImg from '/storage/images/Home/infaq.png'
+// import shadaqahImg from '/storage/images/Home/shadaqah.png'
 import { router } from '@inertiajs/vue3'
 export default{
     setup(){
