@@ -79,7 +79,7 @@ export default {
         const user = computed(() => usePage().props.user)
 
         function logout(){
-            axios.post('http://127.0.0.1:8000/logout')
+            axios.post('/logout')
             .then((res) => {
                 console.log(res)
                 router.get('/login')
