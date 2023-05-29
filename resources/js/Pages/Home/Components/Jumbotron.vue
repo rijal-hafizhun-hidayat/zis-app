@@ -8,7 +8,7 @@
                     <button @click="donasi()">Donasi</button>
                 </div>
                 <div class="col-sm-7">
-                    <img class="img-fluid" :src="'/storage/images/Home/jumbotron.png'" alt="">
+                    <img class="img-fluid" :src="image" alt="">
                 </div>
             </div>
         </div>
@@ -16,15 +16,35 @@
 </template>
 <script>
 import { router, Link } from '@inertiajs/vue3'
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
 export default{
     components: { Link },
     setup(){
+        const image = ref('')
+
+        onMounted(() => {
+            getImageJumbotron()
+        })
+
         function donasi(){
             router.get('/donasi')
         }
 
+        function getImageJumbotron(){
+            axios.get('/getImageHome')
+            .then((res) => {
+                image.value = res.data.data.jumbotron
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+        }
+
         return {
-            donasi
+            donasi,
+            getImageJumbotron,
+            image
         }
     }
 }

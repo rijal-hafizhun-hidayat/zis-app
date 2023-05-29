@@ -130,6 +130,8 @@ export default{
             const d = new Date();
             let month = d.getMonth();
 
+            setForm()
+
             axios.post('/zakat', {
                 nama_donatur: zakat.nama_donatur,
                 nomor_hp: zakat.nomor_hp,
@@ -164,7 +166,6 @@ export default{
             axios.get(`/getNominalSha/${zakat.sha_id}`)
             .then((res) => {
                 zakat.nominal = res.data.data[0].harga*jumlah
-                //console.log(zakat.nominal)
             })
             .catch((err) => {
                 console.log(err)
@@ -183,11 +184,18 @@ export default{
             }
         }
 
+        function setForm(){
+            if(zakat.jenis_zakat === 'Zakat Maal'){
+                zakat.sha_id = 1
+            }
+        }
+
         return {
             submit,
             NumbersOnly,
             setTotalNominal,
             setBeratBeras,
+            setForm,
             zakat,
             empty,
             validation

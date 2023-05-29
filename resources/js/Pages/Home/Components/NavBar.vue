@@ -1,7 +1,7 @@
 <template>
     <nav class="navbar sticky-top navbar-expand-lg bg-body-tertiary">
         <div class="container">
-            <img class="img-fluid" :src="'/storage/images/Home/logo.jpg'" alt="">
+            <img class="img-fluid" :src="image" alt="">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
             </button>
@@ -10,9 +10,6 @@
                     <li class="nav-item divided-home">
                         <a class="nav-link" @click="home()">Home</a>
                     </li>
-                    <!-- <li class="nav-item divided-profile">
-                        <a class="nav-link" href="#">Profile</a>
-                    </li> -->
                     <li class="nav-item divided-donasi">
                         <a class="nav-link" @click="donasi()" href="#">Donasi</a>
                     </li>
@@ -26,8 +23,16 @@
 </template>
 <script>
 import { router } from '@inertiajs/vue3'
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
 export default{
     setup(){
+        const image = ref('')
+
+        onMounted(() => {
+            getImageNavBar()
+        })
+
         function donasi(){
             router.get('/donasi')
         }
@@ -36,9 +41,21 @@ export default{
             router.get('/')
         }
 
+        function getImageNavBar(){
+            axios.get('/getImageHome')
+            .then((res) => {
+                image.value = res.data.data.logo
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+        }
+
         return {
             donasi,
-            home
+            home,
+            getImageNavBar,
+            image
         }
     }
 }

@@ -20,6 +20,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PengeluaranController;
 use App\Http\Controllers\PengeluaranLaporanController;
 use App\Http\Controllers\DonasiController;
+use App\Http\Controllers\ImageController;
 use App\Models\Infaq;
 use FontLib\Table\Type\name;
 use Illuminate\Support\Facades\Artisan;
@@ -49,8 +50,9 @@ Route::get('/login', function () {
 
 Route::post('/login', [AuthController::class, 'authenticate'])->name('auth');
 
-
+//HOME
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/getImageHome', [HomeController::class, 'getImageHome'])->name('getImageHome');
 
 Route::middleware(['isLogin'])->group(function() {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -152,6 +154,7 @@ Route::middleware(['isLogin'])->group(function() {
     Route::get('/getNominalSha/{id}', [ZakatController::class, 'getNominalSha'])->name('getNominalSha');
     Route::post('/searchZakat', [ZakatController::class, 'searchZakat'])->name('searchZakat');
     Route::get('/testGrabRequest', [ZakatController::class, 'testGrabReques'])->name('testGrabReques');
+    Route::get('/getImageBuktiPembayaran/{path}/{image}', [ZakatController::class, 'getImageBuktiPembayaran'])->name('getImageBuktiPembayaran');
 
     //API PENGELUARAN
     Route::post('/pengeluaran', [PengeluaranController::class, 'store'])->name('pengeluaran.store');

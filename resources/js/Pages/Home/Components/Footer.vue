@@ -2,7 +2,7 @@
     <div class="container" id="kontak">
         <div class="row">
             <div class="col-sm-4">
-                <img class="img-fluid" :src="'/storage/images/Home/logo.jpg'" alt="">
+                <img class="img-fluid" :src="image" alt="">
                 <p>Dewan Kemakmuran Masjid Keramat Megu</p>
             </div>
             <div class="col-sm-3">
@@ -20,7 +20,34 @@
         </div>
     </div>
 </template>
+<script>
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
+export default{
+    setup(){
+        const image = ref('')
 
+        onMounted(() => {
+            getImageNavBar()
+        })
+        
+        function getImageNavBar(){
+            axios.get('/getImageHome')
+            .then((res) => {
+                image.value = res.data.data.logo
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+        }
+
+        return {
+            getImageNavBar,
+            image
+        }
+    }
+}
+</script>
 <style scoped>
 
 /* DEKSTOP CSS */

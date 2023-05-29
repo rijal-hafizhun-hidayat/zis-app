@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-6">
-                <img class="img-fluid" id="zakat" :src="'/storage/images/Home/zakat.png'" alt="">
+                <img class="img-fluid" id="zakat" :src="image.zakat" alt="">
             </div>
             <div class="col-sm-6">
                 <h1 class="mb-5">APA ITU <span class="font-weight">ZAKAT?</span></h1>
@@ -21,12 +21,12 @@
                 <button @click="donasi()">Donasi Sekarang</button>
             </div>
             <div class="col-sm-6 order-first order-sm-last">
-                <img class="img-fluid float-end" id="infaq" :src="'/storage/images/Home/infaq.png'" alt="">
+                <img class="img-fluid float-end" id="infaq" :src="image.infaq" alt="">
             </div>
         </div>
         <div class="row">
             <div class="col-sm-6">
-                <img class="img-fluid" id="sedekah" :src="'/storage/images/Home/shadaqah.png'" alt="">
+                <img class="img-fluid" id="sedekah" :src="image.shadaqah" alt="">
             </div>
             <div class="col-sm-6">
                 <h1 class="mb-5">APA ITU <span class="font-weight">SEDEKAH?</span></h1>
@@ -43,15 +43,40 @@
 // import infaqImg from '/storage/images/Home/infaq.png'
 // import shadaqahImg from '/storage/images/Home/shadaqah.png'
 import { router } from '@inertiajs/vue3'
+import { reactive, onMounted } from 'vue'
+import axios from 'axios'
 export default{
     setup(){
+        const image = reactive({
+            zakat: '',
+            infaq: '',
+            shadaqah: ''
+        })
 
         function donasi(){
             router.get('/donasi')
         }
 
+        onMounted(() => {
+            getImageContent()
+        })
+
+        function getImageContent(){
+            axios.get('/getImageHome')
+            .then((res) => {
+                image.zakat = res.data.data.zakat,
+                image.infaq = res.data.data.infaq,
+                image.shadaqah = res.data.data.shadaqah
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+        }
+
         return {
-            donasi
+            donasi,
+            getImageContent,
+            image
         }
     }
 }

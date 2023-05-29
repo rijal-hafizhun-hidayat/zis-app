@@ -11,7 +11,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <img :src="showImage()" class="img-fluid" alt="">
+            <img :src="image" class="img-fluid" alt="">
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -21,6 +21,8 @@
     </div>
 </template>
 <script>
+import axios from 'axios'
+import { onMounted, ref } from 'vue'
 export default{
     props: {
         image: String,
@@ -28,12 +30,30 @@ export default{
         id: Number
     },
     setup(props){
+        const image = ref('')
+
+        onMounted(() => {
+            getImageBuktiPembayaran()
+        })
+
         function showImage(){
             return '/storage/images/'+props.path+'/'+ props.image
         }
 
+        function getImageBuktiPembayaran(){
+            axios.get(`/getImageBuktiPembayaran/${props.path}/${props.image}`)
+            .then((res) => {
+                image.value = res.data.data
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+        }
+
         return {
-            showImage
+            showImage,
+            getImageBuktiPembayaran,
+            image
         }
     }
 }
