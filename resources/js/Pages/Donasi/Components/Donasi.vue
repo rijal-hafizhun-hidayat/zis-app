@@ -3,6 +3,7 @@
         <form @submit.prevent="submit()">
             <div class="row">
                 <p>Jika Anda berminta untuk menyalurkan sebagian rezeki anda, silahkan isi formulir dibawah ini</p>
+                <p>Silahkan bisa melakukan pembayaran dengan transfer lewat rekening <b style="color: black;">MANDIRI</b>, NO REKENING: <b style="color: black;">1340024601774</b></p>
                 <h1 class="mb-4">Donasi Sekarang !</h1>
                 <div class="col">
                     <input type="text" v-model="donasi.nama_donatur" class="form-control" placeholder="Nama Lengkap" aria-label="Nama Lengkap" :class="{ 'is-invalid': validation.nama_donatur }">

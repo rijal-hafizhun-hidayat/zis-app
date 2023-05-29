@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Infaq;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Exception;
 use Illuminate\Support\Facades\Storage;
+use Twilio\Rest\Client;
 
 class InfaqController extends Controller
 {
@@ -62,6 +64,7 @@ class InfaqController extends Controller
     }
 
     public function confirmed($id){
+
         Infaq::where('id', $id)->update(['confirmed' => 1]);
 
         return $this->responseApi(true, 'Berhasil', 'konfirmasi pembayaran berhasil', 200);
