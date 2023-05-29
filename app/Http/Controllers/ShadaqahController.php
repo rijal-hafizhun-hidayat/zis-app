@@ -62,12 +62,6 @@ class ShadaqahController extends Controller
         Shadaqah::destroy($id);
 
         return $this->responseApi(true, 'Berhasil', 'berhasil hapus data', 200);
-        // if($this->destroyImage($id)){
-            
-        // }
-        // else{
-        //     return $this->responseApi(false, 'Gagal', 'Bukti Pembayaran Tidak Ditemukan di Database', 400);
-        // }
     }
 
     private function responseApi($status, $title, $text, $code){
