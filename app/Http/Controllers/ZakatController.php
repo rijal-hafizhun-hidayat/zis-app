@@ -33,16 +33,6 @@ class ZakatController extends Controller
         ]);
     }
 
-    public function getImageBuktiPembayaran($path, $image){
-        $response = [
-            'status' => true,
-            'data' => asset('storage/images/'.$path.'/'.$image),
-            'code' => 200
-        ];
-
-        return response()->json($response, 200);
-    }
-
     public function test(){
         dd(request()->search);
     }
