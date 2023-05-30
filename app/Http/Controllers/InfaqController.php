@@ -77,7 +77,9 @@ class InfaqController extends Controller
 
     private function storeImage(){
         $filename = time().'.'.request()->bukti_pembayaran->getClientOriginalExtension();
-        request()->bukti_pembayaran->storeAs('public/image/Infaq', $filename);
+        
+        $file = request()->file('bukti_pembayaran');
+        $file->move(base_path('/public/image/Infaq'), $filename);
 
         return $filename;
     }
@@ -85,8 +87,8 @@ class InfaqController extends Controller
     private function destroyImage($id){
         $image = Infaq::where('id', $id)->value('bukti_pembayaran');
 
-        if(Storage::disk('public')->exists('/image/Infaq/'.$image)){
-            Storage::disk('public')->delete('/image/Infaq/'.$image);
+        if(file_exists(base_path('/public/image/Infaq/'.$image))){
+            unlink(base_path('/public/image/Infaq/'.$image));
             return true;
         }
         else{

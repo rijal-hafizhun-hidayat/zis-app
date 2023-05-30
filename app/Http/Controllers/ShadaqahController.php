@@ -86,7 +86,9 @@ class ShadaqahController extends Controller
 
     private function storeImage(){
         $filename = time().'.'.request()->bukti_pembayaran->getClientOriginalExtension();
-        request()->bukti_pembayaran->storeAs('public/image/Shadaqah/', $filename);
+
+        $file = request()->file('bukti_pembayaran');
+        $file->move(base_path('/public/image/Shadaqah'), $filename);
 
         return $filename;
     }
@@ -94,8 +96,8 @@ class ShadaqahController extends Controller
     private function destroyImage($id){
         $image = Shadaqah::where('id', $id)->value('bukti_pembayaran');
 
-        if(Storage::disk('public')->exists('/image/Shadaqah/'.$image)){
-            Storage::disk('public')->delete('/image/Shadaqah/'.$image);
+        if(file_exists(base_path('/public/image/Shadaqah/'.$image))){
+            unlink(base_path('/public/image/Shadaqah/'.$image));
             return true;
         }
         else{

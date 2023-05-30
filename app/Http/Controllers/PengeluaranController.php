@@ -72,7 +72,9 @@ class PengeluaranController extends Controller
 
     private function storeImage(){
         $filename = time().'.'.request()->bukti_pengeluaran->getClientOriginalExtension();
-        request()->bukti_pengeluaran->storeAs('public/image/Pengeluaran', $filename);
+
+        $file = request()->file('bukti_pengeluaran');
+        $file->move(base_path('/public/image/Pengeluaran'), $filename);
 
         return $filename;
     }
@@ -91,8 +93,8 @@ class PengeluaranController extends Controller
     private function destroyImage($id){
         $image = Pengeluaran::where('id', $id)->value('bukti_pengeluaran');
 
-        if(Storage::disk('public')->exists('/image/Pengeluaran/'.$image)){
-            Storage::disk('public')->delete('/image/Pengeluaran/'.$image);
+        if(file_exists(base_path('/public/image/Pengeluaran/'.$image))){
+            unlink(base_path('/public/image/Pengeluaran/'.$image));
             return true;
         }
         else{

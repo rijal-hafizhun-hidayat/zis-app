@@ -141,7 +141,9 @@ class ZakatController extends Controller
 
     private function storeImage(){
         $filename = time().'.'.request()->bukti_pembayaran->getClientOriginalExtension();
-        request()->bukti_pembayaran->storeAs('public/image/Zakat', $filename);
+
+        $file = request()->file('bukti_pembayaran');
+        $file->move(base_path('/public/image/Zakat'), $filename);
 
         return $filename;
     }
@@ -149,8 +151,8 @@ class ZakatController extends Controller
     private function destroyImage($id){
         $image = Zakat::where('id', $id)->value('bukti_pembayaran');
 
-        if(Storage::disk('public')->exists('/image/Zakat/'.$image)){
-            Storage::disk('public')->delete('/image/Zakat/'.$image);
+        if(file_exists(base_path('/public/image/Zakat/'.$image))){
+            unlink(base_path('/public/image/Zakat/'.$image));
             return true;
         }
         else{
