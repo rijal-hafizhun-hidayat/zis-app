@@ -91,8 +91,8 @@ class PengeluaranController extends Controller
     private function destroyImage($id){
         $image = Pengeluaran::where('id', $id)->value('bukti_pengeluaran');
 
-        if(Storage::disk('public')->exists('/images/Pengeluaran/'.$image)){
-            Storage::disk('public')->delete('/images/Pengeluaran/'.$image);
+        if(Storage::disk('public')->exists('/image/Pengeluaran/'.$image)){
+            Storage::disk('public')->delete('/image/Pengeluaran/'.$image);
             return true;
         }
         else{

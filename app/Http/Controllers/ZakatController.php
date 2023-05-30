@@ -131,7 +131,7 @@ class ZakatController extends Controller
     }
 
     public function showImage($image){
-        return Storage::download('images/Zakat/'.$image);
+        return Storage::download('image/Zakat/'.$image);
     }
 
     private function setMonth($num){
@@ -149,8 +149,8 @@ class ZakatController extends Controller
     private function destroyImage($id){
         $image = Zakat::where('id', $id)->value('bukti_pembayaran');
 
-        if(Storage::disk('public')->exists('/images/Zakat/'.$image)){
-            Storage::disk('public')->delete('/images/Zakat/'.$image);
+        if(Storage::disk('public')->exists('/image/Zakat/'.$image)){
+            Storage::disk('public')->delete('/image/Zakat/'.$image);
             return true;
         }
         else{

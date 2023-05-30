@@ -94,8 +94,8 @@ class ShadaqahController extends Controller
     private function destroyImage($id){
         $image = Shadaqah::where('id', $id)->value('bukti_pembayaran');
 
-        if(Storage::disk('public')->exists('/images/Shadaqah/'.$image)){
-            Storage::disk('public')->delete('/images/Shadaqah/'.$image);
+        if(Storage::disk('public')->exists('/image/Shadaqah/'.$image)){
+            Storage::disk('public')->delete('/image/Shadaqah/'.$image);
             return true;
         }
         else{

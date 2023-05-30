@@ -85,8 +85,8 @@ class InfaqController extends Controller
     private function destroyImage($id){
         $image = Infaq::where('id', $id)->value('bukti_pembayaran');
 
-        if(Storage::disk('public')->exists('/images/Infaq/'.$image)){
-            Storage::disk('public')->delete('/images/Infaq/'.$image);
+        if(Storage::disk('public')->exists('/image/Infaq/'.$image)){
+            Storage::disk('public')->delete('/image/Infaq/'.$image);
             return true;
         }
         else{
