@@ -25,7 +25,7 @@ class ImageController extends Controller
     public function getImageBuktiPembayaran($path, $image){
         $response = [
             'status' => true,
-            'data' => asset('images/'.$path.'/'.$image),
+            'data' => asset('image/'.$path.'/'.$image),
             'code' => 200
         ];
 
