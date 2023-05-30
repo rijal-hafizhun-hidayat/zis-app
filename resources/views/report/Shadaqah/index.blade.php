@@ -43,7 +43,7 @@
         @foreach ($shadaqahUangs as $shadaqahUang)
         <tr>
             <td style="text-align: center">{{ $loop->iteration }}</td>
-            <td style="text-align: left">{{ $shadaqahUang->nama }}</td>
+            <td style="text-align: left">{{ $shadaqahUang->nama_donatur }}</td>
             <td style="text-align: left">{{ "Rp " . number_format($shadaqahUang->nominal,0,',','.') }}</td>
         </tr>
         @endforeach
