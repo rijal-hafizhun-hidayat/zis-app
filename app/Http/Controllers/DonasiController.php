@@ -160,7 +160,7 @@ class DonasiController extends Controller
 
     private function storeImage($path){
         $filename = time().'.'.request()->bukti_donasi->getClientOriginalExtension();
-        request()->bukti_donasi->storeAs('public/images/'.$path, $filename);
+        request()->bukti_donasi->store('public/images/');
 
         return $filename;
     }

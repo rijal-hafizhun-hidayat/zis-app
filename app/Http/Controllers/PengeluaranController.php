@@ -72,7 +72,7 @@ class PengeluaranController extends Controller
 
     private function storeImage(){
         $filename = time().'.'.request()->bukti_pengeluaran->getClientOriginalExtension();
-        request()->bukti_pengeluaran->storeAs('public/images/Pengeluaran', $filename);
+        request()->bukti_pengeluaran->storeAs('public/image/Pengeluaran', $filename);
 
         return $filename;
     }

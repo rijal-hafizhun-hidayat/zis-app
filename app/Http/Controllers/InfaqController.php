@@ -77,7 +77,7 @@ class InfaqController extends Controller
 
     private function storeImage(){
         $filename = time().'.'.request()->bukti_pembayaran->getClientOriginalExtension();
-        request()->bukti_pembayaran->storeAs('public/images/Infaq', $filename);
+        request()->bukti_pembayaran->storeAs('public/image/Infaq', $filename);
 
         return $filename;
     }

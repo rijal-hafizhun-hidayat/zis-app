@@ -86,7 +86,7 @@ class ShadaqahController extends Controller
 
     private function storeImage(){
         $filename = time().'.'.request()->bukti_pembayaran->getClientOriginalExtension();
-        request()->bukti_pembayaran->storeAs('public/images/Shadaqah/', $filename);
+        request()->bukti_pembayaran->storeAs('public/image/Shadaqah/', $filename);
 
         return $filename;
     }

@@ -33,6 +33,16 @@ class ZakatController extends Controller
         ]);
     }
 
+    public function getImageBuktiPembayaran($path, $image){
+        $response = [
+            'status' => true,
+            'data' => asset('image/'.$path.'/'.$image),
+            'code' => 200
+        ];
+
+        return response()->json($response, 200);
+    }
+
     public function test(){
         dd(request()->search);
     }
@@ -131,7 +141,7 @@ class ZakatController extends Controller
 
     private function storeImage(){
         $filename = time().'.'.request()->bukti_pembayaran->getClientOriginalExtension();
-        request()->bukti_pembayaran->storeAs('public/images/Zakat', $filename);
+        request()->bukti_pembayaran->storeAs('public/image/Zakat', $filename);
 
         return $filename;
     }
