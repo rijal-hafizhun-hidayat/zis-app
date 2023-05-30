@@ -113,6 +113,16 @@ class ShadaqahController extends Controller
                 'confirmed' => 'required|numeric'
             ]);
         }
+        return $this->setForm($credential);
+    }
+
+    private function setForm($credential){
+        if($credential['jenis_bantuan'] == 'Barang'){
+            $credential['nominal'] = null;
+        }
+        else{
+            $credential['keterangan'] = null;
+        }
         return $credential;
     }
     
