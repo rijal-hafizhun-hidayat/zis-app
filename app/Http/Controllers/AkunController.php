@@ -26,16 +26,12 @@ class AkunController extends Controller
             'role'      => 'required|integer',
             'password'  => 'required|string'
        ]);
-
        $credential['password'] = Hash::make($request->password);
-
        Akun::create($credential);
-
        $response = [
         'status' => 201,
         'message' => 'berhasil membuat akun'
        ];
-
        return response()->json($response, 201);
     }
 
@@ -51,16 +47,12 @@ class AkunController extends Controller
             'username'  => 'required|string',
             'role'      => 'integer',
        ]);
-
        Akun::where('id', $id)->update($credential);
-
        return $this->responseApi(true, 'update data berhasil', 200);
     }
 
     public function destroy($id){
-
         $akun = Akun::find($id);
-
         if(!$akun->delete()){
             return $this->responseApi(false, 'akun tidak ditemukan', 404);
         }
@@ -76,7 +68,6 @@ class AkunController extends Controller
             'message' => $message,
             'code' => $code
         ];
-
         return response()->json($response, $code);
     }
 }

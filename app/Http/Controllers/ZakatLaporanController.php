@@ -70,10 +70,8 @@ class ZakatLaporanController extends Controller
             $totalSaldoUang = $this->formatRp((int)Zakat::sum('nominal'));
             $totalSaldoBeras = Zakat::sum('berat_beras');
         }
-
         $date = date("d").' '.$this->setMonth((int)date("m")-1).' '.date("Y");
         $bulan = $request->bulan;
-
         $pdf = PDF::loadview('report/Zakat/index', compact(
             'zakatFitrahUang',
             'zakatFitrahBeras',
@@ -87,7 +85,6 @@ class ZakatLaporanController extends Controller
             'date',
             'bulan'
         ));
-    	
         return $pdf->stream("laporan_zakat.pdf", array("Attachment" => false));
     }
 

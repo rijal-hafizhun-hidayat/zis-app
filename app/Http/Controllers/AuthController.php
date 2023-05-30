@@ -14,26 +14,14 @@ class AuthController extends Controller
     }
 
     public function authenticate(Request $request){
-        //dd($request->all());
         $credentials = $request->validate([
             'username' => 'required|string',
             'password' => 'required|string'
         ]);
-
         if(Auth::attempt($credentials)){
             $request->session()->regenerate();
             $request->session()->put('isLogin', true);
             $request->session()->put('role', Auth::user()->role);
-            //dd(Auth::user()->role);
-
-            // $response = [
-            //     'status' => true,
-            //     'code' => 200,
-            //     'message' => 'login berhasil'
-            // ];
-
-            // return response()->json($response, 200);
-
             return $this->responseApi(true, 'berhasil', 'selamat datang', 200);
         }
         else{
@@ -43,11 +31,8 @@ class AuthController extends Controller
 
     public function logout(Request $request){
         Auth::logout();
-
         $request->session()->invalidate();
- 
         $request->session()->regenerateToken();
-
         return $this->responseApi(true, 'berhasil', 'berhasil logout', 200);
     }
 
@@ -58,7 +43,6 @@ class AuthController extends Controller
             'text' => $text,
             'code' => $code
         ];
-
         return response()->json($response, $code);
     }
 }

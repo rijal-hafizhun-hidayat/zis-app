@@ -36,25 +36,8 @@ class ShadaqahLaporanController extends Controller
 
         $date = date("d").' '.$this->setMonth((int)date("m")-1).' '.date("Y");
         $bulan = $request->bulan;
-
         $pdf = PDF::loadview('report/Shadaqah/index', compact('shadaqahUangs', 'shadaqahBarangs', 'totalSaldo', 'date', 'bulan'));
-        
         return $pdf->stream("laporan_shadaqah.pdf", array("Attachment" => false));
-
-        //$query = $this->getQuery();
-        // if($query->exists()){
-        //     $shadaqahUangs = $query->where('jenis_bantuan', 'Cash')->get();
-        //     $shadaqahBarangs = DB::table('shadaqah')->where('jenis_bantuan', 'Barang')->get();
-        //     $totalSaldo = $this->formatRp((int)$query->sum('nominal'));
-
-        //     $date = date("d").' '.$this->setMonth((int)date("m")-1).' '.date("Y");
-
-        //     $pdf = PDF::loadview('report/Shadaqah/index', compact('shadaqahUangs', 'shadaqahBarangs', 'totalSaldo', 'date'));
-        //     return $pdf->stream("laporan_shadaqah.pdf", array("Attachment" => false));
-        // }
-        // else{
-        //     return back()->with('message', 'Data Tidak Ditemukan');
-        // }
     }
 
     private function formatRp($angka){

@@ -23,13 +23,8 @@ class ShadaqahController extends Controller
 
     public function store(){
         $credential = $this->hasImage();
-
-        //dd($credential);
-
         $credential['bulan'] = $this->setMonth($credential['bulan']);
-
         Shadaqah::create($credential);
-
         return $this->responseApi(true, 'Berhasil', 'berhasil tambah data', 200);
     }
 
@@ -41,10 +36,8 @@ class ShadaqahController extends Controller
 
     public function update(Request $request, $id){
         $credential = $this->hasImage();
-
         if($request->hasFile('bukti_pembayaran')){
             $this->destroyImage($id);
-            
             Shadaqah::where('id', $id)->update($credential);
             return $this->responseApi(true, 'Berhasil', 'berhasil update data', 200);
         }
@@ -52,15 +45,12 @@ class ShadaqahController extends Controller
             Shadaqah::where('id', $id)->update($credential);
             return $this->responseApi(true, 'Berhasil', 'berhasil update data', 200);
         }
-
         return $this->responseApi(false, 'Gagal', 'gagal update data', 400);
     }
 
     public function destroy($id){
         $this->destroyImage($id);
-
         Shadaqah::destroy($id);
-
         return $this->responseApi(true, 'Berhasil', 'berhasil hapus data', 200);
     }
 
@@ -71,31 +61,24 @@ class ShadaqahController extends Controller
             'text' => $text,
             'code' => $code
         ];
-
         return response()->json($response, $code);
     }
 
     public function confirmed(Request $request, $id){
-        //Shadaqah::where('id', $id)->update(['confirmed' => 1]);
         $shadaqah = Shadaqah::findOrFail($id);
-
         $shadaqah->update(['confirmed' => $request->confirmed]);
-
         return $this->responseApi(true, 'Berhasil', 'konfirmasi pembayaran berhasil', 200);
     }
 
     private function storeImage(){
         $filename = time().'.'.request()->bukti_pembayaran->getClientOriginalExtension();
-
         $file = request()->file('bukti_pembayaran');
         $file->move(base_path('/public/image/Shadaqah'), $filename);
-
         return $filename;
     }
 
     private function destroyImage($id){
         $image = Shadaqah::where('id', $id)->value('bukti_pembayaran');
-
         if(file_exists(base_path('/public/image/Shadaqah/'.$image))){
             unlink(base_path('/public/image/Shadaqah/'.$image));
             return true;
@@ -117,7 +100,6 @@ class ShadaqahController extends Controller
                 'bukti_pembayaran' => 'mimes:jpg,jpeg,png',
                 'confirmed' => 'required|numeric|max_digits:1'
             ]);
-
             $credential['bukti_pembayaran'] = $this->storeImage();
         }
         else{
@@ -131,7 +113,6 @@ class ShadaqahController extends Controller
                 'confirmed' => 'required|numeric'
             ]);
         }
-
         return $credential;
     }
     

@@ -17,11 +17,9 @@ class ProfileController extends Controller
     }
 
     public function getUsername(){
-        //dd(Auth::user()->name);
         $response = [
             'username' => Auth::user()->username
         ];
-
         return response()->json($response, 200);
     }
 
@@ -30,13 +28,9 @@ class ProfileController extends Controller
             'username' => 'required|string',
             'newUsername' => 'required|string'
         ]);
-
         $profile = Profile::find(Auth::id());
- 
         $profile->username = $request->newUsername;
-        
         $profile->save();
-
         return response()->json([
             'success' => true,
             'message' => 'username berhasil di ubah',
@@ -49,26 +43,20 @@ class ProfileController extends Controller
             'newPass' => 'required|string',
             'konfPass' => 'required|string'
         ]);
-
         if (Hash::check($request->konfPass, Auth::user()->password)) {
             $new = Hash::make($request->newPass);
-
             DB::table('users')->where('id', Auth::id())->update(['password' => $new]);
-
             $response = [
                 'status' => true,
                 'message' => 'berhasil update password akun'
             ];
-
             return response()->json($response, 200);
         }
-
         $response = [
             'status' => false,
             'message' => 'gagal update password akun',
             'code' => 400
         ];
-
         return response()->json($response, 400);
     }
 }

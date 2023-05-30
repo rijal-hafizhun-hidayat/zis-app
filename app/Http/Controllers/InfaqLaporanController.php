@@ -28,12 +28,9 @@ class InfaqLaporanController extends Controller
             $infaqs = Infaq::get();
             $totalInfaq = $this->formatRp((int)Infaq::sum('nominal'));
         }
-
         $date = date("d").' '.$this->setMonth((int)date("m")-1).' '.date("Y");
         $bulan = $request->bulan;
-
         $pdf = PDF::loadview('report/Infaq/index', compact('infaqs', 'totalInfaq', 'date', 'bulan'));
-    	
         return $pdf->stream("laporan_infaq.pdf", array("Attachment" => false));
     }
 

@@ -18,7 +18,6 @@ class ImageController extends Controller
             ],
             'code' => 200
         ];
-
         return response()->json($response, 200);
     }
 
@@ -28,7 +27,6 @@ class ImageController extends Controller
             'data' => asset('image/'.$path.'/'.$image),
             'code' => 200
         ];
-
         return response()->json($response, 200);
     }
 }

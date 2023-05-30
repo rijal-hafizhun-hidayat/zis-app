@@ -24,9 +24,7 @@ class ZakatController extends Controller
             ->where('nama_donatur', 'like', '%'.request()->search.'%')
             ->latest('waktu_zakat')
             ->get();
-
         return Inertia::render('Zakat/Index', [
-            // 'zakats' => $this->changeDate($zakats)
             'zakats' => $zakats,
             'total' => Zakat::sum('nominal'),
             'totalBeratBeras' => Zakat::whereNotNull('berat_beras')->sum('berat_beras')
@@ -39,22 +37,14 @@ class ZakatController extends Controller
             'data' => asset('image/'.$path.'/'.$image),
             'code' => 200
         ];
-
         return response()->json($response, 200);
     }
 
-    public function test(){
-        dd(request()->search);
-    }
-
     public function searchZakat(Request $request){
-        //$data = Zakat::where('nama_donatur', 'like', '%'.$request->search.'%');
-
         $response = [
             'status' => true,
             'data' => Zakat::where('nama_donatur', 'like', '%'.$request->search.'%')->paginate(5)
         ];
-
         return response()->json($response, 200);
     }
 
@@ -73,21 +63,15 @@ class ZakatController extends Controller
 
     public function store(){
         $credential = $this->hasImage();
-
-        //dd($credential);
         $credential['bulan'] = $this->setMonth($credential['bulan']);
-
         Zakat::create($credential);
-
         return $this->responseApi(true, 'Berhasil', 'berhasil tambah data', 200);
     }
 
     public function update(Request $request, $id){
         $credential = $this->hasImage();
-
         if($request->hasFile('bukti_pembayaran')){
             $this->destroyImage($id);
-
             Zakat::where('id', $id)->update($credential);
             return $this->responseApi(true, 'Berhasil', 'berhasil update data', 200);
         }
@@ -95,15 +79,12 @@ class ZakatController extends Controller
             Zakat::where('id', $id)->update($credential);
             return $this->responseApi(true, 'Berhasil', 'berhasil update data', 200);
         }
-
         return $this->responseApi(false, 'Gagal', 'gagal update data', 400);
     }
 
     public function destroy($id){  
         $this->destroyImage($id);
-
         Zakat::destroy($id);
-
         return $this->responseApi(true, 'Berhasil', 'berhasil hapus data', 200);
     }
 
@@ -113,19 +94,15 @@ class ZakatController extends Controller
             'data' => Sha::select('harga')->where('id', $id)->get(),
             'code' => 200
         ];
-
         return response()->json($response, 200);
     }
 
     public function confirmed($id){
         Zakat::where('id', $id)->update(['confirmed' => 1]);
-
         return $this->responseApi(true, 'Berhasil', 'konfirmasi pembayaran berhasil', 200);
     }
 
     public function exportPdf(){
-
-        //dd($this->setValuePdf());
         $pdf = PDF::loadview('report/index', $this->setValuePdf());
     	return $pdf->stream("dompdf_out.pdf", array("Attachment" => false));
     }
@@ -141,16 +118,13 @@ class ZakatController extends Controller
 
     private function storeImage(){
         $filename = time().'.'.request()->bukti_pembayaran->getClientOriginalExtension();
-
         $file = request()->file('bukti_pembayaran');
         $file->move(base_path('/public/image/Zakat'), $filename);
-
         return $filename;
     }
 
     private function destroyImage($id){
         $image = Zakat::where('id', $id)->value('bukti_pembayaran');
-
         if(file_exists(base_path('/public/image/Zakat/'.$image))){
             unlink(base_path('/public/image/Zakat/'.$image));
             return true;
@@ -167,7 +141,6 @@ class ZakatController extends Controller
             'text' => $text,
             'code' => $code
         ];
-
         return response()->json($response, $code);
     }
 
@@ -185,7 +158,6 @@ class ZakatController extends Controller
                 'bukti_pembayaran' => 'mimes:jpg,jpeg,png',
                 'confirmed' => 'required|numeric|max_digits:1'
             ]);
-
             $credential['bukti_pembayaran'] = $this->storeImage();
 
         }
@@ -202,7 +174,6 @@ class ZakatController extends Controller
                 'confirmed' => 'required|numeric|max_digits:1'
             ]);
         }
-
         return $this->setForm($credential);
     }
 
@@ -218,7 +189,6 @@ class ZakatController extends Controller
         else if($credential['jenis_zakat'] == 'Zakat Fitrah' && $credential['sha_id'] == 2){
             $credential['berat_beras'] = null;
         }
-
         return $credential;
     }
 

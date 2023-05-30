@@ -34,10 +34,8 @@ class PengeluaranLaporanController extends Controller
             $totalSaldoPengeluaranBeras = Pengeluaran::sum('berat_beras');
             $jumlahMustahiq = Pengeluaran::sum('jumlah_mustahiq');
         }
-
         $date = date("d").' '.$this->setMonth((int)date("m")-1).' '.date("Y");
         $bulan = $request->bulan;
-
         $pdf = PDF::loadview('report/Pengeluaran/index', compact(
             'pengeluaranUangs',
             'pengeluaranBerass',
@@ -47,16 +45,7 @@ class PengeluaranLaporanController extends Controller
             'bulan',
             'jumlahMustahiq'
         ));
-
         return $pdf->stream("laporan_pengeluaran.pdf", array("Attachment" => false));
-        //dd($request->filled('bulan'), $request->bulan);
-        // if(Pengeluaran::where('bulan', $request->bulan)->exists()){
-           
-        // }
-        // else{
-        //     return redirect()->route('pengeluaran.laporan')->with('message', 'Data Tidak Ditemukan');
-        //     //return back()->with('message', 'Data Tidak Ditemukan');
-        // }
     }
 
     private function formatRp($angka){

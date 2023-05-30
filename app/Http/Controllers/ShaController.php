@@ -23,17 +23,13 @@ class ShaController extends Controller
             'nama' => 'required|string',
             'harga' => 'required|numeric'
         ]);
-
         Sha::create($credentials);
-
         $response = [
             'status' => true,
             'message' => 'simpan data berhasil',
             'code' => 200
         ];
-
         return response()->json($response, 200);
-
     }
 
     public function show($id){
@@ -47,27 +43,22 @@ class ShaController extends Controller
             'nama' => 'required|string',
             'harga' => 'required|numeric'
         ]);
-
         Sha::where('id', $id)->update($credentials);
-
         $response = [
             'status' => true,
             'message' => 'update data berhasil',
             'code' => 200
         ];
-
         return response()->json($response, 200);
     }
 
     public function destroy($id){
         Sha::destroy($id);
-
         $response = [
             'status' => true,
             'message' => 'hapus berhasil',
             'code' => 200
         ];
-
         return response()->json($response, 200);
     }
 }

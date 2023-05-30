@@ -24,7 +24,6 @@ class DashboardController extends Controller
             'pengeluaran' => Pengeluaran::whereDate('created_at', date("Y-m-d"))->sum('nominal'),
             'code' => 200
         ];
-
         return response()->json($response, 200);
     }
 
@@ -35,7 +34,6 @@ class DashboardController extends Controller
             'bulan' => Zakat::select('bulan')->distinct()->oldest()->get(),
             'code' => 200
         ];
-
         return response()->json($response, 200);
     }
 
@@ -46,7 +44,6 @@ class DashboardController extends Controller
             'bulan' => Infaq::select('bulan')->distinct()->oldest()->get(),
             'code' => 200
         ];
-
         return response()->json($response, 200);
     }
 
@@ -57,7 +54,6 @@ class DashboardController extends Controller
             'bulan' => Shadaqah::select('bulan')->distinct()->oldest()->get(),
             'code' => 200
         ];
-
         return response()->json($response, 200);
     }
 
@@ -68,7 +64,6 @@ class DashboardController extends Controller
             'bulan' => Pengeluaran::select('bulan')->distinct()->oldest()->get(),
             'code' => 200
         ];
-
         return response()->json($response, 200);
     }
 }

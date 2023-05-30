@@ -23,7 +23,6 @@ class HomeController extends Controller
             ],
             'code' => 200
         ];
-
         return response()->json($response, 200);
     }
 }

@@ -30,20 +30,15 @@ class InfaqController extends Controller
 
     public function store(){
         $credential = $this->hasImage();
-
         $credential['bulan'] = $this->setMonth($credential['bulan']);
-
         Infaq::create($credential);
-
         return $this->responseApi(true, 'Berhasil', 'berhasil tambah data', 200);
     }
 
     public function update(Request $request, $id){
         $credential = $this->hasImage();
-
         if($request->hasFile('bukti_pembayaran')){
             $this->destroyImage($id);
-
             Infaq::findOrFail($id)->update($credential);
             return $this->responseApi(true, 'Berhasil', 'berhasil update data', 200);
         }
@@ -51,22 +46,17 @@ class InfaqController extends Controller
             Infaq::findOrFail($id)->update($credential);
             return $this->responseApi(true, 'Berhasil', 'berhasil update data', 200);
         }
-
         return $this->responseApi(false, 'Gagal', 'gagal update data', 400);
     }
 
     public function delete($id){
         $this->destroyImage($id);
-
         Infaq::destroy($id);
-
         return $this->responseApi(true, 'Berhasil', 'berhasil hapus data', 200);
     }
 
     public function confirmed($id){
-
         Infaq::where('id', $id)->update(['confirmed' => 1]);
-
         return $this->responseApi(true, 'Berhasil', 'konfirmasi pembayaran berhasil', 200);
     }
 
@@ -77,16 +67,13 @@ class InfaqController extends Controller
 
     private function storeImage(){
         $filename = time().'.'.request()->bukti_pembayaran->getClientOriginalExtension();
-        
         $file = request()->file('bukti_pembayaran');
         $file->move(base_path('/public/image/Infaq'), $filename);
-
         return $filename;
     }
 
     private function destroyImage($id){
         $image = Infaq::where('id', $id)->value('bukti_pembayaran');
-
         if(file_exists(base_path('/public/image/Infaq/'.$image))){
             unlink(base_path('/public/image/Infaq/'.$image));
             return true;
@@ -103,7 +90,6 @@ class InfaqController extends Controller
             'message' => $message,
             'code' => $code
         ];
-
         return response()->json($response, $code);
     }
 
@@ -131,7 +117,6 @@ class InfaqController extends Controller
                 'confirmed' => 'required|numeric|max_digits:1'
             ]);
         }
-
         return $credential;
     }
 }

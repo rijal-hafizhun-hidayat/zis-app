@@ -28,27 +28,21 @@ class DonasiController extends Controller
             ],
             'code' => 200,
         ];
-
         return response()->json($response, 200);
     }
 
     public function store(){
-        // dd(request()->file('nama_donatur'));
         $credential = $this->formRequest();
-
         if($credential['jenis_donasi'] == 'Zakat Fitrah' || $credential['jenis_donasi'] == 'Zakat Maal'){
             $this->storeZakat($credential);
-
             return $this->responseStoreDonasi(200, 'berhasil', 'Terima Kasih Telah Bersubangsi');
         }
         else if($credential['jenis_donasi'] == 'Infaq'){
             $this->storeInfaq($credential);
-
             return $this->responseStoreDonasi(200, 'berhasil', 'Terima Kasih Telah Bersubangsi');
         }
         else if($credential['jenis_donasi'] == 'Shadaqah'){
             $this->storeShadaqah($credential);
-
             return $this->responseStoreDonasi(200, 'berhasil', 'Terima Kasih Telah Bersubangsi');
         }        
     }
@@ -59,7 +53,6 @@ class DonasiController extends Controller
             'data' => Sha::latest()->get(),
             'code' => 200
         ];
-
         return response()->json($response, 200);
     }
 
@@ -69,7 +62,6 @@ class DonasiController extends Controller
             'data' => Sha::select('harga')->where('id', $id)->first(),
             'code' => 200
         ];
-
         return response()->json($response, 200);
     }
 
@@ -119,7 +111,6 @@ class DonasiController extends Controller
             'title' => $title,
             'text' => $text
         ];
-
         return response()->json($response, $code);
     }
 
@@ -142,7 +133,6 @@ class DonasiController extends Controller
             'bukti_donasi' => 'required|image',
             'confirmed' => 'required|numeric'
         ]);
-
         if($credential['jenis_donasi'] == 'Zakat Fitrah' || $credential['jenis_donasi'] == 'Zakat Maal'){
             $path = 'Zakat/';
         }
@@ -152,21 +142,17 @@ class DonasiController extends Controller
         else if($credential['jenis_donasi'] == 'Shadaqah'){
             $path = 'Shadaqah/';
         }
-
         $credential['bukti_donasi'] = $this->storeImage($path);
-
         return $this->setForm($credential);
     }
 
     private function storeImage($path){
         $filename = time().'.'.request()->bukti_donasi->getClientOriginalExtension();
         request()->bukti_donasi->store('public/images/');
-
         return $filename;
     }
 
     private function setForm($credential){
-
         if($credential['jenis_donasi'] == 'Zakat Fitrah'){
             if($credential['sha_id'] == 1){
                 $credential['nominal'] = null;
@@ -174,29 +160,24 @@ class DonasiController extends Controller
             else{
                 $credential['berat_beras'] = null; 
             }
-
             return $credential;
         }
         else if($credential['jenis_donasi'] == 'Zakat Maal'){
             $credential['sha_id'] = 2;
             $credential['jumlah'] = null;
             $credential['berat_beras'] = null;
-
             return $credential;
         }
         else if($credential['jenis_donasi'] == 'Infaq'){
             $credential['jumlah'] = null;
             $credential['berat_beras'] = null;
-
             return $credential;
         }
         else if($credential['jenis_donasi'] == 'Shadaqah'){
             $credential['jumlah'] = null;
             $credential['berat_beras'] = null;
-
             return $credential;
         }
-
         return $credential;
     }
 }
