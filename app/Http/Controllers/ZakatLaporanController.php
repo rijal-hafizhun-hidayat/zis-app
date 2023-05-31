@@ -21,54 +21,83 @@ class ZakatLaporanController extends Controller
             if(Zakat::where('bulan', $request->bulan)->exists()){
                 $zakatFitrahUang = $this->formatRp((int)Zakat::where([
                     ['bulan', '=', $request->bulan],
-                    ['jenis_zakat', '=', 'Zakat Fitrah']
+                    ['jenis_zakat', '=', 'Zakat Fitrah'],
+                    ['confirmed', 1]
                 ])->sum('nominal'));
                 $zakatFitrahBeras = Zakat::where([
                     ['bulan', '=', $request->bulan],
-                    ['jenis_zakat', '=', 'Zakat Fitrah']
+                    ['jenis_zakat', '=', 'Zakat Fitrah'],
+                    ['confirmed', 1]
                 ])->sum('berat_beras');
                 $muzakkiFitrahUang = Zakat::where([
                     ['bulan', '=', $request->bulan],
                     ['jenis_zakat', '=', 'Zakat Fitrah'],
-                    ['sha_id', '=', 2]
+                    ['sha_id', '=', 2],
+                    ['confirmed', 1]
                 ])->count();
                 $muzakkiFitrahBeras = Zakat::where([
                     ['bulan', '=', $request->bulan],
                     ['jenis_zakat', '=', 'Zakat Fitrah'],
-                    ['sha_id', '=', 1]
+                    ['sha_id', '=', 1],
+                    ['confirmed', 1]
                 ])->count();
                 $zakatMaal = $this->formatRp(Zakat::where([
                     ['bulan', '=', $request->bulan],
                     ['jenis_zakat', '=', 'Zakat Maal'],
+                    ['confirmed', 1]
                 ])->sum('nominal'));
                 $muzakkiZakatMaal = Zakat::where([
                     ['bulan', '=', $request->bulan],
-                    ['jenis_zakat', '=', 'Zakat Maal']
+                    ['jenis_zakat', '=', 'Zakat Maal'],
+                    ['confirmed', 1]
                 ])->count();
-                $totalMuzakki = Zakat::where('bulan', $request->bulan)->count();
-                $totalSaldoUang = $this->formatRp((int)Zakat::where('bulan', $request->bulan)->sum('nominal'));
-                $totalSaldoBeras = $this->formatRp((int)Zakat::where('bulan', $request->bulan)->sum('berat_beras'));
+                $totalMuzakki = Zakat::where([
+                    ['bulan', $request->bulan],
+                    ['confirmed', 1]
+                ])->count();
+                $totalSaldoUang = $this->formatRp((int)Zakat::where([
+                    ['bulan', $request->bulan],
+                    ['confirmed', 1]
+                ])->sum('nominal'));
+                $totalSaldoBeras = $this->formatRp((int)Zakat::where([
+                    ['bulan', $request->bulan],
+                    ['confirmed', 1]
+                ])->sum('berat_beras'));
             }
             else{
                 return redirect()->route('zakat.laporan')->with('message', 'Data Tidak Ditemukan');
             }
         }
         else{
-            $zakatFitrahUang = $this->formatRp((int)Zakat::where('jenis_zakat', 'Zakat Fitrah')->sum('nominal'));
-            $zakatFitrahBeras = Zakat::where('jenis_zakat', 'Zakat Fitrah')->sum('berat_beras');
+            $zakatFitrahUang = $this->formatRp((int)Zakat::where([
+                ['jenis_zakat', 'Zakat Fitrah'],
+                ['confirmed', 1]
+            ])->sum('nominal'));
+            $zakatFitrahBeras = Zakat::where([
+                ['jenis_zakat', 'Zakat Fitrah'],
+                ['confirmed', 1]
+            ])->sum('berat_beras');
             $muzakkiFitrahUang = Zakat::where([
                 ['jenis_zakat', '=', 'Zakat Fitrah'],
-                ['sha_id', '=', 2]
+                ['sha_id', '=', 2],
+                ['confirmed', 1]
             ])->count();
             $muzakkiFitrahBeras = Zakat::where([
                 ['jenis_zakat', '=', 'Zakat Fitrah'],
-                ['sha_id', '=', 1]
+                ['sha_id', '=', 1],
+                ['confirmed', 1]
             ])->count();
-            $zakatMaal = $this->formatRp((int)Zakat::where('jenis_zakat', 'Zakat Maal')->sum('nominal'));
-            $muzakkiZakatMaal = Zakat::where('jenis_zakat', 'Zakat Maal')->count();
-            $totalMuzakki = Zakat::count();
-            $totalSaldoUang = $this->formatRp((int)Zakat::sum('nominal'));
-            $totalSaldoBeras = Zakat::sum('berat_beras');
+            $zakatMaal = $this->formatRp((int)Zakat::where([
+                ['jenis_zakat', 'Zakat Maal'],
+                ['confirmed', 1]
+            ])->sum('nominal'));
+            $muzakkiZakatMaal = Zakat::where([
+                ['jenis_zakat', 'Zakat Maal'],
+                ['confirmed', 1]
+            ])->count();
+            $totalMuzakki = Zakat::where('confirmed', 1)->count();
+            $totalSaldoUang = $this->formatRp((int)Zakat::where('confirmed', 1)->sum('nominal'));
+            $totalSaldoBeras = Zakat::where('confirmed', 1)->sum('berat_beras');
         }
         $date = date("d").' '.$this->setMonth((int)date("m")-1).' '.date("Y");
         $bulan = $request->bulan;

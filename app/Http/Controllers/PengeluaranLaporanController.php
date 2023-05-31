@@ -17,22 +17,37 @@ class PengeluaranLaporanController extends Controller
     public function generateLaporan(Request $request){
         if($request->filled('bulan')){
             if(Pengeluaran::where('bulan', $request->bulan)->exists()){
-                $pengeluaranUangs = Pengeluaran::whereNotNull('nominal')->where('bulan', $request->bulan)->get();
-                $pengeluaranBerass = Pengeluaran::whereNotNull('berat_beras')->where('bulan', $request->bulan)->get();
-                $totalSaldoPengeluaranUang = $this->formatRp((int)Pengeluaran::where('bulan', $request->bulan)->sum('nominal'));
-                $totalSaldoPengeluaranBeras = Pengeluaran::where('bulan', $request->bulan)->sum('berat_beras');
-                $jumlahMustahiq = Pengeluaran::where('bulan', $request->bulan)->sum('jumlah_mustahiq');
+                $pengeluaranUangs = Pengeluaran::whereNotNull('nominal')->where([
+                    ['bulan', $request->bulan],
+                    ['confirmed', 1]
+                ])->get();
+                $pengeluaranBerass = Pengeluaran::whereNotNull('berat_beras')->where([
+                    ['bulan', $request->bulan],
+                    ['confirmed', 1]
+                ])->get();
+                $totalSaldoPengeluaranUang = $this->formatRp((int)Pengeluaran::where([
+                    ['bulan', $request->bulan],
+                    ['confirmed', 1]
+                ])->sum('nominal'));
+                $totalSaldoPengeluaranBeras = Pengeluaran::where([
+                    ['bulan', $request->bulan],
+                    ['confirmed', 1]
+                ])->sum('berat_beras');
+                $jumlahMustahiq = Pengeluaran::where([
+                    ['bulan', $request->bulan],
+                    ['confirmed', 1]
+                ])->sum('jumlah_mustahiq');
             }
             else{
                 return redirect()->route('pengeluaran.laporan')->with('message', 'Data Tidak Ditemukan');
             }
         }
         else{
-            $pengeluaranUangs = Pengeluaran::whereNotNull('nominal')->get();
-            $pengeluaranBerass = Pengeluaran::whereNotNull('berat_beras')->get();
-            $totalSaldoPengeluaranUang = $this->formatRp((int)Pengeluaran::sum('nominal'));
-            $totalSaldoPengeluaranBeras = Pengeluaran::sum('berat_beras');
-            $jumlahMustahiq = Pengeluaran::sum('jumlah_mustahiq');
+            $pengeluaranUangs = Pengeluaran::whereNotNull('nominal')->where('confirmed', 1)->get();
+            $pengeluaranBerass = Pengeluaran::whereNotNull('berat_beras')->where('confirmed', 1)->get();
+            $totalSaldoPengeluaranUang = $this->formatRp((int)Pengeluaran::where('confirmed', 1)->sum('nominal'));
+            $totalSaldoPengeluaranBeras = Pengeluaran::where('confirmed', 1)->sum('berat_beras');
+            $jumlahMustahiq = Pengeluaran::where('confirmed', 1)->sum('jumlah_mustahiq');
         }
         $date = date("d").' '.$this->setMonth((int)date("m")-1).' '.date("Y");
         $bulan = $request->bulan;

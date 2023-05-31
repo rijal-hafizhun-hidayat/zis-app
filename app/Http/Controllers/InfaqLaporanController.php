@@ -17,16 +17,22 @@ class InfaqLaporanController extends Controller
     public function generateLaporan(Request $request){
         if($request->filled('bulan')){
             if(Infaq::where('bulan', $request->bulan)->exists()){
-                $infaqs = Infaq::where('bulan', $request->bulan)->get();
-                $totalInfaq = $this->formatRp((int)Infaq::where('bulan', $request->bulan)->sum('nominal'));
+                $infaqs = Infaq::where([
+                    ['bulan', $request->bulan],
+                    ['confirmed', 1]
+                ])->get();
+                $totalInfaq = $this->formatRp((int)Infaq::where([
+                    ['bulan', $request->bulan],
+                    ['confirmed', 1]
+                ])->sum('nominal'));
             }
             else{
                 return redirect()->route('infaq.laporan')->with('message', 'Data Tidak Ditemukan');
             }
         }
         else{
-            $infaqs = Infaq::get();
-            $totalInfaq = $this->formatRp((int)Infaq::sum('nominal'));
+            $infaqs = Infaq::where('confirmed', 1)->get();
+            $totalInfaq = $this->formatRp((int)Infaq::where('confirmed', 1)->sum('nominal'));
         }
         $date = date("d").' '.$this->setMonth((int)date("m")-1).' '.date("Y");
         $bulan = $request->bulan;

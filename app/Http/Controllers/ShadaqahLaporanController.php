@@ -17,21 +17,31 @@ class ShadaqahLaporanController extends Controller
     public function generateLaporan(Request $request){
         if($request->filled('bulan')){
             if(Shadaqah::where('bulan', $request->bulan)->exists()){
-                $shadaqahUangs = Shadaqah::where('bulan', $request->bulan)->whereNotNull('nominal')->get();
+                $shadaqahUangs = Shadaqah::where([
+                    ['bulan', $request->bulan],
+                    ['confirmed', 1]
+                ])->whereNotNull('nominal')->get();
                 $shadaqahBarangs = Shadaqah::where([
                     ['bulan', '=', $request->bulan],
-                    ['jenis_bantuan', '=', 'Barang']
+                    ['jenis_bantuan', '=', 'Barang'],
+                    ['confirmed', 1]
                 ])->get();
-                $totalSaldo = $this->formatRp((int)Shadaqah::where('bulan', $request->bulan)->sum('nominal'));
+                $totalSaldo = $this->formatRp((int)Shadaqah::where([
+                    ['bulan', $request->bulan],
+                    ['confirmed', 1]
+                ])->sum('nominal'));
             }
             else{
                 return redirect()->route('shadaqah.laporan')->with('message', 'Data Tidak Ditemukan');
             }
         }
         else{
-            $shadaqahUangs = Shadaqah::whereNotNull('nominal')->get();
-            $shadaqahBarangs = Shadaqah::where('jenis_bantuan', 'Barang')->get();
-            $totalSaldo = $this->formatRp((int)Shadaqah::sum('nominal'));
+            $shadaqahUangs = Shadaqah::whereNotNull('nominal')->where('confirmed', 1)->get();
+            $shadaqahBarangs = Shadaqah::where([
+                ['jenis_bantuan', 'Barang'],
+                ['confirmed', 1]
+            ])->get();
+            $totalSaldo = $this->formatRp((int)Shadaqah::where('confirmed', 1)->sum('nominal'));
         }
 
         $date = date("d").' '.$this->setMonth((int)date("m")-1).' '.date("Y");
