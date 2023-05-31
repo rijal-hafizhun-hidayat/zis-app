@@ -29,7 +29,7 @@ class PengeluaranController extends Controller
     }
 
     public function store(){
-        $credential = $this->hasImage();
+        $credential = $this->formRequest();
         $credential['bulan'] = $this->setMonth($credential['bulan']);
         Pengeluaran::create($credential);
         return $this->responseApi(true, 'Berhasil', 'berhasil tambah data', 200);
@@ -42,7 +42,7 @@ class PengeluaranController extends Controller
     }
 
     public function update(Request $request, $id){
-        $credential = $this->hasImage();
+        $credential = $this->formRequest();
         if($request->hasFile('bukti_pengeluaran')){
             $this->destroyImage($id);
             Pengeluaran::where('id', $id)->update($credential);
@@ -93,7 +93,7 @@ class PengeluaranController extends Controller
         return $month[$num];
     }
 
-    private function hasImage(){
+    private function formRequest(){
         if(request()->hasFile('bukti_pengeluaran')){
             $credential = request()->validate([
                 'nama_organisasi' => 'nullable|string',

@@ -22,7 +22,7 @@ class ShadaqahController extends Controller
     }
 
     public function store(){
-        $credential = $this->hasImage();
+        $credential = $this->formRequest();
         $credential['bulan'] = $this->setMonth($credential['bulan']);
         Shadaqah::create($credential);
         return $this->responseApi(true, 'Berhasil', 'berhasil tambah data', 200);
@@ -35,7 +35,7 @@ class ShadaqahController extends Controller
     }
 
     public function update(Request $request, $id){
-        $credential = $this->hasImage();
+        $credential = $this->formRequest();
         if($request->hasFile('bukti_pembayaran')){
             $this->destroyImage($id);
             Shadaqah::where('id', $id)->update($credential);
@@ -88,7 +88,7 @@ class ShadaqahController extends Controller
         }
     }
 
-    private function hasImage(){
+    private function formRequest(){
         if(request()->hasFile('bukti_pembayaran')){
             $credential = request()->validate([
                 'nama_donatur' => 'required|string',

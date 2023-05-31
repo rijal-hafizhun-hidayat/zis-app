@@ -31,15 +31,6 @@ class ZakatController extends Controller
         ]);
     }
 
-    public function getImageBuktiPembayaran($path, $image){
-        $response = [
-            'status' => true,
-            'data' => asset('image/'.$path.'/'.$image),
-            'code' => 200
-        ];
-        return response()->json($response, 200);
-    }
-
     public function searchZakat(Request $request){
         $response = [
             'status' => true,
@@ -62,14 +53,14 @@ class ZakatController extends Controller
     }
 
     public function store(){
-        $credential = $this->hasImage();
+        $credential = $this->formRequest();
         $credential['bulan'] = $this->setMonth($credential['bulan']);
         Zakat::create($credential);
         return $this->responseApi(true, 'Berhasil', 'berhasil tambah data', 200);
     }
 
     public function update(Request $request, $id){
-        $credential = $this->hasImage();
+        $credential = $this->formRequest();
         if($request->hasFile('bukti_pembayaran')){
             $this->destroyImage($id);
             Zakat::where('id', $id)->update($credential);
@@ -144,7 +135,7 @@ class ZakatController extends Controller
         return response()->json($response, $code);
     }
 
-    private function hasImage(){
+    private function formRequest(){
         if(request()->hasFile('bukti_pembayaran')){
             $credential = request()->validate([
                 'nama_donatur' => 'required|string',
