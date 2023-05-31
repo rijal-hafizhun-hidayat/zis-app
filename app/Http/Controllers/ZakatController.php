@@ -116,7 +116,7 @@ class ZakatController extends Controller
 
     private function destroyImage($id){
         $image = Zakat::where('id', $id)->value('bukti_pembayaran');
-        if(file_exists(base_path('/public/image/Zakat/'.$image))){
+        if(is_file(base_path('/public/image/Zakat/'.$image))){
             unlink(base_path('/public/image/Zakat/'.$image));
             return true;
         }

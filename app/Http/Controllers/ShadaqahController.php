@@ -79,7 +79,7 @@ class ShadaqahController extends Controller
 
     private function destroyImage($id){
         $image = Shadaqah::where('id', $id)->value('bukti_pembayaran');
-        if(file_exists(base_path('/public/image/Shadaqah/'.$image))){
+        if(is_file(base_path('/public/image/Shadaqah/'.$image))){
             unlink(base_path('/public/image/Shadaqah/'.$image));
             return true;
         }
