@@ -8,7 +8,7 @@
             </button>
             <div v-if="user.name" class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item dropdown">
+                    <li v-if="user.role == 1 || user.role == 2" class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Zakat
                         </a>
@@ -20,7 +20,7 @@
                             <!-- <li><a class="dropdown-item" href="#">Print</a></li> -->
                         </ul>
                     </li>
-                    <li class="nav-item dropdown">
+                    <li v-if="user.role == 1 || user.role == 2" class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Infaq
                         </a>
@@ -29,7 +29,7 @@
                             <li><a class="dropdown-item" @click="laporanInfaq()" href="#">Laporan</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item dropdown">
+                    <li v-if="user.role == 1 || user.role == 2" class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Shadaqah
                         </a>

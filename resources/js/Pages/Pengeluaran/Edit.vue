@@ -37,13 +37,15 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label" for="berat_beras">Berat Beras / kg (Jika ada penyaluran beras)</label>
-                                    <div class="input-group">
+                                    <div class="input-group has-validation">
                                         <input type="text" class="form-control" v-model="form.berat_beras" v-on:keypress="numOnly()" id="berat_beras" aria-describedby="basic-addon2" :class="{ 'is-invalid': validation.berat_beras }">
                                         <span class="input-group-text" id="basic-addon2">Kg</span>
+                                        <div v-if="validation.berat_beras" class="invalid-feedback">
+                                            {{ validation.berat_beras[0] }}
+                                        </div>
                                     </div>
-                                    <div v-if="validation.berat_beras" class="invalid-feedback">
-                                        {{ validation.berat_beras[0] }}
-                                    </div>
+                                    
+                                    <!-- <p class="invalid-feedback"></p> -->
                                 </div>
                                 <div class="mb-3">
                                     <label for="jumlah_mustahiq" class="form-label">Jumlah Mustahiq</label>
@@ -54,7 +56,6 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="nominal" class="form-label">Nominal</label>
-                                    <!-- <input type="text" v-model="form.nominal" v-on:keypress="numOnly()" class="form-control" id="nominal"> -->
                                     <div class="input-group">
                                         <span class="input-group-text" id="basic-addon1">Rp.</span>
                                         <input type="text" class="form-control" v-model="form.nominal" v-on:keypress="numOnly()" id="nominal" aria-describedby="basic-addon1" :class="{ 'is-invalid': validation.nominal }">
@@ -103,10 +104,10 @@ export default{
             id: props.pengeluaran.id,
             kebutuhan: props.pengeluaran.kebutuhan,
             jenis_dana: props.pengeluaran.jenis_dana,
-            nama_organisasi: props.pengeluaran.nama_organisasi,
-            berat_beras: props.pengeluaran.berat_beras,
-            jumlah_mustahiq: props.pengeluaran.jumlah_mustahiq,
-            nominal: props.pengeluaran.nominal,
+            nama_organisasi: props.pengeluaran.nama_organisasi === null ? '' : props.pengeluaran.nama_organisasi,
+            berat_beras: props.pengeluaran.berat_beras === null ? '' : props.pengeluaran.berat_beras,
+            jumlah_mustahiq: props.pengeluaran.jumlah_mustahiq === null ? '' : props.pengeluaran.jumlah_mustahiq,
+            nominal: props.pengeluaran.nominal === null ? '' : props.pengeluaran.nominal,
             confirmed: props.pengeluaran.confirmed,
             old_bukti_pengeluaran: props.pengeluaran.bukti_pengeluaran,
             new_bukti_pengeluaran: ''

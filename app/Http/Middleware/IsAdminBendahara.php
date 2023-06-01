@@ -4,11 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 use Symfony\Component\HttpFoundation\Response;
 
-class IsAdmin
+class IsAdminBendahara
 {
     /**
      * Handle an incoming request.
@@ -17,7 +15,8 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if($request->session()->get('role') == 1){    
+        //DITERIMA JIKA ROLE ADMIN DAN BENDAHARA
+        if($request->session()->get('role') == 1 || $request->session()->get('role') == 2){  
             return $next($request);
         }
         return redirect('dashboard')->with('message', 'Hak Akses Tidak Terpenuhi');

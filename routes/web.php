@@ -55,66 +55,11 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/getImageHome', [ImageController::class, 'getImageHome'])->name('getImageHome');
 
 Route::middleware(['isLogin'])->group(function() {
+
+    //DASHBOARD & PROFILE
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/profile', [ProfileController::class, 'index'])->name('Profile');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    //AKUN
-    Route::middleware(['isAdmin'])->group(function(){
-
-        Route::get('/akun', [AkunController::class, 'index'])->name('akun');
-        Route::get('/akun/add', [AkunController::class, 'create'])->name('akun.create');
-        Route::get('/akun/{id}', [AkunController::class, 'show'])->name('akun.show');
-
-        //API AKUN
-        Route::post('/akun', [AkunController::class, 'store'])->name('akun.store');
-        Route::delete('/akun/{id}', [AkunController::class, 'destroy'])->name('akun.destroy');
-        Route::put('/akun/{id}', [AkunController::class, 'update'])->name('akun.update');
-    });
-
-    //SHA
-    Route::get('/sha', [ShaController::class, 'index'])->name('sha');
-    Route::get('/sha/add', [ShaController::class, 'create'])->name('sha.create');
-    Route::get('/sha/{id}', [ShaController::class, 'show'])->name('sha.show');
-
-    //INFAQ
-    Route::get('/infaq', [InfaqController::class, 'index'])->name('infaq');
-    Route::get('/infaq/add', [InfaqController::class, 'create'])->name('infaq.create');
-    Route::get('/infaq/{id}', [InfaqController::class, 'show'])->name('infaq.show');
-
-    //INFAQ LAPORAN
-    Route::get('/laporan/infaq', [InfaqLaporanController::class, 'index'])->name('infaq.laporan');
-    Route::post('/laporan/infaq', [InfaqLaporanController::class, 'generateLaporan'])->name('infaq.generateLaporan');
-
-    //SHADAQAH
-    Route::get('/shadaqah', [ShadaqahController::class, 'index'])->name('shadaqah');
-    Route::get('/shadaqah/add', [ShadaqahController::class, 'create'])->name('shadaqah.create');
-    Route::get('/shadaqah/{id}', [ShadaqahController::class, 'show'])->name('shadaqah.show');
-
-    //SHADAQAH LAPORAN
-    Route::get('/laporan/shadaqah', [ShadaqahLaporanController::class, 'index'])->name('shadaqah.laporan');
-    Route::post('/laporan/shadaqah', [ShadaqahLaporanController::class, 'generateLaporan'])->name('shadaqah.generateLaporan');
-
-    //ZAKAT
-    Route::get('/zakat', [ZakatController::class, 'index'])->name('zakat');
-    Route::get('/zakat/add', [ZakatController::class, 'create'])->name('zakat.create');
-    Route::get('/zakat/{id}', [ZakatController::class, 'show'])->name('zakat.show');
-    Route::get('/zakat/showImage/{image}', [ZakatController::class, 'showImage'])->name('zakat.showImage');
-    Route::get('/report', [ZakatController::class, 'exportPdf'])->name('zakat.exportPdf');
-
-    //ZAKAT LAPORAN
-    Route::get('/laporan/zakat', [ZakatLaporanController::class, 'index'])->name('zakat.laporan');
-    Route::post('/laporan/zakat', [ZakatLaporanController::class, 'generateLaporan'])->name('zakat.generateLaporan');
-
-    //PENGELUARAN
-    Route::get('/pengeluaran', [PengeluaranController::class, 'index'])->name('pengeluaran');
-    Route::get('/pengeluaran/add', [PengeluaranController::class, 'create'])->name('pengeluaran.create');
-    Route::get('/pengeluaran/{id}', [PengeluaranController::class, 'show'])->name('pengeluaran.show');
-
-    //PENGELUARAN LAPORAN
-    Route::get('/laporan/pengeluaran', [PengeluaranLaporanController::class, 'index'])->name('pengeluaran.laporan');
-    Route::post('/laporan/pengeluaran', [PengeluaranLaporanController::class, 'generateLaporan'])->name('pengeluaran.generateLaporan');
-
-    //API ROUTE
 
     //API DASHBOARD
     Route::get('/getSumZIS', [DashboardController::class, 'getSumZIS'])->name('getSumZIS');
@@ -129,38 +74,102 @@ Route::middleware(['isLogin'])->group(function() {
     Route::put('/updateUsername', [ProfileController::class, 'updateUsername'])->name('updateUsername');
     Route::put('/updatePassword', [ProfileController::class, 'updatePassword'])->name('updatePassword');
 
-    //API SHA
-    Route::post('/sha', [ShaController::class, 'store'])->name('sha.store');
-    Route::delete('/sha/{id}', [ShaController::class, 'destroy'])->name('sha.destroy');
-    Route::put('/sha/{id}', [ShaController::class, 'update'])->name('sha.update');
-
-    //API INFAQ
-    Route::post('/infaq', [InfaqController::class, 'store'])->name('infaq.store');
-    Route::delete('/infaq/{id}', [InfaqController::class, 'delete'])->name('infaq.destroy');
-    Route::put('/infaq/{id}', [InfaqController::class, 'update'])->name('infaq.update');
-    Route::put('infaq/confirmed/{id}', [InfaqController::class, 'confirmed'])->name('infaq.confirmed');
-
-    //API SHADAQAH
-    Route::post('/shadaqah', [ShadaqahController::class, 'store'])->name('shadaqah.store');
-    Route::delete('/shadaqah/{id}', [ShadaqahController::class, 'destroy'])->name('shadaqah.destroy');
-    Route::put('/shadaqah/{id}', [ShadaqahController::class, 'update'])->name('shadaqah.update');
-    Route::put('/shadaqah/confirmed/{id}', [ShadaqahController::class, 'confirmed'])->name('shadaqah.confirmed');
-
-    //API ZAKAT
-    Route::post('/zakat', [ZakatController::class, 'store'])->name('zakat.store');
-    Route::delete('/zakat/{id}', [ZakatController::class, 'destroy'])->name('zakat.destroy');
-    Route::put('/zakat/{id}', [ZakatController::class, 'update'])->name('zakat.update');
-    Route::put('/zakat/confirmed/{id}', [ZakatController::class, 'confirmed'])->name('zakat.confirmed');
-    Route::get('/getNominalSha/{id}', [ZakatController::class, 'getNominalSha'])->name('getNominalSha');
-    Route::post('/searchZakat', [ZakatController::class, 'searchZakat'])->name('searchZakat');
-    Route::get('/testGrabRequest', [ZakatController::class, 'testGrabReques'])->name('testGrabReques');
+    //API GAMBAR BUKTI PEMBAYARAN DAN PENGELUARAN
     Route::get('/getImageBuktiPembayaran/{path}/{image}', [ImageController::class, 'getImageBuktiPembayaran'])->name('getImageBuktiPembayaran');
 
-    //API PENGELUARAN
-    Route::post('/pengeluaran', [PengeluaranController::class, 'store'])->name('pengeluaran.store');
-    Route::delete('/pengeluaran/{id}', [PengeluaranController::class, 'destroy'])->name('pengeluaran.destroy');
-    Route::put('/pengeluaran/{id}', [PengeluaranController::class, 'update'])->name('pengeluaran.update');
-    Route::put('/pengeluaran/confirmed/{id}', [PengeluaranController::class, 'confirmed'])->name('pengeluaran.confirmed');
+    Route::middleware(['isAdmin'])->group(function(){
+
+        //AKUN
+        Route::get('/akun', [AkunController::class, 'index'])->name('akun');
+        Route::get('/akun/add', [AkunController::class, 'create'])->name('akun.create');
+        Route::get('/akun/{id}', [AkunController::class, 'show'])->name('akun.show');
+
+        //API AKUN
+        Route::post('/akun', [AkunController::class, 'store'])->name('akun.store');
+        Route::delete('/akun/{id}', [AkunController::class, 'destroy'])->name('akun.destroy');
+        Route::put('/akun/{id}', [AkunController::class, 'update'])->name('akun.update');
+    });
+
+    Route::middleware(['isAdminBendahara'])->group(function(){
+
+         //SHA
+        Route::get('/sha', [ShaController::class, 'index'])->name('sha');
+        Route::get('/sha/add', [ShaController::class, 'create'])->name('sha.create');
+        Route::get('/sha/{id}', [ShaController::class, 'show'])->name('sha.show');
+
+        //INFAQ
+        Route::get('/infaq', [InfaqController::class, 'index'])->name('infaq');
+        Route::get('/infaq/add', [InfaqController::class, 'create'])->name('infaq.create');
+        Route::get('/infaq/{id}', [InfaqController::class, 'show'])->name('infaq.show');
+
+        //INFAQ LAPORAN
+        Route::get('/laporan/infaq', [InfaqLaporanController::class, 'index'])->name('infaq.laporan');
+        Route::post('/laporan/infaq', [InfaqLaporanController::class, 'generateLaporan'])->name('infaq.generateLaporan');
+
+        //SHADAQAH
+        Route::get('/shadaqah', [ShadaqahController::class, 'index'])->name('shadaqah');
+        Route::get('/shadaqah/add', [ShadaqahController::class, 'create'])->name('shadaqah.create');
+        Route::get('/shadaqah/{id}', [ShadaqahController::class, 'show'])->name('shadaqah.show');
+
+        //SHADAQAH LAPORAN
+        Route::get('/laporan/shadaqah', [ShadaqahLaporanController::class, 'index'])->name('shadaqah.laporan');
+        Route::post('/laporan/shadaqah', [ShadaqahLaporanController::class, 'generateLaporan'])->name('shadaqah.generateLaporan');
+
+        //ZAKAT
+        Route::get('/zakat', [ZakatController::class, 'index'])->name('zakat');
+        Route::get('/zakat/add', [ZakatController::class, 'create'])->name('zakat.create');
+        Route::get('/zakat/{id}', [ZakatController::class, 'show'])->name('zakat.show');
+        Route::get('/zakat/showImage/{image}', [ZakatController::class, 'showImage'])->name('zakat.showImage');
+        Route::get('/report', [ZakatController::class, 'exportPdf'])->name('zakat.exportPdf');
+
+        //ZAKAT LAPORAN
+        Route::get('/laporan/zakat', [ZakatLaporanController::class, 'index'])->name('zakat.laporan');
+        Route::post('/laporan/zakat', [ZakatLaporanController::class, 'generateLaporan'])->name('zakat.generateLaporan');
+
+        //API SHA
+        Route::post('/sha', [ShaController::class, 'store'])->name('sha.store');
+        Route::delete('/sha/{id}', [ShaController::class, 'destroy'])->name('sha.destroy');
+        Route::put('/sha/{id}', [ShaController::class, 'update'])->name('sha.update');
+
+        //API INFAQ
+        Route::post('/infaq', [InfaqController::class, 'store'])->name('infaq.store');
+        Route::delete('/infaq/{id}', [InfaqController::class, 'delete'])->name('infaq.destroy');
+        Route::put('/infaq/{id}', [InfaqController::class, 'update'])->name('infaq.update');
+        Route::put('infaq/confirmed/{id}', [InfaqController::class, 'confirmed'])->name('infaq.confirmed');
+
+        //API SHADAQAH
+        Route::post('/shadaqah', [ShadaqahController::class, 'store'])->name('shadaqah.store');
+        Route::delete('/shadaqah/{id}', [ShadaqahController::class, 'destroy'])->name('shadaqah.destroy');
+        Route::put('/shadaqah/{id}', [ShadaqahController::class, 'update'])->name('shadaqah.update');
+        Route::put('/shadaqah/confirmed/{id}', [ShadaqahController::class, 'confirmed'])->name('shadaqah.confirmed');
+
+        //API ZAKAT
+        Route::post('/zakat', [ZakatController::class, 'store'])->name('zakat.store');
+        Route::delete('/zakat/{id}', [ZakatController::class, 'destroy'])->name('zakat.destroy');
+        Route::put('/zakat/{id}', [ZakatController::class, 'update'])->name('zakat.update');
+        Route::put('/zakat/confirmed/{id}', [ZakatController::class, 'confirmed'])->name('zakat.confirmed');
+        Route::get('/getNominalSha/{id}', [ZakatController::class, 'getNominalSha'])->name('getNominalSha');
+        Route::post('/searchZakat', [ZakatController::class, 'searchZakat'])->name('searchZakat');
+        Route::get('/testGrabRequest', [ZakatController::class, 'testGrabReques'])->name('testGrabReques');
+    });
+
+    Route::middleware(['IsAdminBendaharaPemeliharaan'])->group(function(){
+
+        //PENGELUARAN
+        Route::get('/pengeluaran', [PengeluaranController::class, 'index'])->name('pengeluaran');
+        Route::get('/pengeluaran/add', [PengeluaranController::class, 'create'])->name('pengeluaran.create');
+        Route::get('/pengeluaran/{id}', [PengeluaranController::class, 'show'])->name('pengeluaran.show');
+
+        //PENGELUARAN LAPORAN
+        Route::get('/laporan/pengeluaran', [PengeluaranLaporanController::class, 'index'])->name('pengeluaran.laporan');
+        Route::post('/laporan/pengeluaran', [PengeluaranLaporanController::class, 'generateLaporan'])->name('pengeluaran.generateLaporan');
+
+        //API PENGELUARAN
+        Route::post('/pengeluaran', [PengeluaranController::class, 'store'])->name('pengeluaran.store');
+        Route::delete('/pengeluaran/{id}', [PengeluaranController::class, 'destroy'])->name('pengeluaran.destroy');
+        Route::put('/pengeluaran/{id}', [PengeluaranController::class, 'update'])->name('pengeluaran.update');
+        Route::put('/pengeluaran/confirmed/{id}', [PengeluaranController::class, 'confirmed'])->name('pengeluaran.confirmed');
+    });
 });
 
 //DONASI

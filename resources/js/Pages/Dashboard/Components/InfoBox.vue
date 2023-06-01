@@ -39,7 +39,7 @@
     <div class="col-sm-3">
         <div class="card divide">
             <div class="card-header">
-                Pengeluaran per {{ total.tanggal }}
+                Pengeluaran per bulan {{ total.bulan }}
             </div>
             <div class="card-body">
                 <h5 class="card-title">Total Dana:</h5>
@@ -51,7 +51,6 @@
 <script>
 import axios from 'axios';
 import { onMounted, reactive } from 'vue';
-import moment from 'moment';
 export default{
     setup(){
         const total = reactive({
@@ -59,7 +58,7 @@ export default{
             infaq: '',
             shadaqah: '',
             pengeluaran: '',
-            tanggal: moment().format('LL')
+            bulan: ''
         })
 
         onMounted(() => {
@@ -69,11 +68,12 @@ export default{
         function getSumZIS(){
             axios.get('/getSumZIS')
             .then((res) => {
+                console.log(res.data),
                 total.zakat = res.data.zakat,
                 total.infaq = res.data.infaq,
                 total.shadaqah = res.data.shadaqah,
-                total.pengeluaran = res.data.pengeluaran
-
+                total.pengeluaran = res.data.pengeluaran,
+                total.bulan = res.data.bulan
             })
             .catch((err) => {
                 console.log(err)

@@ -86,7 +86,7 @@ export default{
             nomor_hp: props.zakat.nomor_hp,
             jenis_zakat: props.zakat.jenis_zakat,
             sha_id: props.zakat.sha_id,
-            berat_beras: props.zakat.berat_beras === null ? '' : props.zakat.berat_beras ,
+            berat_beras: props.zakat.berat_beras === null ? '' : props.zakat.berat_beras,
             jumlah: props.zakat.jumlah === null ? '' : props.zakat.jumlah,
             nominal: props.zakat.nominal === null ? '' : props.zakat.nominal,
             old_bukti_pembayaran: props.zakat.bukti_pembayaran,

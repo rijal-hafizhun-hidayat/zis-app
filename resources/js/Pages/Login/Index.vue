@@ -53,7 +53,6 @@ import { Head, useForm, router } from '@inertiajs/vue3'
 export default {
     components: { NavBar, Footer, Head },
     setup() {
-        //console.log(props.errors)
         const form = reactive({
             username: '',
             password: ''
@@ -68,8 +67,7 @@ export default {
                 password: form.password
             })
             .then((res) => {
-                NProgress.done()
-                return router.get('/dashboard')
+                router.get('/dashboard')
             })
             .catch((err) => {
                 if(err.response.data.errors){
@@ -86,6 +84,7 @@ export default {
                     validation.value = ''
                 }
             })
+            NProgress.done()
         }
 
         return {

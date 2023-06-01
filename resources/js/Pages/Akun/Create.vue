@@ -29,6 +29,7 @@
                                         <option disabled selected value="">-- pilih --</option>
                                         <option value="1">Admin</option>
                                         <option value="2">Bendahara</option>
+                                        <option value="3">Pemeliharaan & Pembangunan</option>
                                     </select>
                                     <div v-if="validation.role" class="invalid-feedback">
                                         {{ validation.role[0] }}

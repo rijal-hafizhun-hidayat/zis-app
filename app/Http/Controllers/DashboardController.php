@@ -18,10 +18,20 @@ class DashboardController extends Controller
     public function getSumZIS(){
         $response = [
             'status' => true,
-            'zakat' => Zakat::whereYear('created_at', date("Y"))->sum('nominal') - Pengeluaran::where('jenis_dana', 'Zakat')->sum('nominal'),
-            'infaq' => Infaq::whereYear('created_at', date("Y"))->sum('nominal') - Pengeluaran::where('jenis_dana', 'Infaq')->sum('nominal'),
-            'shadaqah' => Shadaqah::whereYear('created_at', date("Y"))->sum('nominal') - Pengeluaran::where('jenis_dana', 'Shadaqah')->sum('nominal'),
-            'pengeluaran' => Pengeluaran::whereDate('created_at', date("Y-m-d"))->sum('nominal'),
+            'zakat' => Zakat::whereYear('created_at', date("Y"))->sum('nominal') - Pengeluaran::where([
+                ['jenis_dana', 'Zakat'],
+                ['confirmed', 1]
+            ])->sum('nominal'),
+            'infaq' => Infaq::whereYear('created_at', date("Y"))->sum('nominal') - Pengeluaran::where([
+                ['jenis_dana', 'Infaq'],
+                ['confirmed', 1]
+            ])->sum('nominal'),
+            'shadaqah' => Shadaqah::whereYear('created_at', date("Y"))->sum('nominal') - Pengeluaran::where([
+                ['jenis_dana', 'Shadaqah'],
+                ['confirmed', 1]
+            ])->sum('nominal'),
+            'pengeluaran' => Pengeluaran::whereMonth('created_at', date('m'))->where('confirmed', 1)->sum('nominal'),
+            'bulan' => $this->setMonth(date('n')),
             'code' => 200
         ];
         return response()->json($response, 200);
@@ -30,7 +40,7 @@ class DashboardController extends Controller
     public function getZakat(){
         $response = [
             'status' => true,
-            'data' => Zakat::selectRaw('SUM(nominal) as total')->groupBy('bulan')->oldest()->get(),
+            'data' => Zakat::selectRaw('SUM(nominal) as total')->groupBy('bulan')->where('confirmed', 1)->oldest()->get(),
             'bulan' => Zakat::select('bulan')->distinct()->oldest()->get(),
             'code' => 200
         ];
@@ -40,7 +50,7 @@ class DashboardController extends Controller
     public function getInfaq(){
         $response = [
             'status' => true,
-            'data' => Infaq::selectRaw('SUM(nominal) as total')->groupBy('bulan')->oldest()->get(),
+            'data' => Infaq::selectRaw('SUM(nominal) as total')->groupBy('bulan')->where('confirmed', 1)->oldest()->get(),
             'bulan' => Infaq::select('bulan')->distinct()->oldest()->get(),
             'code' => 200
         ];
@@ -50,7 +60,7 @@ class DashboardController extends Controller
     public function getShadaqah(){
         $response = [
             'status' => true,
-            'data' => Shadaqah::selectRaw('SUM(nominal) as total')->groupBy('bulan')->oldest()->get(),
+            'data' => Shadaqah::selectRaw('SUM(nominal) as total')->groupBy('bulan')->where('confirmed', 1)->oldest()->get(),
             'bulan' => Shadaqah::select('bulan')->distinct()->oldest()->get(),
             'code' => 200
         ];
@@ -60,10 +70,15 @@ class DashboardController extends Controller
     public function getPengeluaran(){
         $response = [
             'status' => true,
-            'data' => Pengeluaran::selectRaw('SUM(nominal) as total')->groupBy('bulan')->oldest()->get(),
+            'data' => Pengeluaran::selectRaw('SUM(nominal) as total')->groupBy('bulan')->where('confirmed', 1)->oldest()->get(),
             'bulan' => Pengeluaran::select('bulan')->distinct()->oldest()->get(),
             'code' => 200
         ];
         return response()->json($response, 200);
+    }
+
+    private function setMonth($num){
+        $month = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+        return $month[$num-1];
     }
 }
