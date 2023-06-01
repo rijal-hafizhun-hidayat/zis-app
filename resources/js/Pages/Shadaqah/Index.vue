@@ -73,7 +73,7 @@ import { Link, router, Head } from '@inertiajs/vue3';
 import axios from 'axios';
 import { ref, computed } from 'vue'
 import Swal from 'sweetalert2';
-
+import NProgress from 'nprogress';
 export default{
     components: { Navbar, Footer, Link, Head, Modal },
     props: {
@@ -138,6 +138,7 @@ export default{
             })
             .then((result) => {
                 if (result.isConfirmed) {
+                    NProgress.start()
                     axios.put(`/shadaqah/confirmed/${id}`, {
                         confirmed: 1
                     })
@@ -147,11 +148,12 @@ export default{
                             text: res.data.text,
                             icon: 'success',
                         })
-                        return router.get('/shadaqah')
+                        router.get('/shadaqah')
                     })
                     .catch((err) => {
                         console.log(err)
                     })
+                    NProgress.done()
                 }
             })
         }

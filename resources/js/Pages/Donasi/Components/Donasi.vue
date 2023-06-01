@@ -79,6 +79,7 @@
 import { reactive, ref, onMounted } from 'vue'
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import NProgress from 'nprogress';
 export default{
     props: {
         errors: Object
@@ -115,7 +116,7 @@ export default{
         }
 
         function submit(){
-
+            NProgress.start()
             const d = new Date();
             let month = d.getMonth();
 
@@ -143,6 +144,7 @@ export default{
                     title: res.data.title,
                     text: res.data.text
                 })
+                NProgress.done()
             })
             .catch((err) => {
                 validation.value = err.response.data.errors

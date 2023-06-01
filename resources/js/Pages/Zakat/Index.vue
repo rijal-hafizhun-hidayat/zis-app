@@ -88,6 +88,7 @@ import { Link, router, Head } from '@inertiajs/vue3'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import moment from 'moment';
+import NProgress from 'nprogress';
 export default {
     components: { NavBar, Footer, Link, Head, Modal, Pagination },
     props: {
@@ -98,13 +99,6 @@ export default {
     },
     setup(props) {
         const searchQuery = ref('')
-        console.log(props.zakats)
-
-        // const zakats = ref([])
-        // zakats.value = props.zakats
-
-        // console.log(zakats.value)
-
         const searchedZakats = computed(() => {
             return props.zakats.filter((zakat) => {
                 return (
@@ -127,6 +121,7 @@ export default {
             })
             .then((result) => {
                 if(result.isConfirmed){
+                    NProgress.start()
                     axios.delete(`/zakat/${id}`)
                     .then((res) => {
                         Swal.fire({
@@ -134,16 +129,16 @@ export default {
                             title: res.data.title,
                             text: res.data.text
                         })
-
-                        return router.get('/zakat')
+                        router.get('/zakat')
                     })
                     .catch((err) => {
-                        return Swal.fire({
+                        Swal.fire({
                             icon: 'error',
                             title: err.data.title,
                             text: err.data.text
                         })
                     })
+                    NProgress.done()
                 }
             })
         }

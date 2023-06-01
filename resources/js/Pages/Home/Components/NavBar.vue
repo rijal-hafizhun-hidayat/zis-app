@@ -24,6 +24,7 @@
 <script>
 import { router } from '@inertiajs/vue3'
 import { ref, onMounted } from 'vue'
+import NProgress from 'nprogress';
 import axios from 'axios'
 export default{
     setup(){
@@ -42,9 +43,11 @@ export default{
         }
 
         function getImageNavBar(){
+            NProgress.start()
             axios.get('/getImageHome')
             .then((res) => {
                 image.value = res.data.data.logo
+                NProgress.done()
             })
             .catch((err) => {
                 console.log(err)

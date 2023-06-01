@@ -28,6 +28,7 @@
 import { reactive } from 'vue'
 import Swal from 'sweetalert2'
 import axios from 'axios';
+import NProgress from 'nprogress';
 export default {
     setup() {
         const form = reactive({
@@ -36,6 +37,7 @@ export default {
         });
 
         function savePass(){
+            NProgress.start()
             axios.put('/updatePassword', {
                 newPass: form.newPass,
                 konfPass: form.konfPass,
@@ -46,17 +48,18 @@ export default {
                     title: 'Berhasil',
                     text: 'Berhasil Update Password'
                 })
-
+                NProgress.done()
                 form.reset('newPass', 'konfPass')
             })
             .catch((err) => {
                 form.konfPass = ''
-                return Swal.fire({
+                Swal.fire({
                     icon: 'error',
                     title: 'Gagal',
                     text: err.response.data.message
                 })
             })
+            NProgress.done()
         }
 
         return {

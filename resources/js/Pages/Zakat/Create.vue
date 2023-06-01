@@ -93,6 +93,7 @@ import { reactive, ref } from 'vue'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import { router, Head } from '@inertiajs/vue3'
+import NProgress from 'nprogress';
 export default{
     components: { NavBar, Footer, Head },
     props: {
@@ -126,12 +127,10 @@ export default{
         }
 
         function submit(){
-            console.log(zakat)
+            NProgress.start()
             const d = new Date();
             let month = d.getMonth();
-
             setForm()
-
             axios.post('/zakat', {
                 nama_donatur: zakat.nama_donatur,
                 nomor_hp: zakat.nomor_hp,
@@ -160,6 +159,7 @@ export default{
             .catch((err) => {
                 validation.value = err.response.data.errors
             })
+            NProgress.done()
         }
 
         function setTotalNominal(jumlah){

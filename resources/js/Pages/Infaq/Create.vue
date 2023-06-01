@@ -65,7 +65,7 @@ import { reactive, ref } from 'vue';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { router, Head } from '@inertiajs/vue3'
-
+import NProgress from 'nprogress';
 export default {
     components: { Navbar, Footer, Head },
     setup(){
@@ -80,8 +80,8 @@ export default {
         const validation = ref([])
 
         function submit(){
+            NProgress.start()
             const d = new Date();
-
             axios.post('/infaq', {
                 nama_donatur: form.nama_donatur,
                 nomor_hp: form.nomor_hp,
@@ -101,12 +101,12 @@ export default {
                     title: res.data.title,
                     text: res.data.message
                 })
-
-                return router.get('/infaq')
+                router.get('/infaq')
             })
             .catch((err) => {
                 validation.value = err.response.data.errors
             })
+            NProgress.done()
         }
 
         function numOnly(evt){

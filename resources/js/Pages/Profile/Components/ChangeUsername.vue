@@ -36,6 +36,7 @@
 import Swal from 'sweetalert2'
 import { reactive, onMounted, ref } from 'vue'
 import axios from 'axios';
+import NProgress from 'nprogress';
 export default {
     setup(){
         const form = reactive({
@@ -46,6 +47,7 @@ export default {
         const validation = ref([])
 
         onMounted(() => {
+            NProgress.start()
             axios.get(`/getUsername`)
             .then((res) => {
                 form.username = res.data.username
@@ -53,9 +55,11 @@ export default {
             .catch((err) => {
                 console.log(err)
             })
+            NProgress.done()
         })
 
         function submit(){
+            NProgress.start()
             axios.put(`/updateUsername`, {
                 username: form.username,
                 newUsername: form.newUsername
@@ -72,6 +76,7 @@ export default {
             .catch((err) => {
                 validation.value = err.response.data.errors
             });
+            NProgress.done()
         }
 
         return {

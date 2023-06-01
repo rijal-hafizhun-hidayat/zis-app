@@ -80,6 +80,7 @@ import moment from 'moment';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { ref, computed } from 'vue'
+import NProgress from 'nprogress';
 export default{
     components: { Navbar, Footer, Link, Modal, Head },
     props: {
@@ -113,6 +114,7 @@ export default{
             })
             .then((result) => {
                 if(result.isConfirmed){
+                    NProgress.start()
                     axios.delete(`/pengeluaran/${id}`)
                     .then((res) => {
                         Swal.fire({
@@ -120,8 +122,7 @@ export default{
                             title: res.data.title,
                             text: res.data.text
                         })
-
-                        return router.get('/pengeluaran')
+                        router.get('/pengeluaran')
                     })
                     .catch((err) => {
                         Swal.fire({
@@ -129,9 +130,9 @@ export default{
                             title: err.data.title,
                             text: err.data.text
                         })
-
-                        return router.get('/pengeluaran')
+                        router.get('/pengeluaran')
                     })
+                    NProgress.done()
                 }
             })
         }

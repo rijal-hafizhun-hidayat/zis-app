@@ -72,6 +72,7 @@ import { reactive } from 'vue';
 import { router, Head } from '@inertiajs/vue3'
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import NProgress from 'nprogress';
 export default{
     components: { Navbar, Footer, Modal, Head },
     props: {
@@ -94,7 +95,7 @@ export default{
         })
 
         function submit(){
-
+            NProgress.start()
             axios.post(`/zakat/${props.zakat.id}`,dataAppend() ,{
                 headers: {
                     'Content-Type': 'multipart/form-data'
@@ -107,15 +108,16 @@ export default{
                     text: res.data.text
                 })
 
-                return router.get('/zakat')
+                router.get('/zakat')
             })
             .catch((err) => {
-                return Swal.fire({
+                Swal.fire({
                     icon: 'error',
                     title: err.data.title,
                     text: err.data.text
                 })
             })
+            NProgress.done()
         }
 
         function NumbersOnly(evt) {

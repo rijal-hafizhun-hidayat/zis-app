@@ -55,6 +55,7 @@
 import { Head, router } from '@inertiajs/vue3'
 import NavBar from '../Components/Navbar.vue'
 import Footer from '../Components/Footer.vue'
+import NProgress from 'nprogress';
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import { reactive, ref } from 'vue'
@@ -71,6 +72,7 @@ export default {
         const validation = ref([])
 
         function submit(){
+            NProgress.start()
             axios.post('/akun', {
                 name: form.name,
                 username: form.username,
@@ -83,12 +85,12 @@ export default {
                     title: 'Berhasil',
                     text: res.data.message
                 })
-
-                return router.get('/akun')
+                router.get('/akun')
             })
             .catch((err) => {
                 validation.value = err.response.data.errors
             })
+            NProgress.done()
         }
 
         return {

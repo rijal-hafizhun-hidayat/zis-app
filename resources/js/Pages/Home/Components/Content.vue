@@ -42,6 +42,7 @@
 // import zakatImg from '/storage/images/Home/zakat.png'
 // import infaqImg from '/storage/images/Home/infaq.png'
 // import shadaqahImg from '/storage/images/Home/shadaqah.png'
+import NProgress from 'nprogress';
 import { router } from '@inertiajs/vue3'
 import { reactive, onMounted } from 'vue'
 import axios from 'axios'
@@ -62,11 +63,13 @@ export default{
         })
 
         function getImageContent(){
+            NProgress.start()
             axios.get('/getImageHome')
             .then((res) => {
                 image.zakat = res.data.data.zakat,
                 image.infaq = res.data.data.infaq,
                 image.shadaqah = res.data.data.shadaqah
+                NProgress.done()
             })
             .catch((err) => {
                 console.log(err)

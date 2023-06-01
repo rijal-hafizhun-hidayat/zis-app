@@ -74,7 +74,7 @@ import { Link, router, Head } from '@inertiajs/vue3'
 import { ref, computed } from 'vue'
 import axios from 'axios'
 import Swal from 'sweetalert2'
-
+import NProgress from 'nprogress';
 export default {
     components: { Navbar, Footer, Link, Head, Modal },
     props: {
@@ -96,7 +96,7 @@ export default {
         });
 
         function destroy(id){
-            //console.log(id)
+            NProgress.start()
             axios.delete(`/infaq/${id}`)
             .then((res) => {
                 Swal.fire({
@@ -104,8 +104,7 @@ export default {
                     title: 'Berhasil',
                     text: res.data.message
                 })
-
-                return router.get('/infaq')
+                router.get('/infaq')
             })
             .catch((err) => {
                 Swal.fire({
@@ -113,9 +112,9 @@ export default {
                     title: 'Gagal',
                     text: 'Gagal Hapus Akun'
                 })
-
-                return router.get('/infaq')
+                router.get('/infaq')
             })
+            NProgress.done()
         }
 
         function numberWithDots(x) {

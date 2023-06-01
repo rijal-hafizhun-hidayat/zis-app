@@ -35,7 +35,7 @@ import axios from 'axios'
 import { reactive } from 'vue'
 import Swal from 'sweetalert2'
 import { router } from '@inertiajs/vue3'
-
+import NProgress from 'nprogress';
 export default {
     components: { Navbar, Footer },
     props: {
@@ -59,6 +59,7 @@ export default {
         }
 
         function submit(){
+            NProgress.start(0)
             axios.put(`/sha/${props.sha.id}`, {
                 nama: sha.nama,
                 harga: sha.harga
@@ -79,6 +80,7 @@ export default {
                     text: 'gagal update data'
                 })
             })
+            NProgress.done()
         }
 
         return {

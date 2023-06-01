@@ -47,8 +47,8 @@ import { useForm, router } from '@inertiajs/vue3'
 import NavBar from '../Components/Navbar.vue'
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import NProgress from 'nprogress';
 import { ref } from 'vue'
-
 export default {
     components: { NavBar },
     props: {
@@ -64,6 +64,7 @@ export default {
         const validation = ref([])
 
         function submit(){
+            NProgress.start()
             axios.put(`/akun/${props.akun.id}`, {
                 name: form.name,
                 username: form.username,
@@ -75,12 +76,12 @@ export default {
                     title: 'Berhasil',
                     text: res.data.message
                 })
-
-                return router.get('/akun')
+                router.get('/akun')
             })
             .catch((err) => {
                 console.log(err)
             })
+            NProgress.done()
         }
 
         return {

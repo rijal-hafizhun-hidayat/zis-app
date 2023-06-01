@@ -72,6 +72,7 @@
 import { Link } from '@inertiajs/vue3'
 import { computed } from 'vue'
 import { usePage, router } from '@inertiajs/vue3'
+import NProgress from 'nprogress';
 import axios from 'axios'
 export default {
     components: { Link },
@@ -79,14 +80,15 @@ export default {
         const user = computed(() => usePage().props.user)
 
         function logout(){
+            NProgress.start()
             axios.post('/logout')
             .then((res) => {
-                console.log(res)
                 router.get('/login')
             })
             .catch((err) => {
                 console.log(err)
             })
+            NProgress.done()
         }
 
         function laporanZakat(){

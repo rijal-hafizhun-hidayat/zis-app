@@ -16,6 +16,7 @@
 </template>
 <script>
 import { router, Link } from '@inertiajs/vue3'
+import NProgress from 'nprogress';
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 export default{
@@ -32,9 +33,11 @@ export default{
         }
 
         function getImageJumbotron(){
+            NProgress.start()
             axios.get('/getImageHome')
             .then((res) => {
                 image.value = res.data.data.jumbotron
+                NProgress.done()
             })
             .catch((err) => {
                 console.log(err)

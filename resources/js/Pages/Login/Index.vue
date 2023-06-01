@@ -47,6 +47,7 @@ import NavBar from '../Components/Navbar.vue'
 import Footer from '../Components/Footer.vue'
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import NProgress from 'nprogress';
 import { reactive, ref } from 'vue'
 import { Head, useForm, router } from '@inertiajs/vue3'
 export default {
@@ -61,11 +62,13 @@ export default {
         const validation = ref([])
 
         function login(){
+            NProgress.start()
             axios.post('/login', {
                 username: form.username,
                 password: form.password
             })
             .then((res) => {
+                NProgress.done()
                 return router.get('/dashboard')
             })
             .catch((err) => {

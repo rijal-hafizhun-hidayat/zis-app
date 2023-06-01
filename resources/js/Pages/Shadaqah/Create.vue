@@ -69,7 +69,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import { router, Head } from '@inertiajs/vue3'
 import { reactive, ref } from 'vue';
-
+import NProgress from 'nprogress';
 export default{
     components: { Navbar, Footer, Head },
     setup(){
@@ -85,10 +85,9 @@ export default{
         const validation = ref([])
 
         function submit(){
+            NProgress.start()
             const d = new Date();
-
             setForm()
-            
             axios.post('/shadaqah', {
                 nama_donatur: form.nama_donatur,
                 nomor_hp: form.nomor_hp,
@@ -115,6 +114,7 @@ export default{
             .catch((err) => {
                 validation.value = err.response.data.errors
             })
+            NProgress.done()
         }
 
         function numOnly(evt){

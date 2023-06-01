@@ -35,7 +35,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import { reactive } from "vue";
 import { router } from '@inertiajs/vue3'
-
+import NProgress from 'nprogress';
 export default {
     components: { Navbar, Footer },
     props: {
@@ -48,6 +48,7 @@ export default {
         })
 
         function submit(){
+            NProgress.start()
             axios.post('/sha', {
                 nama: sha.nama,
                 harga: sha.harga
@@ -59,15 +60,16 @@ export default {
                     text: res.data.message
                 })
 
-                return router.get('/sha')
+                router.get('/sha')
             })
             .catch((err) => {
-                return Swal.fire({
+                Swal.fire({
                     icon: 'error',
                     titel: 'error',
                     text: 'simpan data gagal'
                 })
             })
+            NProgress.done()
         }
 
         function NumbersOnly(evt) {

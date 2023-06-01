@@ -53,7 +53,7 @@ import Footer from '../Components/Footer.vue'
 import { Link, router, Head } from '@inertiajs/vue3'
 import { computed, ref } from 'vue'
 import Swal from 'sweetalert2'
-
+import NProgress from 'nprogress';
 export default {
     components: { NavBar, Footer, Link, Head },
     props: {
@@ -74,6 +74,7 @@ export default {
         });
 
         function destroy(id){
+            NProgress.start()
             axios.delete(`/akun/${id}`)
             .then((res) => {
                 Swal.fire({
@@ -82,7 +83,7 @@ export default {
                     text: res.data.message
                 })
 
-                return router.get('/akun')
+                router.get('/akun')
                 
             })
             .catch((err) => {
@@ -95,6 +96,7 @@ export default {
                     })
                 }
             })
+            NProgress.done()
         }
 
         return {

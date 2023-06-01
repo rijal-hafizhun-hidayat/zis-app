@@ -92,6 +92,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import { router, Head } from '@inertiajs/vue3'
 import { reactive, ref } from 'vue';
+import NProgress from 'nprogress';
 export default{
     components: { Navbar, Footer, Modal, Head },
     props: {
@@ -116,6 +117,7 @@ export default{
         const validation = ref([])
 
         function submit(){
+            NProgress.start()
             axios.post(`/pengeluaran/${props.pengeluaran.id}`, dataAppend(), {
                 headers: {
                     'Content-Type': 'multipart/form-data'
@@ -127,12 +129,12 @@ export default{
                     title: res.data.title,
                     text: res.data.text
                 })
-
-                return router.get('/pengeluaran')
+                router.get('/pengeluaran')
             })
             .catch((err) => {
                 validation.value = err.response.data.errors
             })
+            NProgress.done()
         }
 
         function numOnly(evt){
