@@ -133,6 +133,7 @@ export default {
             })
             .then((result) => {
                 if (result.isConfirmed) {
+                    NProgress.start()
                     axios.put(`/infaq/confirmed/${id}`)
                     .then((res) => {
                         Swal.fire({
@@ -140,11 +141,12 @@ export default {
                             text: res.data.message,
                             icon: 'success',
                         })
-                        return router.get('/infaq')
+                        router.get('/infaq')
                     })
                     .catch((err) => {
                         console.log(err)
                     })
+                    NProgress.done()
                 }
             })
         }

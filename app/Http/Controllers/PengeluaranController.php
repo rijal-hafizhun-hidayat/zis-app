@@ -79,7 +79,6 @@ class PengeluaranController extends Controller
 
     private function destroyImage($id){
         $image = Pengeluaran::where('id', $id)->value('bukti_pengeluaran');
-        //dd(is_file(base_path('/public/image/Pengeluaran/'.$image)));
         if(is_file(base_path('/public/image/Pengeluaran/'.$image))){
             unlink(base_path('/public/image/Pengeluaran/'.$image));
             return true;

@@ -82,13 +82,10 @@ export default {
                     title: 'Berhasil',
                     text: res.data.message
                 })
-
                 router.get('/akun')
-                
             })
             .catch((err) => {
                 if(err.response.data.message){
-                    //console.log(err)
                     Swal.fire({
                         icon: 'error',
                         title: 'Gagal',

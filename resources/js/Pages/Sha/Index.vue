@@ -50,7 +50,7 @@ import { Link, Head } from '@inertiajs/vue3'
 import { ref, computed } from 'vue'
 import axios from 'axios'
 import Swal from 'sweetalert2'
-
+import NProgress from 'nprogress';
 export default {
     components: { NavBar, Footer, Link, Head },
     props: {
@@ -71,6 +71,7 @@ export default {
         });
 
         function destroy(id){
+            NProgress.start()
             axios.delete(`/sha/${id}`)
             .then((res) => {
                 Swal.fire({
@@ -86,6 +87,7 @@ export default {
                     text: 'gagal hapus data'
                 })
             })
+            NProgress.done()
         }
 
         return {

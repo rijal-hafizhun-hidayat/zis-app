@@ -69,7 +69,6 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <!-- <Pagination class="mt-6" :links="zakats.links" /> -->
                         </div>
                     </div>
                 </div>
@@ -178,6 +177,7 @@ export default {
             })
             .then((result) => {
                 if (result.isConfirmed) {
+                    NProgress.start()
                     axios.put(`/zakat/confirmed/${id}`)
                     .then((res) => {
                         Swal.fire({
@@ -185,11 +185,12 @@ export default {
                             text: res.data.text,
                             icon: 'success',
                         })
-                        return router.get('/zakat')
+                        router.get('/zakat')
                     })
                     .catch((err) => {
                         console.log(err)
                     })
+                    NProgress.done()
                 }
             })
         }
@@ -199,13 +200,6 @@ export default {
                 search: searchQuery.value
             })
         }
-
-        // watch(searchQuery, async (newSearchQuery, oldSearchQuery) => {
-        //     // console.log(newSearchQuery)
-        //     router.get('/zakat', {
-        //         search: newSearchQuery
-        //     })
-        // })
 
         return {
             searchQuery,

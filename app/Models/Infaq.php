@@ -11,6 +11,5 @@ class Infaq extends Model
 
     protected $table = 'infaq';
     protected $primaryKey = 'id';
-    //protected $dateFormat = 'U';
     protected $guarded = [];
 }
