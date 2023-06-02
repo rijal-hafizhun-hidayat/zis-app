@@ -30,7 +30,8 @@
                     </div>
                 </div>
                 <div v-if="donasi.jenis_donasi == 'Zakat Fitrah'" class="mt-4">
-                    <select v-model="donasi.satuan" class="form-select" aria-label="Jenis Donasi" :class="{ 'is-invalid': validation.sha_id }">
+                    <label class="form-label" for="sha_id">Jenis Sha</label>
+                    <select v-model="donasi.satuan" class="form-select" :class="{ 'is-invalid': validation.sha_id }">
                         <option selected disabled value="">-- Jenis Sha --</option>
                         <option v-for="satuan in satuans" :value="satuan.id">{{ satuan.nama }}</option>
                     </select>
@@ -39,7 +40,7 @@
                     </div>
                 </div>
                 <div v-if="donasi.jenis_donasi == 'Zakat Fitrah'" class="mt-4">
-                    <label class="form-label" for="jumlah">jumlah / 1 beras dihitung 2.5 Kg</label>
+                    <label class="form-label" for="jumlah">jumlah 1 = beras dihitung 2.5 Kg</label>
                     <input type="text" @change="getNominal(donasi.satuan, donasi.jumlah)" v-model="donasi.jumlah" v-on:keypress="numOnly()" class="form-control" maxlength="2" id="jumlah" :class="{ 'is-invalid': validation.jumlah }">
                     <div v-if="validation.jumlah" class="invalid-feedback">
                         {{ validation.jumlah[0] }}

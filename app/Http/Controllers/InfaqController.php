@@ -103,6 +103,21 @@ class InfaqController extends Controller
                 'bulan' => 'numeric',
                 'bukti_pembayaran' => 'mimes:jpg,jpeg,png',
                 'confirmed' => 'required|numeric|max_digits:1'
+            ], [
+                'nama_donatur.required' => 'wajib diisi',
+                'nama_donatur' => 'wajib dalam bentuk kalimat',
+                'nomor_hp.required' => 'wajib diisi',
+                'nomor_hp.numeric' => 'wajib dalam bentuk angka',
+                'nomor_hp.min_digits' => 'minimal nomor hp 10 digit',
+                'nomor_hp.max_digits' => 'maximal nomor hp 12 digit',
+                'metode_pembayaran.required' => 'wajib diisi',
+                'metode_pembayaran.string' => 'wajib dalam bentuk kalimat',
+                'nominal.required' => 'wajib diisi',
+                'nominal.numeric' => 'wajib dalam bentuk angka',
+                'bulan.numeric' => 'wajib dalam bentuk angka',
+                'bukti_pembayaran.mimes' => 'gambar wajib dengan format .jpg .jpeg .png',
+                'confirmed.required' => 'wajib diisi',
+                'confirmed.numeric' => 'wajib dalam bentuk angka'
             ]);
 
             $credential['bukti_pembayaran'] = $this->storeImage();
@@ -115,6 +130,20 @@ class InfaqController extends Controller
                 'nominal' => 'required|numeric',
                 'bulan' => 'numeric',
                 'confirmed' => 'required|numeric|max_digits:1'
+            ], [
+                'nama_donatur.required' => 'wajib diisi',
+                'nama_donatur' => 'wajib dalam bentuk kalimat',
+                'nomor_hp.required' => 'wajib diisi',
+                'nomor_hp.numeric' => 'wajib dalam bentuk angka',
+                'nomor_hp.min_digits' => 'minimal nomor hp 10 digit',
+                'nomor_hp.max_digits' => 'maximal nomor hp 12 digit',
+                'metode_pembayaran.required' => 'wajib diisi',
+                'metode_pembayaran.string' => 'wajib dalam bentuk kalimat',
+                'nominal.required' => 'wajib diisi',
+                'nominal.numeric' => 'wajib dalam bentuk angka',
+                'bulan.numeric' => 'wajib dalam bentuk angka',
+                'confirmed.required' => 'wajib diisi',
+                'confirmed.numeric' => 'wajib dalam bentuk angka'
             ]);
         }
         return $credential;

@@ -132,15 +132,36 @@ class DonasiController extends Controller
             'metode_pembayaran' => 'required|string',
             'bukti_donasi' => 'required|image',
             'confirmed' => 'required|numeric'
+        ], [
+            'nama_donatur.required' => 'wajib diisi',
+            'nama_donatur.string' => 'wajib dalam bentuk teks',
+            'nomor_hp.required' => 'wajib diisi',
+            'nomor_hp.numeric' => 'wajib dalam bentuk angka',
+            'nomor_hp.min_digits' => 'minimal nomor hp 10 digit',
+            'nomor_hp.max_digits' => 'maximal nomor hp 12 digit',
+            'jenis_donasi.required' => 'wajib diisi',
+            'jenis_donasi.string' => 'wajib dalam bentuk teks',
+            'sha_id.required' => 'wajib diisi',
+            'sha_id.numeric' => 'wajib dalam bentuk angka',
+            'jumlah.numeric' => 'wajib dalam bentuk angka',
+            'nominal.numeric' => 'wajib dalam bentuk angka',
+            'berat_beras.decimal' => 'desimal minimal 2 angka dibelakang koma',
+            'bulan.numeric' => 'wajib dalam bentuk angka',
+            'metode_pembayaran.required' => 'wajib diisi',
+            'metode_pembayaran.string' => 'wajib dalam bentuk teks',
+            'bukti_donasi.required' => 'wajib ada bukti pembayaran',
+            'bukti_donasi.image' => 'gambar wajib dengan format .jpg .jpeg .png',
+            'confirmed.required' => 'wajib diisi',
+            'confirmed.numeric' => 'wajib dalam bentuk angka',
         ]);
         if($credential['jenis_donasi'] == 'Zakat Fitrah' || $credential['jenis_donasi'] == 'Zakat Maal'){
-            $path = 'Zakat/';
+            $path = 'Zakat';
         }
         else if($credential['jenis_donasi'] == 'Infaq'){
-            $path = 'Infaq/';
+            $path = 'Infaq';
         }
         else if($credential['jenis_donasi'] == 'Shadaqah'){
-            $path = 'Shadaqah/';
+            $path = 'Shadaqah';
         }
         $credential['bukti_donasi'] = $this->storeImage($path);
         return $this->setForm($credential);
@@ -148,7 +169,8 @@ class DonasiController extends Controller
 
     private function storeImage($path){
         $filename = time().'.'.request()->bukti_donasi->getClientOriginalExtension();
-        request()->bukti_donasi->store('public/images/');
+        $file = request()->file('bukti_donasi');
+        $file->move(base_path('/public/image/'.$path), $filename);
         return $filename;
     }
 

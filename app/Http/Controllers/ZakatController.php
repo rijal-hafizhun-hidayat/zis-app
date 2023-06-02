@@ -148,6 +148,24 @@ class ZakatController extends Controller
                 'bulan' => 'numeric',
                 'bukti_pembayaran' => 'mimes:jpg,jpeg,png',
                 'confirmed' => 'required|numeric|max_digits:1'
+            ], [
+                'nama_donatur.required' => 'wajib diisi',
+                'nama_donatur.string' => 'wajib dalam bentuk teks',
+                'nomor_hp.required' => 'wajib diisi',
+                'nomor_hp.numeric' => 'wajib dalam bentuk angka',
+                'nomor_hp.min_digits' => 'minimal nomor hp 10 digit',
+                'nomor_hp.max_digits' => 'maximal nomor hp 12 digit',
+                'jenis_zakat.required' => 'wajib diisi',
+                'jenis_zakat.string' => 'wajib dalam bentuk teks',
+                'sha_id.required' => 'wajib diisi',
+                'sha_id.numeric' => 'wajib dalam bentuk angka',
+                'berat_beras.decimal' => 'desimal minimal 2 angka dibelakang koma',
+                'jumlah.numeric' => 'wajib dalam bentuk angka',
+                'nominal.numeric' => 'wajib dalam bentuk angka',
+                'bulan.numeric' => 'wajib dalam bentuk angka',
+                'bukti_pembayaran.mimes' => 'gambar wajib dengan format .jpg .jpeg .png',
+                'confirmed.required' => 'wajib diisi',
+                'confirmed.numeric' => 'wajib dalam bentuk angka',
             ]);
             $credential['bukti_pembayaran'] = $this->storeImage();
 
@@ -163,6 +181,23 @@ class ZakatController extends Controller
                 'nominal' => 'nullable|numeric',
                 'bulan' => 'numeric',
                 'confirmed' => 'required|numeric|max_digits:1'
+            ], [
+                'nama_donatur.required' => 'wajib diisi',
+                'nama_donatur.string' => 'wajib dalam bentuk teks',
+                'nomor_hp.required' => 'wajib diisi',
+                'nomor_hp.numeric' => 'wajib dalam bentuk angka',
+                'nomor_hp.min_digits' => 'minimal nomor hp 10 digit',
+                'nomor_hp.max_digits' => 'maximal nomor hp 12 digit',
+                'jenis_zakat.required' => 'wajib diisi',
+                'jenis_zakat.string' => 'wajib dalam bentuk teks',
+                'sha_id.required' => 'wajib diisi',
+                'sha_id.numeric' => 'wajib dalam bentuk angka',
+                'berat_beras.decimal' => 'desimal minimal 2 angka dibelakang koma',
+                'jumlah.numeric' => 'wajib dalam bentuk angka',
+                'nominal.numeric' => 'wajib dalam bentuk angka',
+                'bulan.numeric' => 'wajib dalam bentuk angka',
+                'confirmed.required' => 'wajib diisi',
+                'confirmed.numeric' => 'wajib dalam bentuk angka',
             ]);
         }
         return $this->setForm($credential);

@@ -105,6 +105,19 @@ class PengeluaranController extends Controller
                 'bulan' => 'numeric',
                 'bukti_pengeluaran' => 'mimes:jpg,jpeg,png',
                 'confirmed' => 'required|numeric|max_digits:1'
+            ], [
+                'nama_organisasi.string' => 'wajib dalam bentuk teks',
+                'kebutuhan.required' => 'wajib diisi',
+                'kebutuhan.string' => 'wajib dalam bentuk teks',
+                'jenis_dana.required' => 'wajib diisi',
+                'jenis_dana.string' => 'wajib dalam bentuk teks',
+                'berat_beras.decimal' => 'wajib dalam bentuk decimal 2 angka dibelakang koma',
+                'jumlah_mustahiq.numeric' => 'wajib dalam bentuk angka',
+                'nominal.numeric' => 'wajib dalam bentuk angka',
+                'bulan.numeric' => 'wajib dalam bentuk angka',
+                'bukti_pengeluaran.mimes' => 'gambar wajib dengan format .jpg .jpeg .png',
+                'confirmed.required' => 'wajib diisi',
+                'confirmed.numeric' => 'wajib dalam bentuk angka'
             ]);
             $credential['bukti_pengeluaran'] = $this->storeImage();
 
@@ -119,6 +132,18 @@ class PengeluaranController extends Controller
                 'nominal' => 'nullable|numeric',
                 'bulan' => 'numeric',
                 'confirmed' => 'required|numeric|max_digits:1'
+            ], [
+                'nama_organisasi.string' => 'wajib dalam bentuk teks',
+                'kebutuhan.required' => 'wajib diisi',
+                'kebutuhan.string' => 'wajib dalam bentuk teks',
+                'jenis_dana.required' => 'wajib diisi',
+                'jenis_dana.string' => 'wajib dalam bentuk teks',
+                'berat_beras.decimal' => 'wajib dalam bentuk decimal 2 angka dibelakang koma',
+                'jumlah_mustahiq.numeric' => 'wajib dalam bentuk angka',
+                'nominal.numeric' => 'wajib dalam bentuk angka',
+                'bulan.numeric' => 'wajib dalam bentuk angka',
+                'confirmed.required' => 'wajib diisi',
+                'confirmed.numeric' => 'wajib dalam bentuk angka'
             ]);
         }
         return $this->setForm($credential);
