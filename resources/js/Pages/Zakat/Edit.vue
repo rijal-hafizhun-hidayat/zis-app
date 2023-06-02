@@ -13,38 +13,65 @@
                             <form @submit.prevent="submit()">
                                 <div class="mb-3">
                                     <label for="nama_donatur" class="form-label">Nama Donatur</label>
-                                    <input type="text" v-model="zakat.nama_donatur" class="form-control" id="nama_donatur" required>
+                                    <input type="text" v-model="zakat.nama_donatur" class="form-control" id="nama_donatur" :class="{ 'is-invalid': validation.nama_donatur } ">
+                                    <div v-if="validation.nama_donatur" class="invalid-feedback">
+                                        {{ validation.nama_donatur[0] }}
+                                    </div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="nomor_hp" class="form-label">Nomor Hp</label>
-                                    <input type="text" v-model="zakat.nomor_hp" class="form-control" id="nomor_hp" v-on:keypress="NumbersOnly()" required>
+                                    <input type="text" v-model="zakat.nomor_hp" class="form-control" id="nomor_hp" v-on:keypress="NumbersOnly()" :class="{ 'is-invalid': validation.nomor_hp }" >
+                                    <div v-if="validation.nomor_hp" class="invalid-feedback">
+                                        {{ validation.nomor_hp[0] }}
+                                    </div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="jenis_zakat" class="form-label">Jenis Zakat</label>
-                                    <select v-model="zakat.jenis_zakat" class="form-select" id="jenis_zakat" required>
+                                    <select v-model="zakat.jenis_zakat" class="form-select" id="jenis_zakat" :class="{ 'is-invalid': validation.jenis_zakat }">
                                         <option selected disabled value="">-- Pilih --</option>
                                         <option value="Zakat Fitrah">Zakat Fitrah</option>
                                         <option value="Zakat Maal">Zakat Maal</option>
                                     </select>
+                                    <div v-if="validation.jenis_zakat" class="invalid-feedback">
+                                        {{ validation.jenis_zakat[0] }}
+                                    </div>
                                 </div>
                                 <div v-if="zakat.jenis_zakat == 'Zakat Fitrah'" class="mb-3">
                                     <label for="satuan" class="form-label">Satuan</label>
-                                    <select v-model="zakat.sha_id" class="form-select" id="satuan" required>
+                                    <select v-model="zakat.sha_id" class="form-select" id="satuan" :class="{ 'is-invalid': validation.sha_id }">
                                         <option selected disabled value="">-- pilih --</option>
                                         <option v-for="sha in shas" :value="sha.id" :key="sha.id">{{ sha.nama }}</option>
                                     </select>
+                                    <div v-if="validation.sha_id" class="invalid-feedback">
+                                        {{ validation.sha_id[0] }}
+                                    </div>
                                 </div>
                                 <div v-if="zakat.jenis_zakat == 'Zakat Fitrah'" class="mb-3">
                                     <label for="jumlah" class="form-label">Jumlah / 1 Beras di hitung 2,5 Kg</label>
-                                    <input @change="setBeratBeras(zakat.jumlah, zakat.sha_id)" type="text" v-model="zakat.jumlah" class="form-control" v-on:keypress="NumbersOnly()" id="jumlah" required>
+                                    <input @change="setBeratBeras(zakat.jumlah, zakat.sha_id)" type="text" v-model="zakat.jumlah" class="form-control" v-on:keypress="NumbersOnly()" id="jumlah" :class="{ 'is-invalid': validation.jumlah }">
+                                    <div v-if="validation.jumlah" class="invalid-feedback">
+                                        {{ validation.jumlah[0] }}
+                                    </div>
                                 </div>
                                 <div v-if="zakat.jenis_zakat == 'Zakat Fitrah' && zakat.sha_id == 1" class="mb-3">
                                     <label for="jumlah" class="form-label">Berat Beras / kg</label>
-                                    <input type="text" disabled v-model="zakat.berat_beras" class="form-control" v-on:keypress="NumbersOnly()" id="jumlah" :required="zakat.sha_id == 1">
+                                    <div class="input-group has-validation">
+                                        <input type="text" disabled v-model="zakat.berat_beras" class="form-control" v-on:keypress="NumbersOnly()" id="jumlah" :class="{ 'is-invalid': validation.berat_beras }" :required="zakat.sha_id == 1" />
+                                        <span class="input-group-text" id="basic-addon2">Kg</span>
+                                        <div v-if="validation.berat_beras" class="invalid-feedback">
+                                            {{ validation.berat_beras[0] }}
+                                        </div>
+                                    </div>
                                 </div>
                                 <div v-if="zakat.sha_id == 2 || zakat.jenis_zakat == 'Zakat Maal'" class="mb-3">
                                     <label for="jumlah" class="form-label">Nominal</label>
-                                    <input type="text" :disabled="zakat.jenis_zakat == 'Zakat Fitrah'" v-model="zakat.nominal" class="form-control" v-on:keypress="NumbersOnly()" id="jumlah" required>
+                                    <div class="input-group has-validation">
+                                        <span class="input-group-text" id="basic-addon1">Rp.</span>
+                                        <input type="text" :disabled="zakat.jenis_zakat == 'Zakat Fitrah'" v-model="zakat.nominal" class="form-control" v-on:keypress="NumbersOnly()" id="jumlah" :class="{ 'is-invalid': validation.nominal }">
+                                        <div v-if="validation.nominal" class="invalid-feedback">
+                                            {{ validation.nominal[0] }}
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="bukti_pembayaran" class="form-label pe-2">Upload Bukti Pembayaran Baru:</label>
@@ -68,7 +95,7 @@
 import Navbar from '../Components/Navbar.vue';
 import Footer from '../Components/Footer.vue';
 import Modal from '../Components/Modal.vue';
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 import { router, Head } from '@inertiajs/vue3'
 import axios from 'axios';
 import Swal from 'sweetalert2';
@@ -94,6 +121,8 @@ export default{
             new_bukti_pembayaran: ''
         })
 
+        const validation = ref([])
+
         function submit(){
             NProgress.start()
             axios.post(`/zakat/${props.zakat.id}`,dataAppend() ,{
@@ -111,11 +140,7 @@ export default{
                 router.get('/zakat')
             })
             .catch((err) => {
-                Swal.fire({
-                    icon: 'error',
-                    title: err.data.title,
-                    text: err.data.text
-                })
+                validation.value = err.response.data.errors
             })
             NProgress.done()
         }
@@ -172,6 +197,7 @@ export default{
 
         return {
             zakat,
+            validation,
             submit,
             setTotalNominal,
             NumbersOnly,

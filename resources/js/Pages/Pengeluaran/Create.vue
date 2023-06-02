@@ -57,10 +57,11 @@
                                     <div class="input-group">
                                         <span class="input-group-text" id="basic-addon1">Rp.</span>
                                         <input type="text" class="form-control" v-model="form.nominal" v-on:keypress="numOnly()" id="nominal" aria-describedby="basic-addon1" :class="{ 'is-invalid': validation.nominal }">
+                                        <div v-if="validation.nominal" class="invalid-feedback">
+                                            {{ validation.nominal[0] }}
+                                        </div>
                                     </div>
-                                    <div v-if="validation.nominal" class="invalid-feedback">
-                                        {{ validation.nominal[0] }}
-                                    </div>
+                                    
                                 </div>
                                 <div class="mb-3">
                                     <label for="bukti_pengeluaran" class="form-label pe-2">Bukti Pengeluaran:</label>

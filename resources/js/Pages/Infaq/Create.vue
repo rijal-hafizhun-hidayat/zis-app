@@ -36,10 +36,13 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="jumlah" class="form-label">Nominal</label>
-                                    <input type="text" v-model="form.nominal" v-on:keypress="numOnly()" class="form-control" id="jumlah" :class="{ 'is-invalid': validation.nominal }">
-                                    <div v-if="validation.nominal" class="invalid-feedback">
-                                        {{ validation.nominal[0] }}
-                                    </div>
+                                    <div class="input-group has-validation">
+                                        <span class="input-group-text" id="basic-addon1">Rp.</span>
+                                        <input type="text" v-model="form.nominal" v-on:keypress="numOnly()" class="form-control" id="jumlah" :class="{ 'is-invalid': validation.nominal }">
+                                        <div v-if="validation.nominal" class="invalid-feedback">
+                                            {{ validation.nominal[0] }}
+                                        </div>
+                                    </div> 
                                 </div>
                                 <div class="mb-3">
                                     <label for="bukti_pembayaran" class="form-label">Bukti Pembayaran:</label>

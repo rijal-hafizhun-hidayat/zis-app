@@ -36,9 +36,12 @@
                                 </div>
                                 <div v-if="form.jenis_bantuan == 'Uang'" class="mb-3">
                                     <label for="nominal" class="form-label">Nominal</label>
-                                    <input type="text" v-on:keypress="numOnly" class="form-control" v-model="form.nominal" id="nominal" :required="form.jenis_bantuan == 'Uang'" :class="{ 'is-invalid': validation.nominal }">
-                                    <div v-if="validation.nominal" class="invalid-feedback">
-                                        {{ validation.nominal[0] }}
+                                    <div class="input-group has-validation">
+                                        <span class="input-group-text" id="basic-addon1">Rp.</span>
+                                        <input type="text" v-on:keypress="numOnly" class="form-control" v-model="form.nominal" id="nominal" :required="form.jenis_bantuan == 'Uang'" :class="{ 'is-invalid': validation.nominal }">
+                                        <div v-if="validation.nominal" class="invalid-feedback">
+                                            {{ validation.nominal[0] }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div v-if="form.jenis_bantuan == 'Barang'" class="mb-3">
