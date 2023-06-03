@@ -84,7 +84,9 @@ export default {
                     validation.value = ''
                 }
             })
-            NProgress.done()
+            .finally(() => {
+                NProgress.done()
+            })
         }
 
         return {

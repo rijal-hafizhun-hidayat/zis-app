@@ -4,6 +4,7 @@
 <script>
 import axios from 'axios';
 import Chart from 'chart.js/auto';
+import NProgress from 'nprogress';
 import { onMounted } from 'vue';
 export default{
     setup(){
@@ -12,6 +13,7 @@ export default{
         })
 
         function getPengeluaran(){
+            NProgress.start()
             axios.get('/getPengeluaran')
             .then((res) => {
                 //parse total
@@ -26,6 +28,9 @@ export default{
             })
             .catch((err) => {
                 console.log(err)
+            })
+            .finally(() => {
+                NProgress.done()
             })
         }
 

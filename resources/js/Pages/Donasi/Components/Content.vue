@@ -91,6 +91,7 @@
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import moment from 'moment';
+import NProgress from 'nprogress';
 import { ref, onMounted, reactive } from 'vue'
 export default{
     setup(){
@@ -103,6 +104,7 @@ export default{
         })
         
         onMounted(() => {
+            NProgress.start()
             axios.get('/getDonasi')
             .then((res) => {
                 zakats.value = res.data.data.zakat
@@ -113,6 +115,9 @@ export default{
             })
             .catch((err) => {
                 console.log(err)
+            })
+            .finally(() => {
+                NProgress.done()
             })
         })
 

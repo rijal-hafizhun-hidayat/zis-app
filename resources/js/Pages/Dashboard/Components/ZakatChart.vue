@@ -7,6 +7,7 @@
 import Chart from 'chart.js/auto';
 import axios from 'axios';
 import { onMounted } from 'vue';
+import NProgress from 'nprogress';
 export default{
     setup(){
         onMounted(() => {
@@ -14,6 +15,7 @@ export default{
         })
 
         function getZakat(){
+            NProgress.start()
             axios.get('/getZakat')
             .then((res) => {
 
@@ -30,6 +32,9 @@ export default{
             })
             .catch((err) => {
                 console.log(err)
+            })
+            .finally(() => {
+                NProgress.done()
             })
         }
 

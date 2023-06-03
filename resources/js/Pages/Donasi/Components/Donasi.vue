@@ -150,6 +150,9 @@ export default{
             .catch((err) => {
                 validation.value = err.response.data.errors
             })
+            .finally(() => {
+                NProgress.done()
+            })
         }
 
         function getSatuan(){

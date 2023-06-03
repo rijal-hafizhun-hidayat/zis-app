@@ -161,12 +161,14 @@ export default{
                     text: res.data.text
                 })
 
-                return router.get('/zakat')
+                router.get('/zakat')
             })
             .catch((err) => {
                 validation.value = err.response.data.errors
             })
-            NProgress.done()
+            .finally(() => {
+                NProgress.done()
+            })
         }
 
         function setTotalNominal(jumlah){

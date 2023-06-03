@@ -71,7 +71,7 @@ export default {
                     text: res.data.message
                 })
 
-                return router.get('/sha')
+                router.get('/sha')
             })
             .catch((err) => {
                 Swal.fire({
@@ -80,7 +80,9 @@ export default {
                     text: 'gagal update data'
                 })
             })
-            NProgress.done()
+            .finally(() => {
+                NProgress.done()
+            })
         }
 
         return {

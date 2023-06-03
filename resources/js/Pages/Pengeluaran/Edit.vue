@@ -135,7 +135,9 @@ export default{
             .catch((err) => {
                 validation.value = err.response.data.errors
             })
-            NProgress.done()
+            .finally(() => {
+                NProgress.done()
+            })
         }
 
         function numOnly(evt){

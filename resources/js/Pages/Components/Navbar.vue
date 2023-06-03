@@ -76,7 +76,10 @@ import NProgress from 'nprogress';
 import axios from 'axios'
 export default {
     components: { Link },
-    setup() {
+    props: {
+        user: Object
+    },
+    setup(props) {
         const user = computed(() => usePage().props.user)
 
         function logout(){
@@ -88,7 +91,9 @@ export default {
             .catch((err) => {
                 console.log(err)
             })
-            NProgress.done()
+            .finally(() => {
+                NProgress.done()
+            })
         }
 
         function laporanZakat(){

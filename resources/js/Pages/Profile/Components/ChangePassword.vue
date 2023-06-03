@@ -59,7 +59,9 @@ export default {
                     text: err.response.data.message
                 })
             })
-            NProgress.done()
+            .finally(() => {
+                NProgress.done()
+            })
         }
 
         return {

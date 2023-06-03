@@ -42,6 +42,9 @@ export default{
             .catch((err) => {
                 console.log(err)
             })
+            .finally(() => {
+                NProgress.done()
+            })
         }
 
         return {

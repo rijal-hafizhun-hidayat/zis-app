@@ -69,7 +69,9 @@ export default {
                     text: 'simpan data gagal'
                 })
             })
-            NProgress.done()
+            .finally(() => {
+                NProgress.done()
+            })
         }
 
         function NumbersOnly(evt) {

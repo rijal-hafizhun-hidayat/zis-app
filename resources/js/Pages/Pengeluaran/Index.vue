@@ -132,7 +132,9 @@ export default{
                         })
                         router.get('/pengeluaran')
                     })
-                    NProgress.done()
+                    .finally(() => {
+                        NProgress.done()
+                    })
                 }
             })
         }

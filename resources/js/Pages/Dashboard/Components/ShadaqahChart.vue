@@ -6,15 +6,16 @@
 <script>
 import axios from 'axios';
 import Chart from 'chart.js/auto';
+import NProgress from 'nprogress';
 import { onMounted } from 'vue';
 export default{
     setup(){
-
         onMounted(() => {
             getShadaqah()
         })
 
         function getShadaqah(){
+            NProgress.start()
             axios.get('/getShadaqah')
             .then((res) => {
                 //parse total
@@ -29,6 +30,9 @@ export default{
             })
             .catch((err) => {
                 console.log(err)
+            })
+            .finally(() => {
+                NProgress.done()
             })
         }
 

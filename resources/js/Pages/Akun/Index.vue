@@ -93,7 +93,9 @@ export default {
                     })
                 }
             })
-            NProgress.done()
+            .finally(() => {
+                NProgress.done()
+            })
         }
 
         return {

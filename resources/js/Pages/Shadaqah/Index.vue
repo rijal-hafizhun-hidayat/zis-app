@@ -122,6 +122,9 @@ export default{
                             text: err.data.text
                         })
                     })
+                    .finally(() => {
+                        NProgress.done()
+                    })
                 }
             })
         }
@@ -153,7 +156,9 @@ export default{
                     .catch((err) => {
                         console.log(err)
                     })
-                    NProgress.done()
+                    .finally(() => {
+                        NProgress.done()
+                    })
                 }
             })
         }

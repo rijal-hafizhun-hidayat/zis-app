@@ -114,7 +114,9 @@ export default {
                 })
                 router.get('/infaq')
             })
-            NProgress.done()
+            .finally(() => {
+                NProgress.done()
+            })
         }
 
         function numberWithDots(x) {

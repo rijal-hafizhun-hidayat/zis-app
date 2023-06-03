@@ -51,6 +51,7 @@
 <script>
 import axios from 'axios';
 import { onMounted, reactive } from 'vue';
+import NProgress from 'nprogress';
 export default{
     setup(){
         const total = reactive({
@@ -66,6 +67,7 @@ export default{
         })
 
         function getSumZIS(){
+            NProgress.start()
             axios.get('/getSumZIS')
             .then((res) => {
                 console.log(res.data),
@@ -77,6 +79,9 @@ export default{
             })
             .catch((err) => {
                 console.log(err)
+            })
+            .finally(() => {
+                NProgress.done()
             })
         }
 

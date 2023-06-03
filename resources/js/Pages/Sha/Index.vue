@@ -87,7 +87,9 @@ export default {
                     text: 'gagal hapus data'
                 })
             })
-            NProgress.done()
+            .finally(() => {
+                NProgress.done()
+            })
         }
 
         return {

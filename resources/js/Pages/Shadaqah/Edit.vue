@@ -112,12 +112,14 @@ export default{
                     text: res.data.text
                 })
 
-                return router.get('/shadaqah')
+                router.get('/shadaqah')
             })
             .catch((err) => {
                 validation.value = err.response.data.errors
             })
-            NProgress.done()
+            .finally(() => {
+                NProgress.done()
+            })
         }
 
         function numOnly(evt){

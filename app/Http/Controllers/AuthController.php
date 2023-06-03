@@ -10,6 +10,9 @@ use Inertia\Inertia;
 class AuthController extends Controller
 {
     public function index(){
+        // Auth::logout();
+        request()->session()->flush();
+        // request()->session()->regenerateToken();
         return Inertia::render('Login/Index');
     }
 
@@ -22,6 +25,7 @@ class AuthController extends Controller
             $request->session()->regenerate();
             $request->session()->put('isLogin', true);
             $request->session()->put('role', Auth::user()->role);
+            $request->session()->put('name', Auth::user()->name);
             return $this->responseApi(true, 'berhasil', 'selamat datang', 200);
         }
         else{

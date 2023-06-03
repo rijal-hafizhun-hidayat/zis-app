@@ -6,6 +6,7 @@
 <script>
 import axios from 'axios';
 import Chart from 'chart.js/auto';
+import NProgress from 'nprogress';
 import { onMounted } from 'vue';
 export default{
     setup(){
@@ -14,6 +15,7 @@ export default{
         })
 
         function getInfaq(){
+            NProgress.start()
             axios.get('/getInfaq')
             .then((res) => {
 
@@ -29,6 +31,9 @@ export default{
             })
             .catch((err) => {
                 console.log(err)
+            })
+            .finally(() => {
+                NProgress.done()
             })
         }
 

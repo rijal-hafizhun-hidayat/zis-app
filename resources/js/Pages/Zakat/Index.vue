@@ -137,7 +137,9 @@ export default {
                             text: err.data.text
                         })
                     })
-                    NProgress.done()
+                    .finally(() => {
+                        NProgress.done()
+                    })
                 }
             })
         }
