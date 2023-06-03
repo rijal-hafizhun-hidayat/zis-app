@@ -148,7 +148,9 @@ export default {
                     .catch((err) => {
                         console.log(err)
                     })
-                    NProgress.done()
+                    .finally(() => {
+                        NProgress.done()
+                    })
                 }
             })
         }
