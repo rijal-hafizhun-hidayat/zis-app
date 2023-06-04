@@ -43,12 +43,14 @@ Route::get('/', function () {
     return Inertia::render('Home/Index');
 });
 
-Route::get('/login', function () {
-    //dd(Hash::make('admin'));
-    return Inertia::render('Login/Index');
-})->name('login');
-
-Route::post('/login', [AuthController::class, 'authenticate'])->name('auth');
+Route::middleware(['isAuthenticate'])->group(function(){
+    Route::get('/login', function () {
+        //dd(Hash::make('admin'));
+        return Inertia::render('Login/Index');
+    })->name('login');
+    
+    Route::post('/login', [AuthController::class, 'authenticate'])->name('auth');
+});
 
 //HOME
 Route::get('/home', [HomeController::class, 'index'])->name('home');
