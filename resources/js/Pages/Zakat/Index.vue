@@ -28,7 +28,7 @@
                                             <th scope="col">Jenis Zakat</th>
                                             <th scope="col">Satuan</th>
                                             <th scope="col">Berat Beras</th>
-                                            <th scope="col">Jumlah</th>
+                                            <!-- <th scope="col">Jumlah</th> -->
                                             <th scope="col">Nominal</th>
                                             <th scope="col">Bukti Pembayaran</th>
                                             <th scope="col">Status Pembayaran</th>
@@ -44,7 +44,6 @@
                                             <td>{{ zakat.jenis_zakat }}</td>
                                             <td>{{ zakat.nama }}</td>
                                             <td>{{ zakat.berat_beras }}</td>
-                                            <td>{{ zakat.jumlah }}</td>
                                             <td v-if="zakat.nominal">{{ numberWithDots(zakat.nominal) }}</td>
                                             <td v-else></td>
                                             <td><Modal :image="zakat.bukti_pembayaran" :path="'Zakat'" :id="zakat.id"/></td>
@@ -62,7 +61,6 @@
                                             <th>{{ totalBeratBeras }} Kg</th>
                                             <td></td>
                                             <th>{{ numberWithDots(total) }}</th>
-                                            <td></td>
                                             <td></td>
                                             <td></td>
                                         </tr>
