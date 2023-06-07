@@ -58,7 +58,7 @@
                                     <label for="nominal" class="form-label">Nominal</label>
                                     <div class="input-group">
                                         <span class="input-group-text" id="basic-addon1">Rp.</span>
-                                        <input type="text" class="form-control" v-model="form.nominal" v-on:keypress="numOnly()" id="nominal" aria-describedby="basic-addon1" :class="{ 'is-invalid': validation.nominal }">
+                                        <input type="text" class="form-control" v-model="nominal" v-on:keypress="numOnly()" @input="formatInput" id="nominal" aria-describedby="basic-addon1" :class="{ 'is-invalid': validation.nominal }">
                                         <div v-if="validation.nominal" class="invalid-feedback">
                                             {{ validation.nominal[0] }}
                                         </div>
@@ -92,7 +92,7 @@ import Modal from '../Components/Modal.vue';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { router, Head } from '@inertiajs/vue3'
-import { reactive, ref } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import NProgress from 'nprogress';
 export default{
     components: { Navbar, Footer, Modal, Head },
@@ -107,15 +107,15 @@ export default{
             nama_organisasi: props.pengeluaran.nama_organisasi === null ? '' : props.pengeluaran.nama_organisasi,
             berat_beras: props.pengeluaran.berat_beras === null ? '' : props.pengeluaran.berat_beras,
             jumlah_mustahiq: props.pengeluaran.jumlah_mustahiq === null ? '' : props.pengeluaran.jumlah_mustahiq,
-            nominal: props.pengeluaran.nominal === null ? '' : props.pengeluaran.nominal,
+            nominal: props.pengeluaran.nominal === null ? '' : numberWithDots(props.pengeluaran.nominal),
             confirmed: props.pengeluaran.confirmed,
             old_bukti_pengeluaran: props.pengeluaran.bukti_pengeluaran,
             new_bukti_pengeluaran: ''
         })
 
-        console.log(form)
-
         const validation = ref([])
+        const nominal = ref('')
+        nominal.value = form.nominal
 
         function submit(){
             NProgress.start()
@@ -166,12 +166,29 @@ export default{
             return data;
         }
 
+        const formatInput = (event) => {
+            let value = event.target.value.replace(/\./g, ''); // Remove existing dots
+            value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Add dots every three digits
+            nominal.value = value;
+        };
+
+        function numberWithDots(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        watch(nominal, (newValue) => {
+            form.nominal = newValue.replace(/\./g, ''); // Remove dots for the actual value
+        });
+
         return {
             form,
             validation,
+            nominal,
             submit,
             numOnly,
-            dataAppend
+            dataAppend,
+            formatInput,
+            numberWithDots
         }
     }
 }

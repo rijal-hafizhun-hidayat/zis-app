@@ -37,19 +37,27 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-Route::get('/', function () {
-    //dd(Hash::make('admin'));
-    return Inertia::render('Home/Index');
-});
-
 Route::middleware(['isAuthenticate'])->group(function(){
+    Route::get('/', function () {
+        //dd(Hash::make('admin'));
+        return Inertia::render('Home/Index');
+    });
+
     Route::get('/login', function () {
         //dd(Hash::make('admin'));
         return Inertia::render('Login/Index');
     })->name('login');
     
     Route::post('/login', [AuthController::class, 'authenticate'])->name('auth');
+
+    //DONASI
+    Route::get('/donasi', [DonasiController::class, 'index'])->name('donasi');
+
+    //API DONASI
+    Route::get('/getDonasi', [DonasiController::class, 'getDonasi'])->name('getDonasi');
+    Route::post('/donasi', [DonasiController::class, 'store'])->name('donasi.store');
+    Route::get('/getSatuan', [DonasiController::class, 'getSatuan'])->name('getSatuan');
+    Route::get('/getNominal/{id}', [DonasiController::class, 'getNominal'])->name('getNominal');
 });
 
 //HOME
@@ -173,15 +181,6 @@ Route::middleware(['isLogin'])->group(function() {
         Route::put('/pengeluaran/confirmed/{id}', [PengeluaranController::class, 'confirmed'])->name('pengeluaran.confirmed');
     });
 });
-
-//DONASI
-Route::get('/donasi', [DonasiController::class, 'index'])->name('donasi');
-
-//API DONASI
-Route::get('/getDonasi', [DonasiController::class, 'getDonasi'])->name('getDonasi');
-Route::post('/donasi', [DonasiController::class, 'store'])->name('donasi.store');
-Route::get('/getSatuan', [DonasiController::class, 'getSatuan'])->name('getSatuan');
-Route::get('/getNominal/{id}', [DonasiController::class, 'getNominal'])->name('getNominal');
 //Auth::routes();
 
 //artisan command

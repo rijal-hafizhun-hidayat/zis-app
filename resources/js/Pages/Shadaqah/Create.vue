@@ -38,7 +38,7 @@
                                     <label for="nominal" class="form-label">Nominal</label>
                                     <div class="input-group has-validation">
                                         <span class="input-group-text" id="basic-addon1">Rp.</span>
-                                        <input type="text" v-on:keypress="numOnly" class="form-control" v-model="form.nominal" id="nominal" :required="form.jenis_bantuan == 'Uang'" :class="{ 'is-invalid': validation.nominal }">
+                                        <input type="text" v-on:keypress="numOnly" @input="formatInput" class="form-control" v-model="nominal" id="nominal" :required="form.jenis_bantuan == 'Uang'" :class="{ 'is-invalid': validation.nominal }">
                                         <div v-if="validation.nominal" class="invalid-feedback">
                                             {{ validation.nominal[0] }}
                                         </div>
@@ -71,7 +71,7 @@ import Footer from '../Components/Footer.vue';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { router, Head } from '@inertiajs/vue3'
-import { reactive, ref } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import NProgress from 'nprogress';
 export default{
     components: { Navbar, Footer, Head },
@@ -86,6 +86,7 @@ export default{
         })
 
         const validation = ref([])
+        const nominal = ref('')
 
         function submit(){
             NProgress.start()
@@ -141,12 +142,24 @@ export default{
             }
         }
 
+        const formatInput = (event) => {
+            let value = event.target.value.replace(/\./g, ''); // Remove existing dots
+            value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Add dots every three digits
+            nominal.value = value;
+        };
+
+        watch(nominal, (newValue) => {
+            form.nominal = newValue.replace(/\./g, ''); // Remove dots for the actual value
+        });
+
         return {
             form,
             validation,
+            nominal,
             submit,
             numOnly,
-            setForm
+            setForm,
+            formatInput
         }
     }
     

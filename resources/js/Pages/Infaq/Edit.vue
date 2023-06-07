@@ -38,7 +38,7 @@
                                     <label for="jumlah" class="form-label">Nominal</label>
                                     <div class="input-group has-validation">
                                         <span class="input-group-text" id="basic-addon1">Rp.</span>
-                                        <input type="text" v-model="form.nominal" v-on:keypress="numOnly()" class="form-control" id="jumlah" :class="{ 'is-invalid': validation.nominal }">
+                                        <input type="text" v-model="nominal" v-on:keypress="numOnly()" @input="formatInput" class="form-control" id="jumlah" :class="{ 'is-invalid': validation.nominal }">
                                         <div v-if="validation.nominal" class="invalid-feedback">
                                             {{ validation.nominal[0] }}
                                         </div>
@@ -69,7 +69,7 @@
 import Navbar from '../Components/Navbar.vue'
 import Footer from '../Components/Footer.vue'
 import Modal from '../Components/Modal.vue';
-import { reactive, ref } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { router, Head } from '@inertiajs/vue3'
@@ -91,6 +91,8 @@ export default {
         })
 
         const validation = ref([])
+        const nominal = ref('')
+        nominal.value = numberWithDots(form.nominal)
 
         function submit(){
             NProgress.start()
@@ -139,12 +141,29 @@ export default {
             }
         }
 
+        const formatInput = (event) => {
+            let value = event.target.value.replace(/\./g, ''); // Remove existing dots
+            value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Add dots every three digits
+            nominal.value = value;
+        };
+
+        function numberWithDots(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        watch(nominal, (newValue) => {
+            form.nominal = newValue.replace(/\./g, ''); // Remove dots for the actual value
+        });
+
         return {
             form,
             validation,
+            nominal,
             submit,
             numOnly,
-            dataAppend
+            dataAppend,
+            formatInput,
+            numberWithDots
         }
     }
 }

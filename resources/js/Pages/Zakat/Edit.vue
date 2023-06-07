@@ -67,7 +67,7 @@
                                     <label for="jumlah" class="form-label">Nominal</label>
                                     <div class="input-group has-validation">
                                         <span class="input-group-text" id="basic-addon1">Rp.</span>
-                                        <input type="text" :disabled="zakat.jenis_zakat == 'Zakat Fitrah'" v-model="zakat.nominal" class="form-control" v-on:keypress="NumbersOnly()" id="jumlah" :class="{ 'is-invalid': validation.nominal }">
+                                        <input type="text" :disabled="zakat.jenis_zakat == 'Zakat Fitrah'" v-model="nominal" class="form-control" v-on:keypress="NumbersOnly()" @input="formatInput" id="jumlah" :class="{ 'is-invalid': validation.nominal }">
                                         <div v-if="validation.nominal" class="invalid-feedback">
                                             {{ validation.nominal[0] }}
                                         </div>
@@ -95,7 +95,7 @@
 import Navbar from '../Components/Navbar.vue';
 import Footer from '../Components/Footer.vue';
 import Modal from '../Components/Modal.vue';
-import { reactive, ref } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import { router, Head } from '@inertiajs/vue3'
 import axios from 'axios';
 import Swal from 'sweetalert2';
@@ -122,6 +122,8 @@ export default{
         })
 
         const validation = ref([])
+        const nominal = ref('')
+        nominal.value = numberWithDots(zakat.nominal)
 
         function submit(){
             NProgress.start()
@@ -160,7 +162,8 @@ export default{
         function setTotalNominal(jumlah){
             axios.get(`/getNominalSha/${zakat.sha_id}`)
             .then((res) => {
-                zakat.nominal = res.data.data[0].harga*jumlah
+                nominal.value = res.data.data[0].harga*jumlah
+                nominal.value = nominal.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
             })
             .catch((err) => {
                 console.log(err)
@@ -178,6 +181,20 @@ export default{
                 setTotalNominal(jumlah)
             }
         }
+
+        const formatInput = (event) => {
+            let value = event.target.value.replace(/\./g, ''); // Remove existing dots
+            value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Add dots every three digits
+            nominal.value = value;
+        };
+
+        function numberWithDots(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        watch(nominal, (newValue) => {
+            zakat.nominal = newValue.toString().replace(/\./g, ''); // Remove dots for the actual value
+        });
 
         function dataAppend(){
             let data = new FormData();
@@ -200,12 +217,15 @@ export default{
         return {
             zakat,
             validation,
+            nominal,
             submit,
             setTotalNominal,
             NumbersOnly,
             setTotalNominal,
             setBeratBeras,
-            dataAppend
+            dataAppend,
+            formatInput,
+            numberWithDots
         }
     }
 }

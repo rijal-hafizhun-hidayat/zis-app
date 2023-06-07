@@ -12,11 +12,20 @@
                             <form @submit.prevent="submit()">
                                 <div class="mb-3">
                                     <label for="makanan-pokok" class="form-label">Nama Makanan Pokok</label>
-                                    <input type="text" class="form-control" v-model="sha.nama" id="makanan-pokok" required>
+                                    <input type="text" class="form-control" v-model="sha.nama" id="makanan-pokok" :class="{ 'is-invalid': validation.nama }" >
+                                    <div v-if="validation.nama" class="invalid-feedback">
+                                        {{ validation.nama[0] }}
+                                    </div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="harga" class="form-label">Harga / 2,5 Kg</label>
-                                    <input type="text" v-on:keypress="NumbersOnly" class="form-control" v-model="sha.harga" id="harga" required>
+                                    <label for="harga" class="form-label">Harga</label>
+                                    <div class="input-group has-validation">
+                                        <span class="input-group-text" id="inputGroupPrepend">Rp.</span>
+                                        <input type="text" v-on:keypress="NumbersOnly" @input="formatInput" class="form-control" v-model="nominal" id="harga" :class="{ 'is-invalid': validation.harga }">
+                                        <div v-if="validation.harga" class="invalid-feedback">
+                                            {{ validation.harga[0] }}
+                                        </div>
+                                    </div>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Update</button>
                             </form>
@@ -32,7 +41,7 @@
 import Navbar from '../Components/Navbar.vue'
 import Footer from '../Components/Footer.vue'
 import axios from 'axios'
-import { reactive } from 'vue'
+import { reactive, watch, ref } from 'vue'
 import Swal from 'sweetalert2'
 import { router } from '@inertiajs/vue3'
 import NProgress from 'nprogress';
@@ -46,6 +55,10 @@ export default {
             nama: props.sha.nama,
             harga: props.sha.harga
         })
+
+        const validation = ref([])
+        const nominal = ref('')
+        nominal.value = numberWithDots(sha.harga)
 
         function NumbersOnly(evt) {
             evt = (evt) ? evt : window.event;
@@ -74,21 +87,35 @@ export default {
                 router.get('/sha')
             })
             .catch((err) => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Gagal',
-                    text: 'gagal update data'
-                })
+                validation.value = err.response.data.errors
             })
             .finally(() => {
                 NProgress.done()
             })
         }
 
+        const formatInput = (event) => {
+            let value = event.target.value.replace(/\./g, ''); // Remove existing dots
+            value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Add dots every three digits
+            nominal.value = value;
+        };
+
+        watch(nominal, (newValue) => {
+            sha.harga = newValue.replace(/\./g, ''); // Remove dots for the actual value
+        });
+
+        function numberWithDots(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
         return {
             submit,
             NumbersOnly,
-            sha
+            formatInput,
+            numberWithDots,
+            sha,
+            validation,
+            nominal
         }
     },
 }

@@ -57,7 +57,7 @@
                     <label v-if="donasi.satuan == 2" for="nominal" class="form-label">Untuk Jenis Sha <b>Uang</b>, Nominal akan ditentukan sesuai harga beras</label>
                     <div class="input-group">
                         <span class="input-group-text" id="Rupiah">Rp.</span>
-                        <input type="text" :disabled="donasi.satuan == 2 && donasi.jenis_donasi == 'Zakat Fitrah'" v-model="donasi.nominal" class="form-control" placeholder="Nominal" aria-label="Nominal" aria-describedby="Rupiah" :class="{ 'is-invalid': validation.nominal }">
+                        <input type="text" :disabled="donasi.satuan == 2 && donasi.jenis_donasi == 'Zakat Fitrah'" v-model="donasi.nominal" v-on:keypress="numOnly()" @input="formatInput" class="form-control" placeholder="Nominal" aria-label="Nominal" aria-describedby="Rupiah" :class="{ 'is-invalid': validation.nominal }">
                         <div v-if="validation.nominal" class="invalid-feedback">
                         {{ validation.nominal[0] }}
                     </div>
@@ -77,7 +77,7 @@
     </div>
 </template>
 <script>
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, watch } from 'vue'
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import NProgress from 'nprogress';
@@ -99,8 +99,8 @@ export default{
         })
 
         const satuans = ref([])
-
         const validation = ref([])
+        const nominal = ref('')
 
         onMounted(() => {
             getSatuan()
@@ -181,15 +181,38 @@ export default{
             donasi.berat_beras = jumlah * 2.5
         }
 
+        function numOnly(evt){
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+                evt.preventDefault();
+            } else {
+                return true;
+            }
+        }
+
+        const formatInput = (event) => {
+            let value = event.target.value.replace(/\./g, ''); // Remove existing dots
+            value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Add dots every three digits
+            nominal.value = value;
+        };
+
+        watch(nominal, (newValue) => {
+            form.nominal = newValue.replace(/\./g, ''); // Remove dots for the actual value
+        });
+
         return {
             donasi,
             satuans,
             validation,
+            nominal,
             numOnly,
             submit,
             getSatuan,
             getNominal,
-            setBeratBeras
+            setBeratBeras,
+            formatInput,
+            numOnly
         }
     }
 }

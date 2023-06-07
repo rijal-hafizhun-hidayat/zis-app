@@ -26,7 +26,7 @@
                                         <tr v-for="(sha, index) in searchedMakananPokoks" :key="sha.id">
                                             <th scope="row">{{ index+1 }}</th>
                                             <td>{{ sha.nama }}</td>
-                                            <td>Rp.{{ sha.harga }}</td>
+                                            <td>Rp. {{ numberWithDots(sha.harga) }}</td>
                                             <td>
                                                 <Link v-if="sha.nama != 'Beras' && sha.nama != 'Uang'" as="button" @click="destroy(sha.id)" class="btn btn-danger me-2"><i class="fa-solid fa-trash"></i></Link>
                                                 <Link :href="`/sha/${sha.id}`" class="btn btn-warning"><i class="fa-solid fa-pen-to-square"></i></Link>
@@ -92,8 +92,13 @@ export default {
             })
         }
 
+        function numberWithDots(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
         return {
             destroy,
+            numberWithDots,
             searchQuery,
             searchedMakananPokoks
         }
