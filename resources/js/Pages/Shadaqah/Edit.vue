@@ -90,7 +90,7 @@ export default{
             nomor_hp: props.shadaqah.nomor_hp,
             jenis_bantuan: props.shadaqah.jenis_bantuan,
             keterangan: props.shadaqah.keterangan == null ? '' : props.shadaqah.keterangan,
-            nominal: props.shadaqah.nominal,
+            nominal: props.shadaqah.nominal == null ? '' : props.shadaqah.nominal,
             old_bukti_pembayaran: props.shadaqah.bukti_pembayaran,
             new_bukti_pembayaran: '',
             confirmed: props.shadaqah.confirmed
