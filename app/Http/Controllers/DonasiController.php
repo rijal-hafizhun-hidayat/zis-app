@@ -35,7 +35,7 @@ class DonasiController extends Controller
         $credential = $this->formRequest();
         if($credential['jenis_donasi'] == 'Zakat Fitrah' || $credential['jenis_donasi'] == 'Zakat Maal'){
             $this->storeZakat($credential);
-            return $this->responseStoreDonasi(200, 'berhasil', 'Terima Kasih Telah Bersubangsi');
+            return $this->responseStoreDonasi(200, 'berhasil', 'Terima Kasih Telah Menunaikan '.$credential['jenis_donasi']);
         }
         else if($credential['jenis_donasi'] == 'Infaq'){
             $this->storeInfaq($credential);

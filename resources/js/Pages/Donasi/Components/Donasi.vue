@@ -57,7 +57,7 @@
                     <label v-if="donasi.satuan == 2" for="nominal" class="form-label">Untuk Jenis Sha <b>Uang</b>, Nominal akan ditentukan sesuai harga beras</label>
                     <div class="input-group">
                         <span class="input-group-text" id="Rupiah">Rp.</span>
-                        <input type="text" :disabled="donasi.satuan == 2 && donasi.jenis_donasi == 'Zakat Fitrah'" v-model="donasi.nominal" v-on:keypress="numOnly()" @input="formatInput" class="form-control" placeholder="Nominal" aria-label="Nominal" aria-describedby="Rupiah" :class="{ 'is-invalid': validation.nominal }">
+                        <input type="text" :disabled="donasi.satuan == 2 && donasi.jenis_donasi == 'Zakat Fitrah'" v-model="nominal" v-on:keypress="numOnly()" @input="formatInput" class="form-control" placeholder="Nominal" aria-label="Nominal" aria-describedby="Rupiah" :class="{ 'is-invalid': validation.nominal }">
                         <div v-if="validation.nominal" class="invalid-feedback">
                         {{ validation.nominal[0] }}
                     </div>
@@ -117,6 +117,7 @@ export default{
         }
 
         function submit(){
+            // console.log(donasi)
             NProgress.start()
             const d = new Date();
             let month = d.getMonth();
@@ -158,7 +159,6 @@ export default{
         function getSatuan(){
             axios.get('/getSatuan')
             .then((res) => {
-                console.log(res.data.data)
                 satuans.value = res.data.data
             })
             .catch((err) => {
@@ -169,8 +169,9 @@ export default{
         function getNominal(id, jumlah){
             axios.get(`/getNominal/${id}`)
             .then((res) => {
-                donasi.nominal = res.data.data.harga * jumlah
+                nominal.value = res.data.data.harga * jumlah
                 donasi.berat_beras = jumlah * 2.5
+                nominal.value = nominal.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
             })
             .catch((err) => {
                 console.log(err)
@@ -198,7 +199,7 @@ export default{
         };
 
         watch(nominal, (newValue) => {
-            form.nominal = newValue.replace(/\./g, ''); // Remove dots for the actual value
+            donasi.nominal = newValue.toString().replace(/\./g, ''); // Remove dots for the actual value
         });
 
         return {

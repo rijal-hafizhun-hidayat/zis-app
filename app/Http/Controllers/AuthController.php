@@ -10,9 +10,7 @@ use Inertia\Inertia;
 class AuthController extends Controller
 {
     public function index(Request $request){
-        // Auth::logout();
         $request->session()->invalidate();
-        // request()->session()->regenerateToken();
         return Inertia::render('Login/Index');
     }
 
