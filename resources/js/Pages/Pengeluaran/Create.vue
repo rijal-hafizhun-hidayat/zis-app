@@ -40,9 +40,9 @@
                                     <div class="input-group">
                                         <input type="text" class="form-control" v-model="form.berat_beras" v-on:keypress="numOnly()" id="berat_beras" aria-describedby="basic-addon2" :class="{ 'is-invalid': validation.berat_beras }">
                                         <span class="input-group-text" id="basic-addon2">Kg</span>
-                                    </div>
-                                    <div v-if="validation.berat_beras" class="invalid-feedback">
-                                        {{ validation.berat_beras[0] }}
+                                        <div v-if="validation.berat_beras" class="invalid-feedback">
+                                            {{ validation.berat_beras[0] }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="mb-3">
@@ -132,6 +132,7 @@ export default{
             })
             .catch((err) => {
                 validation.value = err.response.data.errors
+                console.log(validation.value)
             })
             .finally(() => {
                 NProgress.done()

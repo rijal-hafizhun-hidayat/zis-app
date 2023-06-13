@@ -99,9 +99,9 @@ class PengeluaranController extends Controller
                 'nama_organisasi' => 'nullable|string',
                 'kebutuhan' => 'required|string',
                 'jenis_dana' => 'required|string',
-                'berat_beras' => 'nullable|decimal:0,2',
+                'berat_beras' => 'required_if:nominal,false|nullable|decimal:0,2',
                 'jumlah_mustahiq' => 'nullable|numeric',
-                'nominal' => 'nullable|numeric',
+                'nominal' => 'required_if:berat_beras,false|nullable|numeric',
                 'bulan' => 'numeric',
                 'bukti_pengeluaran' => 'mimes:jpg,jpeg,png',
                 'confirmed' => 'required|numeric|max_digits:1'
@@ -127,9 +127,9 @@ class PengeluaranController extends Controller
                 'nama_organisasi' => 'nullable|string',
                 'kebutuhan' => 'required|string',
                 'jenis_dana' => 'required|string',
-                'berat_beras' => 'nullable|decimal:0,2',
+                'berat_beras' => 'required_without:nominal|nullable|decimal:0,2',
                 'jumlah_mustahiq' => 'nullable|numeric',
-                'nominal' => 'nullable|numeric',
+                'nominal' => 'required_without:berat_beras|nullable|numeric',
                 'bulan' => 'numeric',
                 'confirmed' => 'required|numeric|max_digits:1'
             ], [
@@ -143,7 +143,8 @@ class PengeluaranController extends Controller
                 'nominal.numeric' => 'wajib dalam bentuk angka',
                 'bulan.numeric' => 'wajib dalam bentuk angka',
                 'confirmed.required' => 'wajib diisi',
-                'confirmed.numeric' => 'wajib dalam bentuk angka'
+                'confirmed.numeric' => 'wajib dalam bentuk angka',
+                'required_without' => 'wajib di isi jika salah satu form berat beras atau nominal diisi'
             ]);
         }
         return $this->setForm($credential);

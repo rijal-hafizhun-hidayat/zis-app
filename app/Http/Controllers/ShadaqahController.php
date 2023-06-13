@@ -94,8 +94,8 @@ class ShadaqahController extends Controller
                 'nama_donatur' => 'required|string',
                 'nomor_hp' => 'required|numeric|min_digits:10|max_digits:12',
                 'jenis_bantuan' => 'required|string',
-                'nominal' => 'nullable|numeric',
-                'keterangan' => 'nullable|string',
+                'nominal' => 'required_if:jenis_bantuan,==,Uang|nullable|numeric',
+                'keterangan' => 'required_if:jenis_bantuan,==,Barang|nullable|string',
                 'bulan' => 'numeric',
                 'bukti_pembayaran' => 'mimes:jpg,jpeg,png',
                 'confirmed' => 'required|numeric|max_digits:1'
@@ -122,8 +122,8 @@ class ShadaqahController extends Controller
                 'nama_donatur' => 'required|string',
                 'nomor_hp' => 'required|numeric|min_digits:10|max_digits:12',
                 'jenis_bantuan' => 'required|string',
-                'nominal' => 'nullable|numeric',
-                'keterangan' => 'nullable|string',
+                'nominal' => 'required_if:jenis_bantuan,==,Uang|nullable|numeric',
+                'keterangan' => 'required_if:jenis_bantuan,==,Barang|nullable|string',
                 'bulan' => 'numeric',
                 'confirmed' => 'required|numeric'
             ], [
@@ -132,14 +132,15 @@ class ShadaqahController extends Controller
                 'nomor_hp.required' => 'wajib diisi',
                 'nomor_hp.numeric' => 'wajib dalam bentuk angka',
                 'nomor_hp.min_digits' => 'minimal nomor hp 10 digit',
-                'nomor_hp.max_digits' => 'maximal nomor hp 12 digit',
+                'nomor_hp.max_digits' => 'maksimal nomor hp 12 digit',
                 'jenis_bantuan.required' => 'wajib diisi',
                 'jenis_bantuan.string' => 'wajib dalam bentuk teks',
                 'nominal.numeric' => 'wajib dalam bentuk angka',
                 'keterangan.string' => 'wajib dalam bentuk teks',
                 'bulan.numeric' => 'wajib dalam bentuk angka',
                 'confirmed.required' => 'wajib diisi',
-                'confirmed.numeric' => 'wajib dalam bentuk angka'
+                'confirmed.numeric' => 'wajib dalam bentuk angka',
+                'required_if' => 'wajib diisi'
             ]);
         }
         return $this->setForm($credential);

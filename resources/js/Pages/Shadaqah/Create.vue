@@ -38,7 +38,7 @@
                                     <label for="nominal" class="form-label">Nominal</label>
                                     <div class="input-group has-validation">
                                         <span class="input-group-text" id="basic-addon1">Rp.</span>
-                                        <input type="text" v-on:keypress="numOnly" @input="formatInput" class="form-control" v-model="nominal" id="nominal" :required="form.jenis_bantuan == 'Uang'" :class="{ 'is-invalid': validation.nominal }">
+                                        <input type="text" v-on:keypress="numOnly" @input="formatInput" class="form-control" v-model="nominal" id="nominal" :class="{ 'is-invalid': validation.nominal }">
                                         <div v-if="validation.nominal" class="invalid-feedback">
                                             {{ validation.nominal[0] }}
                                         </div>
@@ -46,7 +46,10 @@
                                 </div>
                                 <div v-if="form.jenis_bantuan == 'Barang'" class="mb-3">
                                     <label for="jumlah" class="form-label">Keterangan</label>
-                                    <input type="text" v-model="form.keterangan" class="form-control" id="jumlah" :required="form.jenis_bantuan == 'Barang'" :class="{ 'is-invalid': validation.jenis_bantuan }">
+                                    <input type="text" v-model="form.keterangan" class="form-control" id="jumlah" :class="{ 'is-invalid': validation.keterangan }">
+                                    <div v-if="validation.keterangan" class="invalid-feedback">
+                                        {{ validation.keterangan[0] }}
+                                    </div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="bukti_pembayaran" class="form-label">Bukti Pembayaran:</label>
@@ -117,6 +120,7 @@ export default{
             })
             .catch((err) => {
                 validation.value = err.response.data.errors
+                console.log(validation.value)
             })
             .finally(() => {
                 NProgress.done()
