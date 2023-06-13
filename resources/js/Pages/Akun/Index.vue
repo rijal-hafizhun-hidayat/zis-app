@@ -74,27 +74,38 @@ export default {
         });
 
         function destroy(id){
-            NProgress.start()
-            axios.delete(`/akun/${id}`)
-            .then((res) => {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil',
-                    text: res.data.message
-                })
-                router.get('/akun')
+            Swal.fire({
+                title: 'Hapus Data?',
+                text: "Akun akan terhapus dari database",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Konfirmasi'
             })
-            .catch((err) => {
-                if(err.response.data.message){
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Gagal',
-                        text: 'akun tidak ditemukan'
+            .then((result) => {
+                if(result.isConfirmed){
+                    NProgress.start()
+                    axios.delete(`/akun/${id}`)
+                    .then((res) => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: res.data.message
+                        })
+                        router.get('/akun')
+                    })
+                    .catch((err) => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal',
+                            text: err.data.text
+                        })
+                    })
+                    .finally(() => {
+                        NProgress.done()
                     })
                 }
-            })
-            .finally(() => {
-                NProgress.done()
             })
         }
 
