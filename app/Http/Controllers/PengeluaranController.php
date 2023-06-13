@@ -56,8 +56,15 @@ class PengeluaranController extends Controller
     }
 
     public function confirmed($id){
-        Pengeluaran::where('id', $id)->update(['confirmed' => 1]);
-        return $this->responseApi(true, 'Berhasil', 'konfirmasi pengeluaran berhasil', 200);
+        $pengeluaran = Pengeluaran::findOrFail($id);
+        if($pengeluaran->confirmed === 0){
+            $pengeluaran->update(['confirmed' => 1]);
+            $text = 'konfirmasi pembayaran berhasil';
+        }
+        else{
+            $text = 'pengeluaran sudah di konfirmasi';
+        }
+        return $this->responseApi(true, 'Berhasil', $text, 200);
     }
 
     private function storeImage(){

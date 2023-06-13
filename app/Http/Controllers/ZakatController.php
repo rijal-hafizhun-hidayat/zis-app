@@ -89,8 +89,18 @@ class ZakatController extends Controller
     }
 
     public function confirmed($id){
-        Zakat::where('id', $id)->update(['confirmed' => 1]);
-        return $this->responseApi(true, 'Berhasil', 'konfirmasi pembayaran berhasil', 200);
+        $zakat = Zakat::findOrFail($id);
+        if($zakat->confirmed === 0){
+            $zakat->update(['confirmed' => 1]);
+            $text = 'konfirmasi pembayaran berhasil';
+        }
+        else{
+            $text = 'pembayaran sudah di konfirmasi';
+        }
+        
+        return $this->responseApi(true, 'Berhasil', $text, 200);
+        // Zakat::where('id', $id)->update(['confirmed' => 1]);
+        // return $this->responseApi(true, 'Berhasil', 'konfirmasi pembayaran berhasil', 200);
     }
 
     public function exportPdf(){

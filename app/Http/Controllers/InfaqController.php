@@ -56,8 +56,16 @@ class InfaqController extends Controller
     }
 
     public function confirmed($id){
-        Infaq::where('id', $id)->update(['confirmed' => 1]);
-        return $this->responseApi(true, 'Berhasil', 'konfirmasi pembayaran berhasil', 200);
+        $infaq = Infaq::findOrFail($id);
+        if($infaq->confirmed === 0){
+            $infaq->update(['confirmed' => $infaq->confirmed]);
+            $text = 'konfirmasi pembayaran berhasil';
+        }
+        else{
+            $text = 'pembayaran sudah di konfirmasi';
+        }
+        
+        return $this->responseApi(true, 'Berhasil', $text, 200);
     }
 
     private function setMonth($num){
