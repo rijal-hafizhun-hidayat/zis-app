@@ -18,6 +18,9 @@ class AuthController extends Controller
         $credentials = $request->validate([
             'username' => 'required|string',
             'password' => 'required|string'
+        ], [
+            'required' => 'wajib diisi',
+            'string' => 'wajib dalam bentuk teks'
         ]);
         if(Auth::attempt($credentials)){
             $request->session()->regenerate();
