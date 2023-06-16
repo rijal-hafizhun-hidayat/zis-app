@@ -80,7 +80,7 @@ export default {
                         text: err.response.data.text,
                     })
 
-                    form.password = '',
+                    form.password = ''
                     validation.value = ''
                 }
             })

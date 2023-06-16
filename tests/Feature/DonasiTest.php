@@ -20,24 +20,24 @@ class DonasiTest extends TestCase
         $response->assertOk();
     }
 
-    // public function test_store_donasi_zakat_fitrah(): void{
-    //     $donasi = Donasi::factory()->make();
+    public function test_store_donasi_zakat_fitrah(): void{
+        $donasi = Donasi::factory()->make();
 
-    //     $response = $this->post(route('donasi.store'), [
-    //         'nama_donatur' => 'fajri',
-    //         'nomor_hp' => 628139378414,
-    //         'jenis_donasi' => 'Zakat Fitrah',
-    //         'sha_id' => 2,
-    //         'jumlah' => 3,
-    //         'nominal' => $donasi->nominal,
-    //         'berat_beras' => '',
-    //         'metode_pembayaran' => $donasi->metode_pembayaran,
-    //         'bulan' => $donasi->bulan,
-    //         'bukti_donasi' => $donasi->bukti_donasi,
-    //         'confirmed' => 0
-    //     ]);
+        $response = $this->post(route('donasi.store'), [
+            'nama_donatur' => 'fajri',
+            'nomor_hp' => 628139378414,
+            'jenis_donasi' => 'Zakat Fitrah',
+            'sha_id' => 2,
+            'jumlah' => 3,
+            'nominal' => $donasi->nominal,
+            'berat_beras' => '',
+            'metode_pembayaran' => $donasi->metode_pembayaran,
+            'bulan' => $donasi->bulan,
+            'bukti_donasi' => $donasi->bukti_donasi,
+            'confirmed' => 0
+        ]);
 
 
-    //     $response->assertOk();
-    // }
+        $response->assertOk();
+    }
 }

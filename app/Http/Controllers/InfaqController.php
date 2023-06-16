@@ -58,7 +58,7 @@ class InfaqController extends Controller
     public function confirmed($id){
         $infaq = Infaq::findOrFail($id);
         if($infaq->confirmed === 0){
-            $infaq->update(['confirmed' => $infaq->confirmed]);
+            $infaq->update(['confirmed' => 1]);
             $text = 'konfirmasi pembayaran berhasil';
         }
         else{

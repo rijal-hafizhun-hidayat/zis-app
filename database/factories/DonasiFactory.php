@@ -21,7 +21,7 @@ class DonasiFactory extends Factory
             'nomor_hp' => fake()->randomNumber(5, true),
             'jenis_donasi' => 'Zakat Fitrah',
             'sha_id' => 1,
-            'jumlah' => fake()->randomDigit(),
+            'jumlah' => fake()->randomDigitNotNull(),
             'nominal' => fake()->randomNumber(5, true),
             'berat_beras' => 4.5,
             'metode_pembayaran' => 'Rekening',

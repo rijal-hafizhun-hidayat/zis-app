@@ -171,9 +171,7 @@ class InfaqTest extends TestCase
         $this->actingAs($user)->withSession([
             'isLogin' => true,
             'role' => $user->role
-        ])->put(route('infaq.confirmed', ['id' => $infaq->id]), [
-            'confirmed' => 1
-        ]);
+        ])->put(route('infaq.confirmed', ['id' => $infaq->id]));
 
         $this->assertDatabaseHas('infaq', [
             'confirmed' => 1

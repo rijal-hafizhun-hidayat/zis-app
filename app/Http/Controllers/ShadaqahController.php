@@ -67,7 +67,7 @@ class ShadaqahController extends Controller
     public function confirmed(Request $request, $id){
         $shadaqah = Shadaqah::findOrFail($id);
         if($shadaqah->confirmed === 0){
-            $shadaqah->update(['confirmed' => $request->confirmed]);
+            $shadaqah->update(['confirmed' => 1]);
             $text = 'konfirmasi pembayaran berhasil';
         }
         else{
