@@ -40,11 +40,11 @@ class InfaqController extends Controller
         if($request->hasFile('bukti_pembayaran')){
             $this->destroyImage($id);
             Infaq::findOrFail($id)->update($credential);
-            return $this->responseApi(true, 'Berhasil', 'berhasil update data', 200);
+            return $this->responseApi(true, 'Berhasil', 'berhasil ubah data', 200);
         }
         else{
             Infaq::findOrFail($id)->update($credential);
-            return $this->responseApi(true, 'Berhasil', 'berhasil update data', 200);
+            return $this->responseApi(true, 'Berhasil', 'berhasil ubah data', 200);
         }
         return $this->responseApi(false, 'Gagal', 'gagal update data', 400);
     }

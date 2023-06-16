@@ -95,27 +95,64 @@ export default {
             });
         });
 
+        // function destroy(id){
+        //     NProgress.start()
+        //     axios.delete(`/infaq/${id}`)
+        //     .then((res) => {
+        //         Swal.fire({
+        //             icon: 'success',
+        //             title: 'Berhasil',
+        //             text: res.data.message
+        //         })
+        //         router.get('/infaq')
+        //     })
+        //     .catch((err) => {
+        //         Swal.fire({
+        //             icon: 'error',
+        //             title: 'Gagal',
+        //             text: 'Gagal Hapus Akun'
+        //         })
+        //         router.get('/infaq')
+        //     })
+        //     .finally(() => {
+        //         NProgress.done()
+        //     })
+        // }
+
         function destroy(id){
-            NProgress.start()
-            axios.delete(`/infaq/${id}`)
-            .then((res) => {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil',
-                    text: res.data.message
-                })
-                router.get('/infaq')
+            Swal.fire({
+                title: 'Hapus Data?',
+                text: "bukti pengeluaran akan terhapus dari database",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Konfirmasi'
             })
-            .catch((err) => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Gagal',
-                    text: 'Gagal Hapus Akun'
-                })
-                router.get('/infaq')
-            })
-            .finally(() => {
-                NProgress.done()
+            .then((result) => {
+                if(result.isConfirmed){
+                    NProgress.start()
+                    axios.delete(`/infaq/${id}`)
+                    .then((res) => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: res.data.title,
+                            text: res.data.message
+                        })
+                        router.get('/infaq')
+                    })
+                    .catch((err) => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: err.data.title,
+                            text: err.data.text
+                        })
+                        router.get('/infaq')
+                    })
+                    .finally(() => {
+                        NProgress.done()
+                    })
+                }
             })
         }
 
