@@ -65,16 +65,8 @@ class ShadaqahController extends Controller
     }
 
     public function confirmed(Request $request, $id){
-        $shadaqah = Shadaqah::findOrFail($id);
-        if($shadaqah->confirmed === 0){
-            $shadaqah->update(['confirmed' => 1]);
-            $text = 'konfirmasi pembayaran berhasil';
-        }
-        else{
-            $text = 'pembayaran sudah di konfirmasi';
-        }
-        
-        return $this->responseApi(true, 'Berhasil', $text, 200);
+        Shadaqah::where('id', $id)->update(['confirmed' => 1]);
+        return $this->responseApi(true, 'Berhasil', 'konfirmasi pembayaran berhasil', 200);
     }
 
     private function storeImage(){
