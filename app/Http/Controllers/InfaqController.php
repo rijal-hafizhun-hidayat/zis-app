@@ -6,15 +6,18 @@ use App\Models\Infaq;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Twilio\Rest\Client;
 
 class InfaqController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
+        $infaqs = $this->setQueryInfaq($request->filter);
+        //$infaqs = $getInfaqs->get();
         return Inertia::render('Infaq/Index', [
-            'infaqs' => Infaq::select('id', 'nama_donatur', 'nomor_hp', 'metode_pembayaran', 'nominal', 'bukti_pembayaran', 'confirmed', 'created_at')->latest()->get(),
-            'total' => Infaq::sum('nominal')
+            'infaqs' => $infaqs->latest()->get(),
+            'total' => $infaqs->sum('nominal')
         ]);
     }
 
@@ -58,6 +61,23 @@ class InfaqController extends Controller
     public function confirmed($id){
         Infaq::where('id', $id)->update(['confirmed' => 1]);
         return $this->responseApi(true, 'Berhasil', 'konfirmasi pembayaran berhasil', 200);
+    }
+
+    private function setQueryInfaq($request){
+        $queryInfaq = DB::table('infaq');
+        if(!empty($request)){
+            if(!empty($request['nama_donatur'])){
+                $queryInfaq->where('nama_donatur', 'like', '%'.$request['nama_donatur'].'%');
+            }
+            if(!empty($request['bulan'])){
+                $queryInfaq->where('bulan', $request['bulan']);
+            }
+            if(!empty($request['metode_pembayaran'])){
+                $queryInfaq->where('metode_pembayaran', $request['metode_pembayaran']);
+            }
+        }
+        
+        return $queryInfaq;
     }
 
     private function setMonth($num){

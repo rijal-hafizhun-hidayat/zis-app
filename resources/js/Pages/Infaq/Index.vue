@@ -12,10 +12,33 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                     <div class="card">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <div>Pemasukan Infaq</div>
-                            <input type="search" v-model="searchQuery" class="search-form" placeholder="Cari Nama.....">
-                            <Link href="/infaq/add" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i></Link>
+                        <div class="card-header">
+                            <div class="d-flex">
+                                <div class="mt-2">Pemasukan Infaq</div>
+                                <div class="ms-3">
+                                    <select v-model="filter.bulan" class="form-select" aria-label="Default select example">
+                                        <option selected disabled value="">-- Pilih Bulan --</option>
+                                        <option v-for="bulan in bulans" :value="bulan">{{ bulan }}</option>
+                                    </select>
+                                </div>
+                                <div class="ms-3">
+                                    <select v-model="filter.metode_pembayaran" class="form-select" aria-label="Default select example">
+                                        <option selected disabled value="">-- Pilih Jenis Pembayaran --</option>
+                                        <option value="Cash">Cash</option>
+                                        <option value="Rekening">Rekening</option>
+                                    </select>
+                                </div>
+                                <div class="ms-3">
+                                    <input type="search" v-model="filter.nama_donatur" class="form-control" placeholder="Cari Nama Donatur .....">
+                                </div>
+                                <div class="ms-3">
+                                    <Link :href="'/infaq'" class="btn btn-secondary">Reset</Link>
+                                </div>
+                                <div class="ms-auto mt-1">
+                                    <!-- <Link :href="'/infaq/add'" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i></Link> -->
+                                    <button @click="create()" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i></button>
+                                </div>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div style="height: 400px; overflow: auto" class="table-responsive">
@@ -27,18 +50,20 @@
                                             <th scope="col">Nomor Hp</th>
                                             <th scope="col">Jenis Pembayaran</th>
                                             <th scope="col">Nominal</th>
+                                            <th scope="col">Bulan</th>
                                             <th scope="col">Bukti Pembayaran</th>
                                             <th scope="col">Status Pembayaran</th>
                                             <th scope="col">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody class="table-group-divider">
-                                        <tr v-for="(infaq, index) in searchedInfaqs" :key="infaq.id">
+                                        <tr v-for="(infaq, index) in infaqs" :key="infaq.id">
                                             <td>{{ index+1 }}</td>
                                             <td>{{ infaq.nama_donatur }}</td>
                                             <td>{{ infaq.nomor_hp }}</td>
                                             <td>{{ infaq.metode_pembayaran }}</td>
                                             <td>{{ numberWithDots(infaq.nominal) }}</td>
+                                            <td>{{ infaq.bulan }}</td>
                                             <td><Modal :image="infaq.bukti_pembayaran" :path="'Infaq'" :id="infaq.id"/></td>
                                             <td v-if="infaq.confirmed == 1"><button type="button" class="btn btn-success" disabled><i class="fa-solid fa-circle-check"></i></button></td>
                                             <td v-else><button type="button" class="btn btn-danger" disabled><i class="fa-solid fa-circle-xmark"></i></button></td>
@@ -71,7 +96,7 @@ import Navbar from '../Components/Navbar.vue'
 import Footer from '../Components/Footer.vue'
 import Modal from '../Components/Modal.vue'
 import { Link, router, Head } from '@inertiajs/vue3'
-import { ref, computed } from 'vue'
+import { ref, reactive, watch } from 'vue'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import NProgress from 'nprogress';
@@ -82,18 +107,13 @@ export default {
         total: Number
     },
     setup(props){
-
+        const bulans = ref(['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'])
         const searchQuery = ref('')
-
-        const searchedInfaqs = computed(() => {
-            return props.infaqs.filter((infaq) => {
-                return (
-                    infaq.nama_donatur
-                        .toLowerCase()
-                        .indexOf(searchQuery.value.toLowerCase()) != -1 
-                );
-            });
-        });
+        const filter = reactive({
+            bulan: '',
+            metode_pembayaran: '',
+            nama_donatur: ''
+        })
 
         function destroy(id){
             Swal.fire({
@@ -168,12 +188,26 @@ export default {
             })
         }
 
+        function create(){
+            router.get('/infaq/add')
+        }
+
+        watch(filter, async (newFilter, oldFilter) => {
+            router.get(`/infaq`, {
+                filter: newFilter
+            }, {
+                preserveState: true
+            })
+        })
+
         return {
             searchQuery,
-            searchedInfaqs,
+            bulans,
+            filter,
             destroy,
             numberWithDots,
-            confirmed
+            confirmed,
+            create
         }
     }
 }

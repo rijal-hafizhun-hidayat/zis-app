@@ -8,10 +8,33 @@
             <div class="row justify-content-center">
                 <div class="col-md-11">
                     <div class="card">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <div>Pemasukan Shadaqah</div>
-                            <input type="search" v-model="searchQuery" class="search-form" placeholder="Cari Nama.....">
-                            <Link href="/shadaqah/add" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i></Link>
+                        <div class="card-header">
+                            <div class="d-flex">
+                                <div class="mt-2">Pemasukan Shadaqah</div>
+                                <div class="ms-3">
+                                    <select v-model="filter.bulan" class="form-select" aria-label="Default select example">
+                                        <option selected disabled value="">-- Pilih Bulan --</option>
+                                        <option v-for="bulan in bulans" :value="bulan">{{ bulan }}</option>
+                                    </select>
+                                </div>
+                                <div class="ms-3">
+                                    <select v-model="filter.jenis_bantuan" class="form-select" aria-label="Default select example">
+                                        <option selected disabled value="">-- Pilih Jenis Bantuan --</option>
+                                        <option value="Uang">Uang</option>
+                                        <option value="Barang">Barang</option>
+                                    </select>
+                                </div>
+                                <div class="ms-3">
+                                    <input type="search" v-model="filter.nama_donatur" class="form-control" placeholder="Cari Nama Donatur .....">
+                                </div>
+                                <div class="ms-3">
+                                    <Link :href="'/shadaqah'" class="btn btn-secondary">Reset</Link>
+                                </div>
+                                <div class="ms-auto mt-1">
+                                    <!-- <Link :href="'/infaq/add'" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i></Link> -->
+                                    <button @click="create()" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i></button>
+                                </div>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div style="height: 500px; overflow: auto" class="table-responsive">
@@ -30,7 +53,7 @@
                                         </tr>
                                     </thead>
                                     <tbody class="table-group-divider">
-                                        <tr v-for="(shadaqah, index) in searchedSahadaqahs" :key="shadaqah.id">
+                                        <tr v-for="(shadaqah, index) in shadaqahs" :key="shadaqah.id">
                                             <td>{{ index+1 }}</td>
                                             <td>{{ shadaqah.nama_donatur }}</td>
                                             <td>{{ shadaqah.nomor_hp }}</td>
@@ -71,7 +94,7 @@ import Footer from '../Components/Footer.vue';
 import Modal from '../Components/Modal.vue';
 import { Link, router, Head } from '@inertiajs/vue3';
 import axios from 'axios';
-import { ref, computed } from 'vue'
+import { ref, reactive, watch } from 'vue'
 import Swal from 'sweetalert2';
 import NProgress from 'nprogress';
 export default{
@@ -81,17 +104,13 @@ export default{
         total: Number
     },
     setup(props){
+        const bulans = ref(['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'])
         const searchQuery = ref('')
-
-        const searchedSahadaqahs = computed(() => {
-            return props.shadaqahs.filter((shadaqah) => {
-                return (
-                    shadaqah.nama_donatur
-                        .toLowerCase()
-                        .indexOf(searchQuery.value.toLowerCase()) != -1 
-                );
-            });
-        });
+        const filter = reactive({
+            bulan: '',
+            jenis_bantuan: '',
+            nama_donatur: ''
+        })
 
         function destroy(id){
             Swal.fire({
@@ -163,17 +182,31 @@ export default{
             })
         }
 
+        function create(){
+            router.get('/shadaqah/add')
+        }
+
         function numberWithDots(x) {
             return 'Rp ' + x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         }
+
+        watch(filter, async (newFilter, oldFilter) => {
+            router.get(`/shadaqah`, {
+                filter: newFilter
+            }, {
+                preserveState: true
+            })
+        })
         
 
         return {
             searchQuery,
-            searchedSahadaqahs,
+            bulans,
+            filter,
             destroy,
             numberWithDots,
-            confirmed
+            confirmed,
+            create
         }
     }
 }

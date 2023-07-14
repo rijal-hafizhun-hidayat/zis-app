@@ -39,7 +39,8 @@
                                     <Link :href="'/zakat'" class="btn btn-secondary">Reset</Link>
                                 </div>
                                 <div class="ms-auto mt-1">
-                                    <Link :href="'/zakat/add'" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i></Link>
+                                    <!-- <Link :href="'/zakat/add'" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i></Link> -->
+                                    <button @click="create()" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -232,7 +233,7 @@ export default {
 
         watch(filter, async(newFilter, oldNamaDonatur) => {
             router.get(`/zakat`, {
-                filters: newFilter
+                filter: newFilter
             }, {
                 preserveState: true
             })

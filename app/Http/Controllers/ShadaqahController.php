@@ -10,10 +10,11 @@ use Illuminate\Support\Facades\Storage;
 
 class ShadaqahController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
+        $shadaqahs = $this->setQueryShadaqah($request->filter);
         return Inertia::render('Shadaqah/Index', [
-            'shadaqahs' => Shadaqah::latest()->get(),
-            'total' => Shadaqah::sum('nominal')
+            'shadaqahs' => $shadaqahs->latest()->get(),
+            'total' => $shadaqahs->sum('nominal')
         ]);
     }
 
@@ -52,6 +53,23 @@ class ShadaqahController extends Controller
         $this->destroyImage($id);
         Shadaqah::destroy($id);
         return $this->responseApi(true, 'Berhasil', 'berhasil hapus data', 200);
+    }
+
+    private function setQueryShadaqah($request){
+        $queryShadaqah = DB::table('shadaqah');
+        if(!empty($request)){
+            if(!empty($request['nama_donatur'])){
+                $queryShadaqah->where('nama_donatur', 'like', '%'.$request['nama_donatur'].'%');
+            }
+            if(!empty($request['bulan'])){
+                $queryShadaqah->where('bulan', $request['bulan']);
+            }
+            if(!empty($request['jenis_bantuan'])){
+                $queryShadaqah->where('jenis_bantuan', $request['jenis_bantuan']);
+            }
+        }
+                
+        return $queryShadaqah;
     }
 
     private function responseApi($status, $title, $text, $code){
