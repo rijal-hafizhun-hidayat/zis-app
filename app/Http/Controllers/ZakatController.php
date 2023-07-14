@@ -17,17 +17,19 @@ use PDF;
 
 class ZakatController extends Controller
 {
-    public function index(){
-        $zakats = DB::table('zakat')
+    public function index(Request $request){
+
+        $queryZakats = DB::table('zakat')
             ->join('sha', 'zakat.sha_id', '=', 'sha.id')
-            ->select('zakat.id', 'zakat.nama_donatur', 'zakat.nomor_hp', 'zakat.jenis_zakat', 'sha.nama', 'zakat.berat_beras', 'zakat.jumlah', 'zakat.nominal', 'zakat.bukti_pembayaran', 'zakat.confirmed', 'zakat.created_at AS waktu_zakat', 'zakat.updated_at')
-            ->where('nama_donatur', 'like', '%'.request()->search.'%')
-            ->latest('waktu_zakat')
-            ->get();
+            ->select('zakat.id', 'zakat.nama_donatur', 'zakat.bulan', 'zakat.nomor_hp', 'zakat.jenis_zakat', 'sha.nama', 'zakat.berat_beras', 'zakat.jumlah', 'zakat.nominal', 'zakat.bukti_pembayaran', 'zakat.confirmed', 'zakat.created_at AS waktu_zakat', 'zakat.updated_at');
+        if(!empty($request->all())){
+            $zakats = $this->setQueryZakats($queryZakats, $request->filters);
+        }
+        $zakats = $this->setQueryZakats($queryZakats, null);
         return Inertia::render('Zakat/Index', [
-            'zakats' => $zakats,
-            'total' => Zakat::sum('nominal'),
-            'totalBeratBeras' => Zakat::whereNotNull('berat_beras')->sum('berat_beras')
+            'zakats' => $zakats->latest('waktu_zakat')->get(),
+            'total' => $zakats->sum('nominal'),
+            'totalBeratBeras' => $zakats->whereNotNull('berat_beras')->sum('berat_beras')
         ]);
     }
 
@@ -100,6 +102,23 @@ class ZakatController extends Controller
 
     public function showImage($image){
         return Storage::download('image/Zakat/'.$image);
+    }
+
+    private function setQueryZakats($queryZakats, $request){
+        if(!empty($request['nama_donatur'])){
+            $queryZakats->where('zakat.nama_donatur', 'like', '%'.$request['nama_donatur'].'%');
+        }
+        if(!empty($request['bulan'])){
+            $queryZakats->where('zakat.bulan', $request['bulan']);
+        }
+        if(!empty($request['satuan'])){
+            $queryZakats->where('zakat.sha_id', $request['satuan']);
+        }
+        if(!empty($request['jenis_zakat'])){
+            $queryZakats->where('zakat.jenis_zakat', $request['jenis_zakat']);
+        }
+
+        return $queryZakats;
     }
 
     private function setMonth($num){

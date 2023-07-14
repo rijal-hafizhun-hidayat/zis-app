@@ -95,30 +95,6 @@ export default {
             });
         });
 
-        // function destroy(id){
-        //     NProgress.start()
-        //     axios.delete(`/infaq/${id}`)
-        //     .then((res) => {
-        //         Swal.fire({
-        //             icon: 'success',
-        //             title: 'Berhasil',
-        //             text: res.data.message
-        //         })
-        //         router.get('/infaq')
-        //     })
-        //     .catch((err) => {
-        //         Swal.fire({
-        //             icon: 'error',
-        //             title: 'Gagal',
-        //             text: 'Gagal Hapus Akun'
-        //         })
-        //         router.get('/infaq')
-        //     })
-        //     .finally(() => {
-        //         NProgress.done()
-        //     })
-        // }
-
         function destroy(id){
             Swal.fire({
                 title: 'Hapus Data?',

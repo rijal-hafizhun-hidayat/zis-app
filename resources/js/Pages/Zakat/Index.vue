@@ -9,12 +9,39 @@
             <div class="row justify-content-center">
                 <div class="col-md-12">
                     <div class="card">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <div>Pemasukan Zakat</div>
-                            <input type="search" v-model="searchQuery" class="search-form" placeholder="Cari Nama Donatur .....">
-                            <!-- <Link href="#" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i></Link> -->
-                            <button class="btn btn-primary btn-sm" @click="create()"><i class="fa-solid fa-plus"></i></button>
-                            <!-- <button @click="report()" class="btn btn-success">cetak</button> -->
+                        <div class="card-header">
+                            <div class="d-flex">
+                                <div class="mt-2">Pemasukan Zakat</div>
+                                <div class="ms-3">
+                                    <select v-model="filter.bulan" class="form-select" aria-label="Default select example">
+                                        <option selected disabled value="">-- Pilih Bulan --</option>
+                                        <option v-for="bulan in bulans" :value="bulan">{{ bulan }}</option>
+                                    </select>
+                                </div>
+                                <div class="ms-3">
+                                    <select v-model="filter.jenis_zakat" class="form-select" aria-label="Default select example">
+                                        <option selected disabled value="">-- Pilih Jenis Zakat --</option>
+                                        <option value="Zakat Fitrah">Zakat Fitrah</option>
+                                        <option value="Zakat Maal">Zakat Maal</option>
+                                    </select>
+                                </div>
+                                <div class="ms-3">
+                                    <select v-model="filter.satuan" class="form-select" aria-label="Default select example">
+                                        <option selected disabled value="">-- Pilih Satuan --</option>
+                                        <option value="2">Uang</option>
+                                        <option value="1">Beras</option>
+                                    </select>
+                                </div>
+                                <div class="ms-3">
+                                    <input type="search" v-model="filter.nama_donatur" class="form-control" placeholder="Cari Nama Donatur .....">
+                                </div>
+                                <div class="ms-3">
+                                    <Link :href="'/zakat'" class="btn btn-secondary">Reset</Link>
+                                </div>
+                                <div class="ms-auto mt-1">
+                                    <Link :href="'/zakat/add'" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i></Link>
+                                </div>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div style="height: 500px; overflow: auto" class="table-responsive">
@@ -30,13 +57,14 @@
                                             <th scope="col">Berat Beras</th>
                                             <!-- <th scope="col">Jumlah</th> -->
                                             <th scope="col">Nominal</th>
+                                            <th scope="col">Bulan</th>
                                             <th scope="col">Bukti Pembayaran</th>
                                             <th scope="col">Status Pembayaran</th>
                                             <th scope="col">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody class="table-group-divider">
-                                        <tr v-for="(zakat, index) in searchedZakats" :key="zakat.id">
+                                        <tr v-for="(zakat, index) in zakats" :key="zakat.id">
                                             <th scope="row">{{ index+1 }}</th>
                                             <td>{{ zakat.nama_donatur }}</td>
                                             <td>{{ zakat.nomor_hp }}</td>
@@ -46,6 +74,7 @@
                                             <td>{{ zakat.berat_beras }}</td>
                                             <td v-if="zakat.nominal">{{ numberWithDots(zakat.nominal) }}</td>
                                             <td v-else></td>
+                                            <td>{{ zakat.bulan }}</td>
                                             <td><Modal :image="zakat.bukti_pembayaran" :path="'Zakat'" :id="zakat.id"/></td>
                                             <td v-if="zakat.confirmed == 1"><button type="button" class="btn btn-success" disabled><i class="fa-solid fa-circle-check"></i></button></td>
                                             <td v-else><button type="button" class="btn btn-danger" disabled><i class="fa-solid fa-circle-xmark"></i></button></td>
@@ -59,8 +88,8 @@
                                             <th colspan="5">Total</th>
                                             <td></td>
                                             <th>{{ totalBeratBeras }} Kg</th>
-                                            <td></td>
-                                            <th>{{ numberWithDots(total) }}</th>
+                                            <td>{{ numberWithDots(total) }}</td>
+                                            <th></th>
                                             <td></td>
                                             <td></td>
                                         </tr>
@@ -80,7 +109,7 @@ import NavBar from '../Components/Navbar.vue'
 import Footer from '../Components/Footer.vue'
 import Modal from '../Components/Modal.vue'
 import Pagination from './Components/Pagination.vue'
-import { ref, computed } from 'vue'
+import { ref, watch, reactive } from 'vue'
 import { Link, router, Head } from '@inertiajs/vue3'
 import axios from 'axios'
 import Swal from 'sweetalert2'
@@ -95,16 +124,14 @@ export default {
         image: String
     },
     setup(props) {
-        const searchQuery = ref('')
-        const searchedZakats = computed(() => {
-            return props.zakats.filter((zakat) => {
-                return (
-                    zakat.nama_donatur
-                        .toLowerCase()
-                        .indexOf(searchQuery.value.toLowerCase()) != -1 
-                );
-            });
-        });
+        const bulans = ref(['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'])
+        const searchNamaDonatur = ref('')
+        const filter = reactive({
+            bulan: '',
+            jenis_zakat: '',
+            satuan: '',
+            nama_donatur: ''
+        })
 
         function destroy(id){
             Swal.fire({
@@ -203,9 +230,18 @@ export default {
             })
         }
 
+        watch(filter, async(newFilter, oldNamaDonatur) => {
+            router.get(`/zakat`, {
+                filters: newFilter
+            }, {
+                preserveState: true
+            })
+        })
+
         return {
-            searchQuery,
-            searchedZakats,
+            bulans,
+            searchNamaDonatur,
+            filter,
             destroy,
             create,
             timezone,
@@ -218,12 +254,3 @@ export default {
     },
 }
 </script>
-<!-- <style scoped>
-    thead, tbody { display: block; }
-
-    tbody {
-        height: 100px;       /* Just for the demo          */
-        overflow-y: auto;    /* Trigger vertical scroll    */
-        overflow-x: hidden;  /* Hide the horizontal scroll */
-    }
-</style> -->

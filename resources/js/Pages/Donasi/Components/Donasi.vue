@@ -117,7 +117,6 @@ export default{
         }
 
         function submit(){
-            // console.log(donasi)
             NProgress.start()
             const d = new Date();
             let month = d.getMonth();

@@ -40,8 +40,8 @@ class DashboardController extends Controller
     public function getZakat(){
         $response = [
             'status' => true,
-            'data' => Zakat::selectRaw('SUM(nominal) as total')->groupBy('bulan')->where('confirmed', 1)->oldest()->get(),
-            'bulan' => Zakat::select('bulan')->distinct()->oldest()->get(),
+            'data' => Zakat::selectRaw('SUM(nominal) as total')->groupBy('bulan')->where('confirmed', 1)->get(),
+            'bulan' => Zakat::select('bulan')->distinct()->get(),
             'code' => 200
         ];
         return response()->json($response, 200);
@@ -50,8 +50,8 @@ class DashboardController extends Controller
     public function getInfaq(){
         $response = [
             'status' => true,
-            'data' => Infaq::selectRaw('SUM(nominal) as total')->groupBy('bulan')->where('confirmed', 1)->oldest()->get(),
-            'bulan' => Infaq::select('bulan')->distinct()->oldest()->get(),
+            'data' => Infaq::selectRaw('SUM(nominal) as total')->groupBy('bulan')->where('confirmed', 1)->get(),
+            'bulan' => Infaq::select('bulan')->distinct()->get(),
             'code' => 200
         ];
         return response()->json($response, 200);
@@ -60,8 +60,8 @@ class DashboardController extends Controller
     public function getShadaqah(){
         $response = [
             'status' => true,
-            'data' => Shadaqah::selectRaw('SUM(nominal) as total')->groupBy('bulan')->where('confirmed', 1)->oldest()->get(),
-            'bulan' => Shadaqah::select('bulan')->distinct()->oldest()->get(),
+            'data' => Shadaqah::selectRaw('SUM(nominal) as total')->groupBy('bulan')->where('confirmed', 1)->get(),
+            'bulan' => Shadaqah::select('bulan')->distinct()->get(),
             'code' => 200
         ];
         return response()->json($response, 200);
@@ -70,8 +70,8 @@ class DashboardController extends Controller
     public function getPengeluaran(){
         $response = [
             'status' => true,
-            'data' => Pengeluaran::selectRaw('SUM(nominal) as total')->groupBy('bulan')->where('confirmed', 1)->oldest()->get(),
-            'bulan' => Pengeluaran::select('bulan')->distinct()->oldest()->get(),
+            'data' => Pengeluaran::selectRaw('SUM(nominal) as total')->groupBy('bulan')->where('confirmed', 1)->get(),
+            'bulan' => Pengeluaran::select('bulan')->distinct()->get(),
             'code' => 200
         ];
         return response()->json($response, 200);
