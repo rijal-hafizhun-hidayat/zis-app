@@ -6,10 +6,34 @@
             <div class="row justify-content-center">
                 <div class="col-sm-12">
                     <div class="card">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <div>Pengeluaran</div>
-                            <input type="search" v-model="searchQuery" class="search-form" placeholder="Cari Keterangan.....">
-                            <Link href="/pengeluaran/add" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i></Link>
+                        <div class="card-header">
+                            <div class="d-flex">
+                                <div class="mt-2">Pengeluaran</div>
+                                <div class="ms-3">
+                                    <select v-model="filter.bulan" class="form-select" aria-label="Default select example">
+                                        <option selected disabled value="">-- Pilih Bulan --</option>
+                                        <option v-for="bulan in bulans" :value="bulan">{{ bulan }}</option>
+                                    </select>
+                                </div>
+                                <div class="ms-3">
+                                    <select v-model="filter.jenis_dana" class="form-select" aria-label="Default select example">
+                                        <option selected disabled value="">-- Pilih Jenis Dana --</option>
+                                        <option value="Zakat">Zakat</option>
+                                        <option value="Infaq">Infaq</option>
+                                        <option value="Shadaqah">Shadaqa</option>
+                                    </select>
+                                </div>
+                                <div class="ms-3">
+                                    <input type="search" v-model="filter.nama_donatur" class="form-control" placeholder="Cari Nama Donatur .....">
+                                </div>
+                                <div class="ms-3">
+                                    <Link :href="'/shadaqah'" class="btn btn-secondary">Reset</Link>
+                                </div>
+                                <div class="ms-auto mt-1">
+                                    <!-- <Link :href="'/infaq/add'" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i></Link> -->
+                                    <button @click="create()" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i></button>
+                                </div>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div style="height: 400px; overflow: auto" class="table-responsive">
@@ -30,7 +54,7 @@
                                         </tr>
                                     </thead>
                                     <tbody class="table-group-divider">
-                                        <tr v-for="(pengeluaran, index) in searchedPengeluarans" :key="pengeluaran.id">
+                                        <tr v-for="(pengeluaran, index) in pengeluarans" :key="pengeluaran.id">
                                             <td>{{ index+1 }}</td>
                                             <td>{{ pengeluaran.nama_organisasi }}</td>
                                             <td>{{ pengeluaran.kebutuhan }}</td>
@@ -79,7 +103,7 @@ import { Link, router, Head } from '@inertiajs/vue3';
 import moment from 'moment';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import { ref, computed } from 'vue'
+import { ref, reactive, watch } from 'vue'
 import NProgress from 'nprogress';
 export default{
     components: { Navbar, Footer, Link, Modal, Head },
@@ -90,18 +114,12 @@ export default{
         totalMustahiq: Number
     },
     setup(props){
+        const bulans = ref(['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'])
+        const filter = reactive({
+            jenis_dana: '',
+            bulan: ''
+        })
 
-        const searchQuery = ref('')
-
-        const searchedPengeluarans = computed(() => {
-            return props.pengeluarans.filter((pengeluaran) => {
-                return (
-                    pengeluaran.kebutuhan
-                        .toLowerCase()
-                        .indexOf(searchQuery.value.toLowerCase()) != -1 
-                );
-            });
-        });
         function destroy(id){
             Swal.fire({
                 title: 'Hapus Data?',
@@ -180,13 +198,26 @@ export default{
             return 'Rp ' + x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         }
 
+        function create(){
+            router.get('/pengeluaran/zakat')
+        }
+
+        watch(filter, async (newFilter, oldFilter) => {
+            router.get(`/pengeluaran`, {
+                filter: newFilter
+            }, {
+                preserveState: true
+            })
+        })
+
         return {
             destroy,
             timezone,
             numberWithDots,
             confirmed,
-            searchQuery,
-            searchedPengeluarans
+            create,
+            bulans,
+            filter
         }
     }
 }

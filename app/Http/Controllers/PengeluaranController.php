@@ -4,17 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Pengeluaran;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
 
 class PengeluaranController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
+        $pengeluaran = $this->setQueryPengeluaran($request->filter);
         return Inertia::render('Pengeluaran/Index', [
-            'pengeluarans' => Pengeluaran::latest()->get(),
-            'total' => Pengeluaran::sum('nominal'),
-            'totalBeratBeras' => Pengeluaran::sum('berat_beras'),
-            'totalMustahiq' => Pengeluaran::sum('jumlah_mustahiq')
+            'pengeluarans' => $pengeluaran->latest()->get(),
+            'total' => $pengeluaran->sum('nominal'),
+            'totalBeratBeras' => $pengeluaran->sum('berat_beras'),
+            'totalMustahiq' => $pengeluaran->sum('jumlah_mustahiq')
         ]);
     }
 
@@ -58,6 +60,23 @@ class PengeluaranController extends Controller
     public function confirmed($id){
         Pengeluaran::where('id', $id)->update(['confirmed' => 1]);
         return $this->responseApi(true, 'Berhasil', 'konfirmasi pengeluaran berhasil', 200);
+    }
+
+    private function setQueryPengeluaran($request){
+        $queryPengeluaran = DB::table('pengeluaran');
+        if(!empty($request)){
+            if(!empty($request['nama_donatur'])){
+                $queryPengeluaran->where('nama_donatur', 'like', '%'.$request['nama_donatur'].'%');
+            }
+            if(!empty($request['bulan'])){
+                $queryPengeluaran->where('bulan', $request['bulan']);
+            }
+            if(!empty($request['jenis_dana'])){
+                $queryPengeluaran->where('jenis_dana', $request['jenis_dana']);
+            }
+        }
+                
+        return $queryPengeluaran;
     }
 
     private function storeImage(){
