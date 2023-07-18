@@ -25,7 +25,9 @@ class ZakatController extends Controller
         if(!empty($request->all())){
             $zakats = $this->setQueryZakats($queryZakats, $request->filters);
         }
-        $zakats = $this->setQueryZakats($queryZakats, null);
+        else{
+            $zakats = $this->setQueryZakats($queryZakats, null);
+        }
         return Inertia::render('Zakat/Index', [
             'zakats' => $zakats->latest('waktu_zakat')->get(),
             'total' => $zakats->sum('nominal'),

@@ -29,7 +29,7 @@
                                     </div>
                                 </div>
                                 <div v-if="form.jenis_dana == 'Zakat'" class="mb-3">
-                                    <label for="nama_organisasi" class="form-label">Nama Organisasi</label>
+                                    <label for="nama_organisasi" class="form-label">Nama Mustahik</label>
                                     <input type="text" v-model="form.nama_organisasi" class="form-control" id="nama_organisasi" :class="{ 'is-invalid': validation.nama_organisasi }">
                                     <div v-if="validation.nama_organisasi" class="invalid-feedback">
                                         {{ validation.nama_organisasi[0] }}

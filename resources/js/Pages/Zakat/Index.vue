@@ -10,38 +10,44 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <div class="d-flex">
-                                <div class="mt-2">Pemasukan Zakat</div>
-                                <div class="ms-3">
-                                    <select v-model="filter.bulan" class="form-select" aria-label="Default select example">
-                                        <option selected disabled value="">-- Pilih Bulan --</option>
-                                        <option v-for="bulan in bulans" :value="bulan">{{ bulan }}</option>
-                                    </select>
-                                </div>
-                                <div class="ms-3">
-                                    <select v-model="filter.jenis_zakat" class="form-select" aria-label="Default select example">
-                                        <option selected disabled value="">-- Pilih Jenis Zakat --</option>
-                                        <option value="Zakat Fitrah">Zakat Fitrah</option>
-                                        <option value="Zakat Maal">Zakat Maal</option>
-                                    </select>
-                                </div>
-                                <div class="ms-3">
-                                    <select v-model="filter.satuan" class="form-select" aria-label="Default select example">
-                                        <option selected disabled value="">-- Pilih Satuan --</option>
-                                        <option value="2">Uang</option>
-                                        <option value="1">Beras</option>
-                                    </select>
-                                </div>
-                                <div class="ms-3">
-                                    <input type="search" v-model="filter.nama_donatur" class="form-control" placeholder="Cari Nama Donatur .....">
-                                </div>
-                                <div class="ms-3">
-                                    <Link :href="'/zakat'" class="btn btn-secondary">Reset</Link>
-                                </div>
-                                <div class="ms-auto mt-1">
-                                    <!-- <Link :href="'/zakat/add'" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i></Link> -->
-                                    <button @click="create()" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i></button>
-                                </div>
+                            <div class="">
+                                <form action="/laporan/zakat" method="post" target="_blank">
+                                    <div class="d-flex">
+                                        <div class="mt-2">Pemasukan Zakat</div>
+                                        <div class="ms-3">
+                                            <select v-model="filter.bulan" name="bulan" class="form-select" aria-label="Default select example">
+                                                <option selected disabled value="">-- Pilih Bulan --</option>
+                                                <option v-for="bulan in bulans" :value="bulan">{{ bulan }}</option>
+                                            </select>
+                                        </div>
+                                        <div class="ms-3">
+                                            <select v-model="filter.jenis_zakat" name="jenis_zakat" class="form-select" aria-label="Default select example">
+                                                <option selected disabled value="">-- Pilih Jenis Zakat --</option>
+                                                <option value="Zakat Fitrah">Zakat Fitrah</option>
+                                                <option value="Zakat Maal">Zakat Maal</option>
+                                            </select>
+                                        </div>
+                                        <div class="ms-3">
+                                            <select v-model="filter.satuan" name="sha_id" class="form-select" aria-label="Default select example">
+                                                <option selected disabled value="">-- Pilih Satuan --</option>
+                                                <option value="2">Uang</option>
+                                                <option value="1">Beras</option>
+                                            </select>
+                                        </div>
+                                        <div class="ms-3">
+                                            <input type="search" v-model="filter.nama_donatur" name="nama_donatur" class="form-control" placeholder="Cari Nama Donatur .....">
+                                        </div>
+                                        <div class="ms-3">
+                                            <Link :href="'/zakat'" class="btn btn-secondary">Reset</Link>
+                                        </div>
+                                        <div class="ms-3">
+                                            <button type="submit" class="btn btn-danger">PDF</button>
+                                        </div>
+                                        <div class="ms-auto mt-1">
+                                            <button type="button" @click="create()" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         <div class="card-body">
@@ -125,6 +131,7 @@ export default {
         image: String
     },
     setup(props) {
+        console.log(props.zakats)
         const bulans = ref(['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'])
         const searchNamaDonatur = ref('')
         const filter = reactive({
@@ -231,9 +238,13 @@ export default {
             })
         }
 
+        function printPdf(filter){
+            window.open('/report')
+        }
+
         watch(filter, async(newFilter, oldNamaDonatur) => {
             router.get(`/zakat`, {
-                filter: newFilter
+                filters: newFilter
             }, {
                 preserveState: true
             })
@@ -250,7 +261,8 @@ export default {
             report,
             confirmed,
             showImage,
-            search
+            search,
+            printPdf
         }
     },
 }

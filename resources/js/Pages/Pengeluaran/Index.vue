@@ -20,7 +20,7 @@
                                         <option selected disabled value="">-- Pilih Jenis Dana --</option>
                                         <option value="Zakat">Zakat</option>
                                         <option value="Infaq">Infaq</option>
-                                        <option value="Shadaqah">Shadaqa</option>
+                                        <option value="Shadaqah">Shadaqah</option>
                                     </select>
                                 </div>
                                 <div class="ms-3">
@@ -41,7 +41,7 @@
                                     <thead>
                                         <tr>
                                             <th scope="col">#</th>
-                                            <th scope="col">Nama Organisasi</th>
+                                            <th scope="col">Nama Mustahik</th>
                                             <th scope="col">Keterangan</th>
                                             <th scope="col">Jenis Dana</th>
                                             <th scope="col">Berat Beras</th>
