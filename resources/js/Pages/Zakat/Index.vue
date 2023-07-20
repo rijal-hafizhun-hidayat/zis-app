@@ -8,36 +8,38 @@
             <!-- <img :src="image" alt=""> -->
             <div class="row justify-content-center">
                 <div class="col-md-12">
+                    <div class="d-flex bg-secondary-subtle p-3 mb-3 rounded">
+                        <div class="">
+                            <select v-model="filter.bulan" class="form-select" aria-label="Default select example">
+                                <option selected disabled value="">-- Pilih Bulan --</option>
+                                <option v-for="bulan in bulans" :value="bulan">{{ bulan }}</option>
+                            </select>
+                        </div>
+                        <div class="ms-3">
+                            <select v-model="filter.jenis_zakat" class="form-select" aria-label="Default select example">
+                                <option selected disabled value="">-- Pilih Jenis Zakat --</option>
+                                <option value="Zakat Fitrah">Zakat Fitrah</option>
+                                <option value="Zakat Maal">Zakat Maal</option>
+                            </select>
+                        </div>
+                        <div class="ms-3">
+                            <select v-model="filter.satuan" class="form-select" aria-label="Default select example">
+                                <option selected disabled value="">-- Pilih Satuan --</option>
+                                <option value="2">Uang</option>
+                                <option value="1">Beras</option>
+                            </select>
+                        </div>
+                        <div class="ms-3">
+                            <input type="search" v-model="filter.nama_donatur" class="form-control" placeholder="Cari Nama Donatur .....">
+                        </div>
+                        <div class="ms-3">
+                            <Link :href="'/zakat'" class="btn btn-secondary">Reset</Link>
+                        </div>
+                    </div>
                     <div class="card">
                         <div class="card-header">
                             <div class="d-flex">
                                 <div class="mt-2">Pemasukan Zakat</div>
-                                <div class="ms-3">
-                                    <select v-model="filter.bulan" class="form-select" aria-label="Default select example">
-                                        <option selected disabled value="">-- Pilih Bulan --</option>
-                                        <option v-for="bulan in bulans" :value="bulan">{{ bulan }}</option>
-                                    </select>
-                                </div>
-                                <div class="ms-3">
-                                    <select v-model="filter.jenis_zakat" class="form-select" aria-label="Default select example">
-                                        <option selected disabled value="">-- Pilih Jenis Zakat --</option>
-                                        <option value="Zakat Fitrah">Zakat Fitrah</option>
-                                        <option value="Zakat Maal">Zakat Maal</option>
-                                    </select>
-                                </div>
-                                <div class="ms-3">
-                                    <select v-model="filter.satuan" class="form-select" aria-label="Default select example">
-                                        <option selected disabled value="">-- Pilih Satuan --</option>
-                                        <option value="2">Uang</option>
-                                        <option value="1">Beras</option>
-                                    </select>
-                                </div>
-                                <div class="ms-3">
-                                    <input type="search" v-model="filter.nama_donatur" class="form-control" placeholder="Cari Nama Donatur .....">
-                                </div>
-                                <div class="ms-3">
-                                    <Link :href="'/zakat'" class="btn btn-secondary">Reset</Link>
-                                </div>
                                 <div class="ms-auto mt-1">
                                     <button @click="create()" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i></button>
                                 </div>

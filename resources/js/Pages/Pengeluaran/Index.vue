@@ -5,30 +5,32 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-sm-12">
+                    <div class="d-flex p-3 mb-3 bg-secondary-subtle">
+                        <div class="">
+                            <select v-model="filter.bulan" class="form-select" aria-label="Default select example">
+                                <option selected disabled value="">-- Pilih Bulan --</option>
+                                <option v-for="bulan in bulans" :value="bulan">{{ bulan }}</option>
+                            </select>
+                        </div>
+                        <div class="ms-3">
+                            <select v-model="filter.jenis_dana" class="form-select" aria-label="Default select example">
+                                <option selected disabled value="">-- Pilih Jenis Dana --</option>
+                                <option value="Zakat">Zakat</option>
+                                <option value="Infaq">Infaq</option>
+                                <option value="Shadaqah">Shadaqah</option>
+                            </select>
+                        </div>
+                        <div class="ms-3">
+                            <input type="search" v-model="filter.nama_donatur" class="form-control" placeholder="Cari Nama Donatur .....">
+                        </div>
+                        <div class="ms-3">
+                            <Link :href="'/shadaqah'" class="btn btn-secondary">Reset</Link>
+                        </div>
+                    </div>
                     <div class="card">
                         <div class="card-header">
                             <div class="d-flex">
                                 <div class="mt-2">Pengeluaran</div>
-                                <div class="ms-3">
-                                    <select v-model="filter.bulan" class="form-select" aria-label="Default select example">
-                                        <option selected disabled value="">-- Pilih Bulan --</option>
-                                        <option v-for="bulan in bulans" :value="bulan">{{ bulan }}</option>
-                                    </select>
-                                </div>
-                                <div class="ms-3">
-                                    <select v-model="filter.jenis_dana" class="form-select" aria-label="Default select example">
-                                        <option selected disabled value="">-- Pilih Jenis Dana --</option>
-                                        <option value="Zakat">Zakat</option>
-                                        <option value="Infaq">Infaq</option>
-                                        <option value="Shadaqah">Shadaqah</option>
-                                    </select>
-                                </div>
-                                <div class="ms-3">
-                                    <input type="search" v-model="filter.nama_donatur" class="form-control" placeholder="Cari Nama Donatur .....">
-                                </div>
-                                <div class="ms-3">
-                                    <Link :href="'/shadaqah'" class="btn btn-secondary">Reset</Link>
-                                </div>
                                 <div class="ms-auto mt-1">
                                     <!-- <Link :href="'/infaq/add'" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i></Link> -->
                                     <button @click="create()" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i></button>
