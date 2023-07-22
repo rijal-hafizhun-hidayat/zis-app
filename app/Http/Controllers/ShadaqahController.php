@@ -109,7 +109,7 @@ class ShadaqahController extends Controller
         if(request()->hasFile('bukti_pembayaran')){
             $credential = request()->validate([
                 'nama_donatur' => 'required|string',
-                'nomor_hp' => 'required|numeric|min_digits:10|max_digits:12',
+                'nomor_hp' => 'required|numeric|min_digits:10|max_digits:13',
                 'jenis_bantuan' => 'required|string',
                 'nominal' => 'required_if:jenis_bantuan,==,Uang|nullable|numeric',
                 'keterangan' => 'required_if:jenis_bantuan,==,Barang|nullable|string',
