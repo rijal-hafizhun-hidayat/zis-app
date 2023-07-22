@@ -11,7 +11,7 @@
                         {{ $page.props.flash.message }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                    <div class="d-flex mb-3 p-3 bg-secondary-subtle rounded">
+                    <div class="d-flex border bg-body-secondary mb-3 p-3 rounded">
                         <div>
                             <select v-model="filter.bulan" class="form-select" aria-label="Default select example">
                                 <option selected disabled value="">-- Pilih Bulan --</option>

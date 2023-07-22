@@ -8,7 +8,7 @@
             <!-- <img :src="image" alt=""> -->
             <div class="row justify-content-center">
                 <div class="col-md-12">
-                    <div class="d-flex bg-secondary-subtle p-3 mb-3 rounded">
+                    <div class="d-flex border bg-body-secondary p-3 mb-3 rounded">
                         <div class="">
                             <select v-model="filter.bulan" class="form-select" aria-label="Default select example">
                                 <option selected disabled value="">-- Pilih Bulan --</option>

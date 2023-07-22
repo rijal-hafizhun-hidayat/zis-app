@@ -9,10 +9,17 @@
                         {{ $page.props.flash.message }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
+                    <div class="d-flex rounded border bg-body-secondary p-3 mb-3">
+                        <div class="ms-3">
+                            <input type="search" v-model="search" class="form-control" placeholder="Cari Nama .....">
+                        </div>
+                        <div class="ms-3">
+                            <Link :href="'/akun'" class="btn btn-secondary">Reset</Link>
+                        </div>
+                    </div>
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <div>Akun</div>
-                            <input type="search" v-model="searchQuery" class="search-form" placeholder="Cari Akun .....">
                             <Link href="/akun/add" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i></Link>
                         </div>
                         <div class="card-body">
@@ -27,7 +34,7 @@
                                         </tr>
                                     </thead>
                                     <tbody class="table-group-divider">
-                                        <tr v-for="(akun, index) in searchedAkuns" :key="akun.id">
+                                        <tr v-for="(akun, index) in akuns" :key="akun.id">
                                             <th scope="row">{{ index+1 }}</th>
                                             <td>{{ akun.name }}</td>
                                             <td>{{ akun.username }}</td>
@@ -51,7 +58,7 @@
 import NavBar from '../Components/Navbar.vue'
 import Footer from '../Components/Footer.vue'
 import { Link, router, Head } from '@inertiajs/vue3'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import Swal from 'sweetalert2'
 import NProgress from 'nprogress';
 export default {
@@ -61,18 +68,7 @@ export default {
     },
     setup(props) {
         console.log(props.akuns)
-        const searchQuery = ref("")
-        
-        const searchedAkuns = computed(() => {
-            return props.akuns.filter((akun) => {
-                return (
-                akun.name
-                    .toLowerCase()
-                    .indexOf(searchQuery.value.toLowerCase()) != -1
-                );
-            });
-        });
-
+        const search = ref('')
         function destroy(id){
             Swal.fire({
                 title: 'Hapus Data?',
@@ -109,9 +105,17 @@ export default {
             })
         }
 
+        watch(search, async (newSearch, oldFilter) => {
+            //console.log(newSearch)
+            router.get(`/akun`, {
+                filter: newSearch
+            }, {
+                preserveState: true
+            })
+        })
+
         return {
-            searchQuery,
-            searchedAkuns,
+            search,
             destroy
         }
     },

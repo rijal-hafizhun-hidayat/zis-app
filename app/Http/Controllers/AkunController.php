@@ -4,14 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Akun;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Hash;
 
 class AkunController extends Controller
 {
     public function index(){
+        $setQueryAkun = $this->setQueryAkun();
+        //dd($setQueryAkun->latest()->get());
         return Inertia::render('Akun/Index', [
-            'akuns' => Akun::select('id', 'name','username')->latest()->get()
+            'akuns' => $setQueryAkun->latest()->get()
         ]);
     }
 
@@ -69,5 +72,14 @@ class AkunController extends Controller
             'code' => $code
         ];
         return response()->json($response, $code);
+    }
+
+    private function setQueryAkun(){
+        $queryAkun = DB::table('users');
+        if(request()->filter){
+            $queryAkun->where('name', 'like', '%'.request()->filter.'%');
+        }
+
+        return $queryAkun;
     }
 }

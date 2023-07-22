@@ -5,7 +5,7 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-sm-12">
-                    <div class="d-flex p-3 mb-3 bg-secondary-subtle">
+                    <div class="d-flex border bg-body-secondary p-3 mb-3">
                         <div class="">
                             <select v-model="filter.bulan" class="form-select" aria-label="Default select example">
                                 <option selected disabled value="">-- Pilih Bulan --</option>
