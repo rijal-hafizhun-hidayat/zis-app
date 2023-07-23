@@ -145,7 +145,7 @@ class InfaqController extends Controller
         else{
             $credential = request()->validate([
                 'nama_donatur' => 'required|string',
-                'nomor_hp' => 'required|numeric|min_digits:10|max_digits:12',
+                'nomor_hp' => 'required|numeric|min_digits:10|max_digits:13',
                 'metode_pembayaran' => 'required|string',
                 'nominal' => 'required|numeric',
                 'bulan' => 'numeric',

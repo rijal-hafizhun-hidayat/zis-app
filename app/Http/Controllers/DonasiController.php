@@ -122,7 +122,7 @@ class DonasiController extends Controller
     private function formRequest(){
         $credential = request()->validate([
             'nama_donatur' => 'required|string',
-            'nomor_hp' => 'required|numeric|min_digits:10|max_digits:12',
+            'nomor_hp' => 'required|numeric|min_digits:10|max_digits:13',
             'jenis_donasi' => 'required|string',
             'sha_id' => 'nullable|numeric',
             'jumlah' => 'nullable|numeric',
