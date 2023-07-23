@@ -6,7 +6,7 @@
     <main class="py-5">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-md-11">
+                <div class="col-md-12">
                     <div class="d-flex mb-3 p-3 border bg-body-secondary rounded">
                         <div>
                             <select v-model="filter.bulan" class="form-select" aria-label="Default select example">
@@ -46,6 +46,8 @@
                                             <th scope="col">#</th>
                                             <th scope="col">Nama Donatur</th>
                                             <th scope="col">Nomor Hp</th>
+                                            <th scope="col">Tanggal Shadaqah</th>
+                                            <th scope="col">Bulan</th>
                                             <th scope="col">Jenis Bantuan</th>
                                             <th scope="col">Keterangan</th>
                                             <th scrope="col">Nominal</th>
@@ -59,6 +61,8 @@
                                             <td>{{ index+1 }}</td>
                                             <td>{{ shadaqah.nama_donatur }}</td>
                                             <td>{{ shadaqah.nomor_hp }}</td>
+                                            <td>{{ timezone(shadaqah.created_at) }}</td>
+                                            <td>{{ shadaqah.bulan }}</td>
                                             <td>{{ shadaqah.jenis_bantuan }}</td>
                                             <td>{{ shadaqah.keterangan }}</td>
                                             <td v-if="shadaqah.nominal != NULL">{{ numberWithDots(shadaqah.nominal) }}</td>
@@ -99,6 +103,7 @@ import axios from 'axios';
 import { ref, reactive, watch } from 'vue'
 import Swal from 'sweetalert2';
 import NProgress from 'nprogress';
+import moment from 'moment';
 export default{
     components: { Navbar, Footer, Link, Head, Modal },
     props: {
@@ -192,6 +197,11 @@ export default{
             return 'Rp ' + x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         }
 
+        function timezone(value){
+            moment.locale('id');
+            return moment(value).format('LL'); 
+        }
+
         watch(filter, async (newFilter, oldFilter) => {
             router.get(`/shadaqah`, {
                 filter: newFilter
@@ -208,7 +218,8 @@ export default{
             destroy,
             numberWithDots,
             confirmed,
-            create
+            create,
+            timezone
         }
     }
 }

@@ -6,7 +6,7 @@
     <main class="py-5">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-md-10">
+                <div class="col-md-12">
                     <div v-if="$page.props.flash.message" class="alert alert-success alert-dismissible fade show" role="alert">
                         {{ $page.props.flash.message }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -50,6 +50,8 @@
                                             <th scope="col">#</th>
                                             <th scope="col">Nama Donatur</th>
                                             <th scope="col">Nomor Hp</th>
+                                            <th scope="col">Tanggal Shadaqah</th>
+                                            <th scope="col">Bulan</th>
                                             <th scope="col">Jenis Pembayaran</th>
                                             <th scope="col">Nominal</th>
                                             <th scope="col">Bulan</th>
@@ -63,6 +65,8 @@
                                             <td>{{ index+1 }}</td>
                                             <td>{{ infaq.nama_donatur }}</td>
                                             <td>{{ infaq.nomor_hp }}</td>
+                                            <td>{{ timezone(infaq.created_at) }}</td>
+                                            <td>{{ infaq.bulan }}</td>
                                             <td>{{ infaq.metode_pembayaran }}</td>
                                             <td>{{ numberWithDots(infaq.nominal) }}</td>
                                             <td>{{ infaq.bulan }}</td>
@@ -101,7 +105,8 @@ import { Link, router, Head } from '@inertiajs/vue3'
 import { ref, reactive, watch } from 'vue'
 import axios from 'axios'
 import Swal from 'sweetalert2'
-import NProgress from 'nprogress';
+import NProgress from 'nprogress'
+import moment from 'moment';
 export default {
     components: { Navbar, Footer, Link, Head, Modal },
     props: {
@@ -194,6 +199,11 @@ export default {
             router.get('/infaq/add')
         }
 
+        function timezone(value){
+            moment.locale('id');
+            return moment(value).format('LL'); 
+        }
+
         watch(filter, async (newFilter, oldFilter) => {
             router.get(`/infaq`, {
                 filter: newFilter
@@ -209,7 +219,8 @@ export default {
             destroy,
             numberWithDots,
             confirmed,
-            create
+            create,
+            timezone
         }
     }
 }
