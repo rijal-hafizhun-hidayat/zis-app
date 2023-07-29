@@ -201,7 +201,7 @@ export default{
         }
 
         function create(){
-            router.get('/pengeluaran/zakat')
+            router.get('/pengeluaran/add')
         }
 
         watch(filter, async (newFilter, oldFilter) => {

@@ -53,6 +53,13 @@
                     </div>
                     <span class="input-group-text" id="berat_beras">Kg</span>
                 </div>
+                <div class="mt-4" v-if="donasi.jenis_donasi == 'Zakat Maal'">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Rp</span>
+                        <input type="text" v-model="nisabZakat" class="form-control" @input="formatInputNisabZakat" placeholder="Masukkan Nisab Zakat">
+                    </div>
+                    <div v-if="donasi.nisab_zakat != null && donasi.nisab_zakat < minimalNisabZakat" class="alert alert-danger" role="alert">minimal zakat maal yaitu Rp. 86.500.000</div>
+                </div>
                 <div v-if="donasi.satuan == 2 || donasi.jenis_donasi != 'Zakat Fitrah'" class="mt-4">
                     <label v-if="donasi.satuan == 2" for="nominal" class="form-label">Untuk Jenis Sha <b>Uang</b>, Nominal akan ditentukan sesuai harga beras</label>
                     <div class="input-group">
@@ -72,7 +79,8 @@
                     </div>
                 </div>
             </div>
-            <button>Kirim Donasi</button>
+            <!-- <button :disabled="isMinimalNisabZakat(donasi.nisab_zakat)">Kirim Donasi</button> -->
+            <button :disabled="donasi.nisab_zakat != null && donasi.nisab_zakat < minimalNisabZakat">Kirim Donasi</button>
         </form>
     </div>
 </template>
@@ -92,15 +100,18 @@ export default{
             jenis_donasi: '',
             satuan: '',
             jumlah: '',
+            nisab_zakat: '',
             nominal: '',
             berat_beras: '',
             metode_pembayaran: 'Rekening',
-            bukti_donasi: ''
+            bukti_donasi: null
         })
 
+        const minimalNisabZakat = ref(86500000)
         const satuans = ref([])
         const validation = ref([])
         const nominal = ref('')
+        const nisabZakat = ref('')
 
         onMounted(() => {
             getSatuan()
@@ -191,28 +202,51 @@ export default{
             }
         }
 
+        function isMinimalNisabZakat(nisabZakat){
+            if(nisabZakat != null && nisabZakat < minimalNisabZakat){
+                return true
+            }
+            else{
+                return false
+            }
+        }
+
         const formatInput = (event) => {
             let value = event.target.value.replace(/\./g, ''); // Remove existing dots
             value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Add dots every three digits
             nominal.value = value;
         };
 
+        const formatInputNisabZakat = (event) => {
+            let value = event.target.value.replace(/\./g, ''); // Remove existing dots
+            value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Add dots every three digits
+            nisabZakat.value = value;
+        }
+
         watch(nominal, (newValue) => {
             donasi.nominal = newValue.toString().replace(/\./g, ''); // Remove dots for the actual value
         });
+
+        watch(nisabZakat, async (newNisabZakat) => {
+            donasi.nisab_zakat = newNisabZakat.toString().replace(/\./g, ''); // Remove dots for the actual value
+        })
 
         return {
             donasi,
             satuans,
             validation,
             nominal,
+            minimalNisabZakat,
+            nisabZakat,
             numOnly,
             submit,
             getSatuan,
             getNominal,
             setBeratBeras,
             formatInput,
-            numOnly
+            numOnly,
+            isMinimalNisabZakat,
+            formatInputNisabZakat
         }
     }
 }

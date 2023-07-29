@@ -102,7 +102,7 @@ Route::middleware(['isLogin'])->group(function() {
 
     Route::middleware(['isAdminBendahara'])->group(function(){
 
-         //SHA
+        //SHA
         Route::get('/sha', [ShaController::class, 'index'])->name('sha');
         Route::get('/sha/add', [ShaController::class, 'create'])->name('sha.create');
         Route::get('/sha/{id}', [ShaController::class, 'show'])->name('sha.show');
