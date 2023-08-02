@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('nomor_hp');
             $table->string('jenis_bantuan');
             $table->string('keterangan')->nullable();
+            $table->integer('jumlah');
             $table->string('bulan');
             $table->bigInteger('nominal')->nullable();
             $table->text('bukti_pembayaran')->nullable();

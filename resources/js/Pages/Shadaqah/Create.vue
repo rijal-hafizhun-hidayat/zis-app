@@ -24,35 +24,14 @@
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="rekening" class="form-label">Jenis Bantuan</label>
-                                    <select class="form-select" v-model="form.jenis_bantuan" aria-label="Default select example" :class="{ 'is-invalid': validation.jenis_bantuan }">
-                                        <option disabled selected value="">-- pilih --</option>
-                                        <option value="Uang">Uang</option>
-                                        <option value="Barang">Barang</option>
-                                    </select>
-                                    <div v-if="validation.jenis_bantuan" class="invalid-feedback">
-                                        {{ validation.jenis_bantuan[0] }}
-                                    </div>
-                                </div>
-                                <div v-if="form.jenis_bantuan == 'Uang'" class="mb-3">
-                                    <label for="nominal" class="form-label">Nominal</label>
-                                    <div class="input-group has-validation">
-                                        <span class="input-group-text" id="basic-addon1">Rp.</span>
-                                        <input type="text" v-on:keypress="numOnly" @input="formatInput" class="form-control" v-model="nominal" id="nominal" :class="{ 'is-invalid': validation.nominal }">
-                                        <div v-if="validation.nominal" class="invalid-feedback">
-                                            {{ validation.nominal[0] }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div v-if="form.jenis_bantuan == 'Barang'" class="mb-3">
-                                    <label for="jumlah" class="form-label">Keterangan</label>
+                                    <label for="jumlah" class="form-label">Nama Barang</label>
                                     <input type="text" v-model="form.keterangan" class="form-control" id="jumlah" :class="{ 'is-invalid': validation.keterangan }">
                                     <div v-if="validation.keterangan" class="invalid-feedback">
                                         {{ validation.keterangan[0] }}
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="bukti_pembayaran" class="form-label">Bukti Pembayaran:</label>
+                                    <label for="bukti_pembayaran" class="form-label">Bukti Penerimaan Barang:</label>
                                     <input type="file" @input="form.bukti_pembayaran = $event.target.files[0]" name="bukti_pembayaran" id="bukti_pembayaran" accept="image/*" :class="{ 'is-invalid': validation.bukti_pembayaran }">
                                     <div v-if="validation.bukti_pembayaran" class="invalid-feedback">
                                         {{ validation.bukti_pembayaran[0] }}
@@ -83,7 +62,6 @@ export default{
             nama_donatur: '',
             nomor_hp: '',
             jenis_bantuan: '',
-            nominal: '',
             keterangan: '',
             bukti_pembayaran: ''
         })
@@ -98,8 +76,7 @@ export default{
             axios.post('/shadaqah', {
                 nama_donatur: form.nama_donatur,
                 nomor_hp: form.nomor_hp,
-                nominal: form.nominal,
-                jenis_bantuan: form.jenis_bantuan,
+                jenis_bantuan: 'Barang',
                 keterangan: form.keterangan,
                 bulan: d.getMonth(),
                 bukti_pembayaran: form.bukti_pembayaran,

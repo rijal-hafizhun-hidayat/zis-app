@@ -5,7 +5,7 @@
                 Zakat
             </div>
             <div class="card-body">
-                <h5 class="card-title">Total Dana:</h5>
+                <h5 class="card-title">Sisa Dana:</h5>
                 <h1 class="card-text">{{ numberWithDots(total.zakat) }}</h1>
             </div>
         </div>
@@ -18,7 +18,7 @@
                 Infaq
             </div>
             <div class="card-body">
-                <h5 class="card-title">Total Dana:</h5>
+                <h5 class="card-title">Sisa Dana:</h5>
                 <h1 class="card-text">{{ numberWithDots(total.infaq) }}</h1>
             </div>
         </div>
@@ -30,7 +30,7 @@
                 Shadaqah
             </div>
             <div class="card-body">
-                <h5 class="card-title">Total Dana:</h5>
+                <h5 class="card-title">Sisa Dana:</h5>
                 <h1 class="card-text">{{ numberWithDots(total.shadaqah) }}</h1>
             </div>
         </div>
@@ -42,7 +42,7 @@
                 Pengeluaran per bulan {{ total.bulan }}
             </div>
             <div class="card-body">
-                <h5 class="card-title">Total Dana:</h5>
+                <h5 class="card-title">Total Pengeluaran:</h5>
                 <h1 class="card-text">{{ numberWithDots(total.pengeluaran) }}</h1>
             </div>
         </div>

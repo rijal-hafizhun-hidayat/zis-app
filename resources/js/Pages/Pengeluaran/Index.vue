@@ -21,9 +21,6 @@
                             </select>
                         </div>
                         <div class="ms-3">
-                            <input type="search" v-model="filter.nama_donatur" class="form-control" placeholder="Cari Nama Donatur .....">
-                        </div>
-                        <div class="ms-3">
                             <Link :href="'/shadaqah'" class="btn btn-secondary">Reset</Link>
                         </div>
                     </div>
@@ -46,6 +43,7 @@
                                             <th scope="col">Nama Mustahik</th>
                                             <th scope="col">Keterangan</th>
                                             <th scope="col">Jenis Dana</th>
+                                            <th scope="col">Nama Barang</th>
                                             <th scope="col">Berat Beras</th>
                                             <th scope="col">Jumlah Mustahiq</th>
                                             <th scope="col">Nominal</th>
@@ -61,6 +59,7 @@
                                             <td>{{ pengeluaran.nama_organisasi }}</td>
                                             <td>{{ pengeluaran.kebutuhan }}</td>
                                             <td>{{ pengeluaran.jenis_dana }}</td>
+                                            <td>{{ pengeluaran.keterangan }}</td>
                                             <td>{{ pengeluaran.berat_beras }}</td>
                                             <td>{{ pengeluaran.jumlah_mustahiq }}</td>
                                             <td v-if="pengeluaran.nominal">{{ numberWithDots(pengeluaran.nominal) }}</td>
@@ -77,6 +76,7 @@
                                         </tr>
                                         <tr>
                                             <th colspan="3">Total</th>
+                                            <td></td>
                                             <td></td>
                                             <th>{{ totalBeratBeras }} Kg</th>
                                             <td>{{ totalMustahiq }}</td>
@@ -116,6 +116,7 @@ export default{
         totalMustahiq: Number
     },
     setup(props){
+        console.log(props.pengeluarans)
         const bulans = ref(['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'])
         const filter = reactive({
             jenis_dana: '',

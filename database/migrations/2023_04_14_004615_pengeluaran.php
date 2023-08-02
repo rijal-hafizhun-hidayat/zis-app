@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('kebutuhan');
             $table->bigInteger('nominal')->nullable();
             $table->string('jenis_dana');
+            $table->integer('id_shadaqah')->nullable();
             $table->string('bulan');
             $table->decimal('berat_beras', $precision = 8, $scale = 1)->nullable();
             $table->integer('jumlah_mustahiq')->nullable();

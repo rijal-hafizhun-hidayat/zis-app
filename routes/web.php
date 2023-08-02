@@ -58,6 +58,7 @@ Route::middleware(['isAuthenticate'])->group(function(){
     Route::post('/donasi', [DonasiController::class, 'store'])->name('donasi.store');
     Route::get('/getSatuan', [DonasiController::class, 'getSatuan'])->name('getSatuan');
     Route::get('/getNominal/{id}', [DonasiController::class, 'getNominal'])->name('getNominal');
+    Route::get('/getSatuanEmas', [DonasiController::class, 'getSatuanEmas'])->name('getSatuanEmas');
 });
 
 //HOME
@@ -120,6 +121,7 @@ Route::middleware(['isLogin'])->group(function() {
         Route::get('/shadaqah', [ShadaqahController::class, 'index'])->name('shadaqah');
         Route::get('/shadaqah/add', [ShadaqahController::class, 'create'])->name('shadaqah.create');
         Route::get('/shadaqah/{id}', [ShadaqahController::class, 'show'])->name('shadaqah.show');
+        Route::get('/getBarangShadaqah', [ShadaqahController::class, 'getBarangShadaqah'])->name('shadaqah.getBarangShadaqah');
 
         //SHADAQAH LAPORAN
         Route::get('/laporan/shadaqah', [ShadaqahLaporanController::class, 'index'])->name('shadaqah.laporan');

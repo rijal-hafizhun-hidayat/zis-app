@@ -56,15 +56,15 @@
                 <div class="mt-4" v-if="donasi.jenis_donasi == 'Zakat Maal'">
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="basic-addon1">Rp</span>
-                        <input type="text" v-model="nisabZakat" class="form-control" @input="formatInputNisabZakat" placeholder="Masukkan Nisab Zakat">
+                        <input type="text" v-model="nisabZakat" class="form-control" @change="setNominalZakatMaal(nisabZakat)" @input="formatInputNisabZakat" placeholder="Masukkan Penghasilan /tahun">
                     </div>
-                    <div v-if="donasi.nisab_zakat != null && donasi.nisab_zakat < minimalNisabZakat" class="alert alert-danger" role="alert">minimal zakat maal yaitu Rp. 86.500.000</div>
+                    <div v-if="donasi.nisab_zakat != null && donasi.nisab_zakat < minimalNisabZakat" class="alert alert-danger" role="alert">minimal nishab zakat yaitu Rp. {{ formatRupiah(minimalNisabZakat) }}</div>
                 </div>
                 <div v-if="donasi.satuan == 2 || donasi.jenis_donasi != 'Zakat Fitrah'" class="mt-4">
                     <label v-if="donasi.satuan == 2" for="nominal" class="form-label">Untuk Jenis Sha <b>Uang</b>, Nominal akan ditentukan sesuai harga beras</label>
                     <div class="input-group">
                         <span class="input-group-text" id="Rupiah">Rp.</span>
-                        <input type="text" :disabled="donasi.satuan == 2 && donasi.jenis_donasi == 'Zakat Fitrah'" v-model="nominal" v-on:keypress="numOnly()" @input="formatInput" class="form-control" placeholder="Nominal" aria-label="Nominal" aria-describedby="Rupiah" :class="{ 'is-invalid': validation.nominal }">
+                        <input type="text" :disabled="donasi.satuan == 2 && donasi.jenis_donasi == 'Zakat Fitrah' || donasi.jenis_donasi == 'Zakat Maal'" v-model="nominal" v-on:keypress="numOnly()" @input="formatInput" class="form-control" placeholder="Nominal" aria-label="Nominal" aria-describedby="Rupiah" :class="{ 'is-invalid': validation.nominal }">
                         <div v-if="validation.nominal" class="invalid-feedback">
                         {{ validation.nominal[0] }}
                     </div>
@@ -80,7 +80,7 @@
                 </div>
             </div>
             <!-- <button :disabled="isMinimalNisabZakat(donasi.nisab_zakat)">Kirim Donasi</button> -->
-            <button :disabled="donasi.nisab_zakat != null && donasi.nisab_zakat < minimalNisabZakat">Kirim Donasi</button>
+            <button>Kirim Donasi</button>
         </form>
     </div>
 </template>
@@ -107,7 +107,7 @@ export default{
             bukti_donasi: null
         })
 
-        const minimalNisabZakat = ref(86500000)
+        const minimalNisabZakat = ref('')
         const satuans = ref([])
         const validation = ref([])
         const nominal = ref('')
@@ -115,6 +115,7 @@ export default{
 
         onMounted(() => {
             getSatuan()
+            getSatuanEmas()
         })
 
         function numOnly(evt){
@@ -166,6 +167,16 @@ export default{
             })
         }
 
+        function getSatuanEmas(){
+            axios.get('/getSatuanEmas')
+            .then((res) => {
+                minimalNisabZakat.value = res.data.data.harga
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+        }
+
         function getSatuan(){
             axios.get('/getSatuan')
             .then((res) => {
@@ -186,6 +197,12 @@ export default{
             .catch((err) => {
                 console.log(err)
             })
+        }
+
+        function setNominalZakatMaal(nisab){
+            let nisabReplace = ''
+            nisabReplace = nisab.replace(/\./g, '')
+            nominal.value = (nisabReplace / 100) * 2.5 
         }
 
         function setBeratBeras(jumlah){
@@ -223,6 +240,10 @@ export default{
             nisabZakat.value = value;
         }
 
+        const formatRupiah = (val) => {
+            return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        }
+
         watch(nominal, (newValue) => {
             donasi.nominal = newValue.toString().replace(/\./g, ''); // Remove dots for the actual value
         });
@@ -246,7 +267,10 @@ export default{
             formatInput,
             numOnly,
             isMinimalNisabZakat,
-            formatInputNisabZakat
+            formatInputNisabZakat,
+            getSatuanEmas,
+            formatRupiah,
+            setNominalZakatMaal
         }
     }
 }

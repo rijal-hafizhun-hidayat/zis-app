@@ -6,15 +6,13 @@ use App\Models\Shadaqah;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 
 class ShadaqahController extends Controller
 {
     public function index(Request $request){
         $shadaqahs = $this->setQueryShadaqah($request->filter);
         return Inertia::render('Shadaqah/Index', [
-            'shadaqahs' => $shadaqahs->latest()->get(),
-            'total' => $shadaqahs->sum('nominal')
+            'shadaqahs' => $shadaqahs->latest()->get()
         ]);
     }
 
@@ -55,6 +53,22 @@ class ShadaqahController extends Controller
         return $this->responseApi(true, 'Berhasil', 'berhasil hapus data', 200);
     }
 
+    public function getBarangShadaqah(){
+        try {
+            $shadaqah = Shadaqah::all();
+            return $this->sendResponse($shadaqah, 200);
+        } catch (\Throwable $th) {
+            return $this->sendResponse($th, 404);
+        }
+    }
+
+    private function sendResponse($data, $code){
+        $response = [
+            'data' => $data
+        ];
+        return response()->json($response, $code);     
+    }
+
     private function setQueryShadaqah($request){
         $queryShadaqah = DB::table('shadaqah');
         if(!empty($request)){
@@ -63,9 +77,6 @@ class ShadaqahController extends Controller
             }
             if(!empty($request['bulan'])){
                 $queryShadaqah->where('bulan', $request['bulan']);
-            }
-            if(!empty($request['jenis_bantuan'])){
-                $queryShadaqah->where('jenis_bantuan', $request['jenis_bantuan']);
             }
         }
                 
@@ -111,7 +122,6 @@ class ShadaqahController extends Controller
                 'nama_donatur' => 'required|string',
                 'nomor_hp' => 'required|numeric|min_digits:10|max_digits:13',
                 'jenis_bantuan' => 'required|string',
-                'nominal' => 'required_if:jenis_bantuan,==,Uang|nullable|numeric',
                 'keterangan' => 'required_if:jenis_bantuan,==,Barang|nullable|string',
                 'bulan' => 'numeric',
                 'bukti_pembayaran' => 'mimes:jpg,jpeg,png',
@@ -125,7 +135,6 @@ class ShadaqahController extends Controller
                 'nomor_hp.max_digits' => 'maximal nomor hp 12 digit',
                 'jenis_bantuan.required' => 'wajib diisi',
                 'jenis_bantuan.string' => 'wajib dalam bentuk teks',
-                'nominal.numeric' => 'wajib dalam bentuk angka',
                 'keterangan.string' => 'wajib dalam bentuk teks',
                 'bulan.numeric' => 'wajib dalam bentuk angka',
                 'bukti_pembayaran.mimes' => 'gambar wajib dengan format .jpg .jpeg .png',
@@ -139,7 +148,6 @@ class ShadaqahController extends Controller
                 'nama_donatur' => 'required|string',
                 'nomor_hp' => 'required|numeric|min_digits:10|max_digits:13',
                 'jenis_bantuan' => 'required|string',
-                'nominal' => 'required_if:jenis_bantuan,==,Uang|nullable|numeric',
                 'keterangan' => 'required_if:jenis_bantuan,==,Barang|nullable|string',
                 'bulan' => 'numeric',
                 'confirmed' => 'required|numeric'
@@ -152,23 +160,12 @@ class ShadaqahController extends Controller
                 'nomor_hp.max_digits' => 'maksimal nomor hp 12 digit',
                 'jenis_bantuan.required' => 'wajib diisi',
                 'jenis_bantuan.string' => 'wajib dalam bentuk teks',
-                'nominal.numeric' => 'wajib dalam bentuk angka',
                 'keterangan.string' => 'wajib dalam bentuk teks',
                 'bulan.numeric' => 'wajib dalam bentuk angka',
                 'confirmed.required' => 'wajib diisi',
                 'confirmed.numeric' => 'wajib dalam bentuk angka',
                 'required_if' => 'wajib diisi'
             ]);
-        }
-        return $this->setForm($credential);
-    }
-
-    private function setForm($credential){
-        if($credential['jenis_bantuan'] == 'Barang'){
-            $credential['nominal'] = null;
-        }
-        else{
-            $credential['keterangan'] = null;
         }
         return $credential;
     }

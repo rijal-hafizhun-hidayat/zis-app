@@ -6,7 +6,6 @@ use App\Models\Pengeluaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
-use Illuminate\Support\Facades\Storage;
 
 class PengeluaranController extends Controller
 {
@@ -14,9 +13,9 @@ class PengeluaranController extends Controller
         $pengeluaran = $this->setQueryPengeluaran($request->filter);
         return Inertia::render('Pengeluaran/Index', [
             'pengeluarans' => $pengeluaran->latest()->get(),
-            'total' => $pengeluaran->sum('nominal'),
-            'totalBeratBeras' => $pengeluaran->sum('berat_beras'),
-            'totalMustahiq' => $pengeluaran->sum('jumlah_mustahiq')
+            'total' => $pengeluaran->sum('pengeluaran.nominal'),
+            'totalBeratBeras' => $pengeluaran->sum('pengeluaran.berat_beras'),
+            'totalMustahiq' => $pengeluaran->sum('pengeluaran.jumlah_mustahiq')
         ]);
     }
 
@@ -63,16 +62,15 @@ class PengeluaranController extends Controller
     }
 
     private function setQueryPengeluaran($request){
-        $queryPengeluaran = DB::table('pengeluaran');
+        $queryPengeluaran = DB::table('pengeluaran')
+            ->join('shadaqah', 'pengeluaran.id_shadaqah', '=', 'shadaqah.id')
+            ->select('pengeluaran.*', 'shadaqah.keterangan');
         if(!empty($request)){
-            if(!empty($request['nama_donatur'])){
-                $queryPengeluaran->where('nama_donatur', 'like', '%'.$request['nama_donatur'].'%');
-            }
             if(!empty($request['bulan'])){
-                $queryPengeluaran->where('bulan', $request['bulan']);
+                $queryPengeluaran->where('pengeluaran.bulan', $request['bulan']);
             }
             if(!empty($request['jenis_dana'])){
-                $queryPengeluaran->where('jenis_dana', $request['jenis_dana']);
+                $queryPengeluaran->where('pengeluaran.jenis_dana', $request['jenis_dana']);
             }
         }
                 
@@ -118,9 +116,10 @@ class PengeluaranController extends Controller
                 'nama_organisasi' => 'nullable|string',
                 'kebutuhan' => 'required|string',
                 'jenis_dana' => 'required|string',
-                'berat_beras' => 'required_if:nominal,false|nullable|decimal:0,2',
+                'berat_beras' => 'exclude_if:jenis_dana,Shadaqah|required_if:nominal,false|nullable|decimal:0,2',
+                'id_shadaqah' => 'exclude_unless:jenis_dana,Shadaqah|required|numeric',
                 'jumlah_mustahiq' => 'nullable|numeric',
-                'nominal' => 'required_if:berat_beras,false|nullable|numeric',
+                'nominal' => 'exclude_if:jenis_dana,Shadaqah|required_if:berat_beras,false|nullable|numeric',
                 'bulan' => 'numeric',
                 'bukti_pengeluaran' => 'mimes:jpg,jpeg,png',
                 'confirmed' => 'required|numeric|max_digits:1'
@@ -146,9 +145,10 @@ class PengeluaranController extends Controller
                 'nama_organisasi' => 'nullable|string',
                 'kebutuhan' => 'required|string',
                 'jenis_dana' => 'required|string',
-                'berat_beras' => 'required_without:nominal|nullable|decimal:0,2',
+                'berat_beras' => 'exclude_if:jenis_dana,Shadaqah|required_without:nominal|nullable|decimal:0,2',
+                'id_shadaqah' => 'exclude_unless:jenis_dana,Shadaqah|required|numeric',
                 'jumlah_mustahiq' => 'nullable|numeric',
-                'nominal' => 'required_without:berat_beras|nullable|numeric',
+                'nominal' => 'exclude_if:jenis_dana,Shadaqah|required_without:berat_beras|nullable|numeric',
                 'bulan' => 'numeric',
                 'confirmed' => 'required|numeric|max_digits:1'
             ], [

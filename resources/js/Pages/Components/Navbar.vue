@@ -14,7 +14,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><Link href="/zakat" class="dropdown-item">Data</Link></li>
-                            <li><Link href="/sha" class="dropdown-item">Sha'</Link></li>
+                            <li><Link href="/sha" class="dropdown-item">Satuan</Link></li>
                             <li><Link @click="laporanZakat()" class="dropdown-item">Laporan</Link></li>
                             <!-- <li><a @click="laporanZakat()" class="dropdown-item">Laporan</a></li> -->
                             <!-- <li><a class="dropdown-item" href="#">Print</a></li> -->

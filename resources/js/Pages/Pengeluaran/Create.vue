@@ -10,7 +10,7 @@
                         <div class="card-body">
                             <form @submit.prevent="submit()" class="mt-3">
                                 <div class="mb-3">
-                                    <label for="nama" class="form-label">Keterengan</label>
+                                    <label for="nama" class="form-label">Keterengan Pengeluaran</label>
                                     <input type="text" v-model="form.kebutuhan" class="form-control" id="nama" :class="{ 'is-invalid': validation.kebutuhan }">
                                     <div v-if="validation.kebutuhan" class="invalid-feedback">
                                         {{ validation.kebutuhan[0] }}
@@ -28,6 +28,13 @@
                                         {{ validation.jenis_dana[0] }}
                                     </div>
                                 </div>
+                                <div v-if="form.jenis_dana == 'Shadaqah'" class="mb-3">
+                                    <label for="barang" class="form-label">Pilih Barang</label>
+                                    <select class="form-select" id="barang" v-model="form.id_shadaqah">
+                                        <option disabled selected value="">-- Pilih --</option>
+                                        <option  v-for="barang in barangs" :key="barang.id" :value="barang.id">{{ barang.keterangan }}</option>
+                                    </select>
+                                </div>
                                 <div v-if="form.jenis_dana == 'Zakat'" class="mb-3">
                                     <label for="nama_organisasi" class="form-label">Nama Mustahik</label>
                                     <input type="text" v-model="form.nama_organisasi" class="form-control" id="nama_organisasi" :class="{ 'is-invalid': validation.nama_organisasi }">
@@ -35,7 +42,7 @@
                                         {{ validation.nama_organisasi[0] }}
                                     </div>
                                 </div>
-                                <div class="mb-3">
+                                <div v-if="form.jenis_dana == 'Zakat' || form.jenis_dana == 'Infaq'" class="mb-3">
                                     <label for="berat_beras">Berat Beras / kg (Jika ada penyaluran beras)</label>
                                     <div class="input-group">
                                         <input type="text" class="form-control" v-model="form.berat_beras" v-on:keypress="numOnly()" id="berat_beras" aria-describedby="basic-addon2" :class="{ 'is-invalid': validation.berat_beras }">
@@ -52,7 +59,7 @@
                                         {{ validation.jumlah_mustahiq[0] }}
                                     </div>
                                 </div>
-                                <div class="mb-3">
+                                <div v-if="form.jenis_dana == 'Zakat' || form.jenis_dana == 'Infaq'" class="mb-3">
                                     <label for="nominal" class="form-label">Nominal</label>
                                     <div class="input-group">
                                         <span class="input-group-text" id="basic-addon1">Rp.</span>
@@ -86,7 +93,7 @@ import Footer from '../Components/Footer.vue';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import { router, Head } from '@inertiajs/vue3'
-import { reactive, ref, watch } from 'vue';
+import { reactive, ref, watch, onMounted } from 'vue';
 import NProgress from 'nprogress';
 export default{
     components: { Navbar, Footer, Head },
@@ -95,6 +102,7 @@ export default{
             kebutuhan: '',
             nama_organisasi: '',
             jenis_dana: '',
+            id_shadaqah: '',
             nominal: '',
             berat_beras: '',
             jumlah_mustahiq: '',
@@ -102,7 +110,22 @@ export default{
         })
 
         const validation = ref([])
+        const barangs = ref([])
         const nominal = ref('')
+
+        onMounted(() => {
+            getBarangShadaqah()
+        })
+
+        function getBarangShadaqah(){
+            axios.get('/getBarangShadaqah')
+            .then((res) => {
+                barangs.value = res.data.data
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+        }
 
         function submit(){
             NProgress.start()
@@ -111,6 +134,7 @@ export default{
                 nama_organisasi: form.nama_organisasi,
                 kebutuhan: form.kebutuhan,
                 jenis_dana: form.jenis_dana,
+                id_shadaqah: form.id_shadaqah,
                 nominal: form.nominal,
                 bulan: d.getMonth(),
                 berat_beras: form.berat_beras,
@@ -163,9 +187,11 @@ export default{
             form,
             validation,
             nominal,
+            barangs,
             submit,
             numOnly,
-            formatInput
+            formatInput,
+            getBarangShadaqah
         }
     }
 }

@@ -56,6 +56,15 @@ class DonasiController extends Controller
         return response()->json($response, 200);
     }
 
+    public function getSatuanEmas(){
+        $response = [
+            'status' => true,
+            'data' => Sha::where('id', 3)->first(),
+            'code' => 200
+        ];
+        return response()->json($response, 200);
+    }
+
     public function getNominal($id){
         $response = [
             'status' => true,

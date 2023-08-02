@@ -15,13 +15,6 @@
                             </select>
                         </div>
                         <div class="ms-3">
-                            <select v-model="filter.jenis_bantuan" class="form-select" aria-label="Default select example">
-                                <option selected disabled value="">-- Pilih Jenis Bantuan --</option>
-                                <option value="Uang">Uang</option>
-                                <option value="Barang">Barang</option>
-                            </select>
-                        </div>
-                        <div class="ms-3">
                             <input type="search" v-model="filter.nama_donatur" class="form-control" placeholder="Cari Nama Donatur .....">
                         </div>
                         <div class="ms-3">
@@ -48,11 +41,9 @@
                                             <th scope="col">Nomor Hp</th>
                                             <th scope="col">Tanggal Shadaqah</th>
                                             <th scope="col">Bulan</th>
-                                            <th scope="col">Jenis Bantuan</th>
-                                            <th scope="col">Keterangan</th>
-                                            <th scrope="col">Nominal</th>
-                                            <th scope="col">Bukti Pembayaran</th>
-                                            <th scope="col">Status Pembayaran</th>
+                                            <th scope="col">Nama Barang</th>
+                                            <th scope="col">Bukti Penerimaan</th>
+                                            <th scope="col">Status</th>
                                             <th scope="col">Action</th>
                                         </tr>
                                     </thead>
@@ -63,10 +54,7 @@
                                             <td>{{ shadaqah.nomor_hp }}</td>
                                             <td>{{ timezone(shadaqah.created_at) }}</td>
                                             <td>{{ shadaqah.bulan }}</td>
-                                            <td>{{ shadaqah.jenis_bantuan }}</td>
                                             <td>{{ shadaqah.keterangan }}</td>
-                                            <td v-if="shadaqah.nominal != NULL">{{ numberWithDots(shadaqah.nominal) }}</td>
-                                            <td v-else></td>
                                             <td><Modal :image="shadaqah.bukti_pembayaran" :path="'Shadaqah'" :id="shadaqah.id"/></td>
                                             <td v-if="shadaqah.confirmed == 1"><button type="button" class="btn btn-success" disabled><i class="fa-solid fa-circle-check"></i></button></td>
                                             <td v-else><button type="button" class="btn btn-danger" disabled><i class="fa-solid fa-circle-xmark"></i></button></td>
@@ -75,13 +63,6 @@
                                                 <Link :href="`/shadaqah/${shadaqah.id}`" class="btn btn-warning me-2"><i class="fa-solid fa-pen-to-square"></i></Link>
                                                 <button class="btn btn-success" @click="confirmed(shadaqah.id)"><i class="fa-solid fa-stamp"></i></button>
                                             </td>
-                                        </tr>
-                                        <tr>
-                                            <th colspan="5">Total</th>
-                                            <th>{{ numberWithDots(total) }}</th>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -115,7 +96,6 @@ export default{
         const searchQuery = ref('')
         const filter = reactive({
             bulan: '',
-            jenis_bantuan: '',
             nama_donatur: ''
         })
 

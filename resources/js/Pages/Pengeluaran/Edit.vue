@@ -28,6 +28,13 @@
                                         {{ validation.jenis_dana[0] }}
                                     </div>
                                 </div>
+                                <div v-if="form.jenis_dana == 'Shadaqah'" class="mb-3">
+                                    <label for="barang" class="form-label">Pilih Barang</label>
+                                    <select class="form-select" id="barang" v-model="form.id_shadaqah">
+                                        <option disabled value="">-- Pilih --</option>
+                                        <option  v-for="barang in barangs" :value="barang.id">{{ barang.keterangan }}</option>
+                                    </select>
+                                </div>
                                 <div v-if="form.jenis_dana == 'Zakat'" class="mb-3">
                                     <label for="nama_organisasi" class="form-label">Nama Mustahik</label>
                                     <input type="text" v-model="form.nama_organisasi" class="form-control" id="nama_organisasi" :class="{ 'is-invalid': validation.nama_organisasi }">
@@ -35,7 +42,7 @@
                                         {{ validation.nama_organisasi[0] }}
                                     </div>
                                 </div>
-                                <div class="mb-3">
+                                <div v-if="form.jenis_dana == 'Zakat' || form.jenis_dana == 'Infaq'" class="mb-3">
                                     <label class="form-label" for="berat_beras">Berat Beras / kg (Jika ada penyaluran beras)</label>
                                     <div class="input-group has-validation">
                                         <input type="text" class="form-control" v-model="form.berat_beras" v-on:keypress="numOnly()" id="berat_beras" aria-describedby="basic-addon2" :class="{ 'is-invalid': validation.berat_beras }">
@@ -54,7 +61,7 @@
                                         {{ validation.jumlah_mustahiq[0] }}
                                     </div>
                                 </div>
-                                <div class="mb-3">
+                                <div v-if="form.jenis_dana == 'Zakat' || form.jenis_dana == 'Infaq'" class="mb-3">
                                     <label for="nominal" class="form-label">Nominal</label>
                                     <div class="input-group">
                                         <span class="input-group-text" id="basic-addon1">Rp.</span>
@@ -92,7 +99,7 @@ import Modal from '../Components/Modal.vue';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { router, Head } from '@inertiajs/vue3'
-import { reactive, ref, watch } from 'vue';
+import { reactive, ref, watch, onMounted } from 'vue';
 import NProgress from 'nprogress';
 export default{
     components: { Navbar, Footer, Modal, Head },
@@ -100,6 +107,7 @@ export default{
         pengeluaran: Object
     },
     setup(props){
+        console.log(props.pengeluaran)
         const form = reactive({
             id: props.pengeluaran.id,
             kebutuhan: props.pengeluaran.kebutuhan,
@@ -109,13 +117,30 @@ export default{
             jumlah_mustahiq: props.pengeluaran.jumlah_mustahiq === null ? '' : props.pengeluaran.jumlah_mustahiq,
             nominal: props.pengeluaran.nominal === null ? '' : numberWithDots(props.pengeluaran.nominal),
             confirmed: props.pengeluaran.confirmed,
+            id_shadaqah: props.pengeluaran.id_shadaqah,
             old_bukti_pengeluaran: props.pengeluaran.bukti_pengeluaran,
             new_bukti_pengeluaran: ''
         })
 
         const validation = ref([])
         const nominal = ref('')
+        const barangs = ref([])
         nominal.value = form.nominal
+
+        onMounted(() => {
+            getBarangShadaqah()
+        })
+
+        function getBarangShadaqah(){
+            axios.get('/getBarangShadaqah')
+            .then((res) => {
+
+                barangs.value = res.data.data
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+        }
 
         function submit(){
             NProgress.start()
@@ -155,6 +180,7 @@ export default{
             data.append('kebutuhan', form.kebutuhan)
             data.append('nominal', form.nominal == null ? '' : form.nominal)
             data.append('jenis_dana', form.jenis_dana)
+            data.append('id_shadaqah', form.id_shadaqah)
             data.append('nama_organisasi', form.nama_organisasi)
             data.append('berat_beras', form.berat_beras)
             data.append('jumlah_mustahiq', form.jumlah_mustahiq)
@@ -184,11 +210,13 @@ export default{
             form,
             validation,
             nominal,
+            barangs,
             submit,
             numOnly,
             dataAppend,
             formatInput,
-            numberWithDots
+            numberWithDots,
+            getBarangShadaqah
         }
     }
 }

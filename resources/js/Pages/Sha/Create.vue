@@ -6,12 +6,12 @@
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center">
-                            <div>Tambah Sha'</div>
+                            <div>Tambah Satuan</div>
                         </div>
                         <div class="card-body">
                             <form @submit.prevent="submit()">
                                 <div class="mb-3">
-                                    <label for="makanan-pokok" class="form-label">Nama Sha'</label>
+                                    <label for="makanan-pokok" class="form-label">Nama Satuan</label>
                                     <input type="text" class="form-control" v-model="sha.nama" id="makanan-pokok" :class="{ 'is-invalid': validation.nama }" />
                                     <div v-if="validation.nama" class="invalid-feedback">
                                         {{ validation.nama[0] }}
