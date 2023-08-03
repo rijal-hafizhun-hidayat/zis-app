@@ -16,6 +16,7 @@
                             <li><Link href="/zakat" class="dropdown-item">Data</Link></li>
                             <li><Link href="/sha" class="dropdown-item">Satuan</Link></li>
                             <li><Link @click="laporanZakat()" class="dropdown-item">Laporan</Link></li>
+                            <li class="dropdown-item" @click="routeAsnaf()">Asnaf</li>
                             <!-- <li><a @click="laporanZakat()" class="dropdown-item">Laporan</a></li> -->
                             <!-- <li><a class="dropdown-item" href="#">Print</a></li> -->
                         </ul>
@@ -112,13 +113,18 @@ export default {
             router.get('/laporan/shadaqah')
         }
 
+        function routeAsnaf(){
+            router.get('/asnaf')
+        }
+
         return {
             user,
             logout,
             laporanZakat,
             laporanPengeluaran,
             laporanInfaq,
-            laporanShadaqah
+            laporanShadaqah,
+            routeAsnaf
         }    
     },
 }

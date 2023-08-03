@@ -21,6 +21,7 @@ use App\Http\Controllers\PengeluaranController;
 use App\Http\Controllers\PengeluaranLaporanController;
 use App\Http\Controllers\DonasiController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\AsnafController;
 use App\Models\Infaq;
 use FontLib\Table\Type\name;
 use Illuminate\Support\Facades\Artisan;
@@ -137,6 +138,10 @@ Route::middleware(['isLogin'])->group(function() {
         //ZAKAT LAPORAN
         Route::get('/laporan/zakat', [ZakatLaporanController::class, 'index'])->name('zakat.laporan');
         Route::post('/laporan/zakat', [ZakatLaporanController::class, 'generateLaporan'])->name('zakat.generateLaporan');
+        
+        //ASNAF
+        Route::get('/asnaf', [AsnafController::class, 'index'])->name('asnaf.index');
+        Route::get('/asnaf/add', [AsnafController::class, 'create'])->name('asnaf.create');
 
         //API SHA
         Route::post('/sha', [ShaController::class, 'store'])->name('sha.store');
@@ -163,6 +168,9 @@ Route::middleware(['isLogin'])->group(function() {
         Route::get('/getNominalSha/{id}', [ZakatController::class, 'getNominalSha'])->name('getNominalSha');
         Route::post('/searchZakat', [ZakatController::class, 'searchZakat'])->name('searchZakat');
         Route::get('/testGrabRequest', [ZakatController::class, 'testGrabReques'])->name('testGrabReques');
+
+        //API ASNAF
+        Route::post('/asnaf', [AsnafController::class, 'store'])->name('asnaf.store');
     });
 
     Route::middleware(['IsAdminBendaharaPemeliharaan'])->group(function(){
