@@ -79,7 +79,6 @@
                     </div>
                 </div>
             </div>
-            <!-- <button :disabled="isMinimalNisabZakat(donasi.nisab_zakat)">Kirim Donasi</button> -->
             <button>Kirim Donasi</button>
         </form>
     </div>

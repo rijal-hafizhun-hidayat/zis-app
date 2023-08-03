@@ -59,7 +59,7 @@
                                             <td>{{ pengeluaran.nama_organisasi }}</td>
                                             <td>{{ pengeluaran.kebutuhan }}</td>
                                             <td>{{ pengeluaran.jenis_dana }}</td>
-                                            <td>{{ pengeluaran.keterangan }}</td>
+                                            <td>{{ pengeluaran.nama_barang }}</td>
                                             <td>{{ pengeluaran.berat_beras }}</td>
                                             <td>{{ pengeluaran.jumlah_mustahiq }}</td>
                                             <td v-if="pengeluaran.nominal">{{ numberWithDots(pengeluaran.nominal) }}</td>

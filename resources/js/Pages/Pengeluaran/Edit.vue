@@ -30,9 +30,9 @@
                                 </div>
                                 <div v-if="form.jenis_dana == 'Shadaqah'" class="mb-3">
                                     <label for="barang" class="form-label">Pilih Barang</label>
-                                    <select class="form-select" id="barang" v-model="form.id_shadaqah">
+                                    <select class="form-select" id="barang" v-model="form.nama_barang">
                                         <option disabled value="">-- Pilih --</option>
-                                        <option  v-for="barang in barangs" :value="barang.id">{{ barang.keterangan }}</option>
+                                        <option  v-for="barang in barangs" :key="barang.id">{{ barang.keterangan }}</option>
                                     </select>
                                 </div>
                                 <div v-if="form.jenis_dana == 'Zakat'" class="mb-3">
@@ -117,7 +117,7 @@ export default{
             jumlah_mustahiq: props.pengeluaran.jumlah_mustahiq === null ? '' : props.pengeluaran.jumlah_mustahiq,
             nominal: props.pengeluaran.nominal === null ? '' : numberWithDots(props.pengeluaran.nominal),
             confirmed: props.pengeluaran.confirmed,
-            id_shadaqah: props.pengeluaran.id_shadaqah,
+            nama_barang: props.pengeluaran.nama_barang,
             old_bukti_pengeluaran: props.pengeluaran.bukti_pengeluaran,
             new_bukti_pengeluaran: ''
         })
@@ -180,7 +180,7 @@ export default{
             data.append('kebutuhan', form.kebutuhan)
             data.append('nominal', form.nominal == null ? '' : form.nominal)
             data.append('jenis_dana', form.jenis_dana)
-            data.append('id_shadaqah', form.id_shadaqah)
+            data.append('nama_barang', form.nama_barang)
             data.append('nama_organisasi', form.nama_organisasi)
             data.append('berat_beras', form.berat_beras)
             data.append('jumlah_mustahiq', form.jumlah_mustahiq)

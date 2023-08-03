@@ -43,7 +43,8 @@
                                             <th scope="col">Bulan</th>
                                             <th scope="col">Nama Barang</th>
                                             <th scope="col">Bukti Penerimaan</th>
-                                            <th scope="col">Status</th>
+                                            <th scope="col">Status Penerimaan</th>
+                                            <th scope="col">Status Penyaluran</th>
                                             <th scope="col">Action</th>
                                         </tr>
                                     </thead>
@@ -57,6 +58,8 @@
                                             <td>{{ shadaqah.keterangan }}</td>
                                             <td><Modal :image="shadaqah.bukti_pembayaran" :path="'Shadaqah'" :id="shadaqah.id"/></td>
                                             <td v-if="shadaqah.confirmed == 1"><button type="button" class="btn btn-success" disabled><i class="fa-solid fa-circle-check"></i></button></td>
+                                            <td v-else><button type="button" class="btn btn-danger" disabled><i class="fa-solid fa-circle-xmark"></i></button></td>
+                                            <td v-if="shadaqah.is_pengeluaran == 1"><button type="button" class="btn btn-success" disabled><i class="fa-solid fa-circle-check"></i></button></td>
                                             <td v-else><button type="button" class="btn btn-danger" disabled><i class="fa-solid fa-circle-xmark"></i></button></td>
                                             <td>
                                                 <Link as="button" @click="destroy(shadaqah.id)" class="btn btn-danger me-2"><i class="fa-solid fa-trash"></i></Link>

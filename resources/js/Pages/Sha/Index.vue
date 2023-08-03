@@ -1,5 +1,5 @@
 <template>
-    <Head title="Sha'" />
+    <Head title="Satuan" />
     <NavBar />
     <main class="py-5">
         <div class="container">

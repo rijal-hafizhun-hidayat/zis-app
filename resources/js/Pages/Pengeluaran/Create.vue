@@ -30,9 +30,9 @@
                                 </div>
                                 <div v-if="form.jenis_dana == 'Shadaqah'" class="mb-3">
                                     <label for="barang" class="form-label">Pilih Barang</label>
-                                    <select class="form-select" id="barang" v-model="form.id_shadaqah">
+                                    <select class="form-select" id="barang" v-model="form.nama_barang">
                                         <option disabled selected value="">-- Pilih --</option>
-                                        <option  v-for="barang in barangs" :key="barang.id" :value="barang.id">{{ barang.keterangan }}</option>
+                                        <option  v-for="barang in barangs" :key="barang.id">{{ barang.keterangan }}</option>
                                     </select>
                                 </div>
                                 <div v-if="form.jenis_dana == 'Zakat'" class="mb-3">
@@ -102,7 +102,7 @@ export default{
             kebutuhan: '',
             nama_organisasi: '',
             jenis_dana: '',
-            id_shadaqah: '',
+            nama_barang: '',
             nominal: '',
             berat_beras: '',
             jumlah_mustahiq: '',
@@ -134,7 +134,7 @@ export default{
                 nama_organisasi: form.nama_organisasi,
                 kebutuhan: form.kebutuhan,
                 jenis_dana: form.jenis_dana,
-                id_shadaqah: form.id_shadaqah,
+                nama_barang: form.nama_barang,
                 nominal: form.nominal,
                 bulan: d.getMonth(),
                 berat_beras: form.berat_beras,

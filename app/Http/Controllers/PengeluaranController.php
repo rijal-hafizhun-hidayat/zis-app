@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pengeluaran;
+use App\Models\Shadaqah;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -13,9 +14,9 @@ class PengeluaranController extends Controller
         $pengeluaran = $this->setQueryPengeluaran($request->filter);
         return Inertia::render('Pengeluaran/Index', [
             'pengeluarans' => $pengeluaran->latest()->get(),
-            'total' => $pengeluaran->sum('pengeluaran.nominal'),
-            'totalBeratBeras' => $pengeluaran->sum('pengeluaran.berat_beras'),
-            'totalMustahiq' => $pengeluaran->sum('pengeluaran.jumlah_mustahiq')
+            'total' => $pengeluaran->sum('nominal'),
+            'totalBeratBeras' => $pengeluaran->sum('berat_beras'),
+            'totalMustahiq' => $pengeluaran->sum('jumlah_mustahiq')
         ]);
     }
 
@@ -31,14 +32,21 @@ class PengeluaranController extends Controller
 
     public function store(){
         $credential = $this->formRequest();
+        //dd($credential);
         $credential['bulan'] = $this->setMonth($credential['bulan']);
         Pengeluaran::create($credential);
+        if($credential['jenis_dana'] == 'Shadaqah'){
+            $this->setIsPengeluaranShadaqah($credential['nama_barang'], 1);
+        }
         return $this->responseApi(true, 'Berhasil', 'berhasil tambah data', 200);
     }
 
     public function destroy($id){
         $this->destroyImage($id);
-        Pengeluaran::destroy($id);
+        // Pengeluaran::destroy($id);
+        $pengeluaran = Pengeluaran::find($id);
+        dd(is_null($pengeluaran->id_shadaqah));
+        //$flight->delete();
         return $this->responseApi(true, 'Berhasil', 'berhasil hapus data', 200);
     }
 
@@ -61,16 +69,23 @@ class PengeluaranController extends Controller
         return $this->responseApi(true, 'Berhasil', 'konfirmasi pengeluaran berhasil', 200);
     }
 
+    private function setIsPengeluaranShadaqah($keterangan, $status){
+        try {
+            Shadaqah::where('keterangan', $keterangan)->update(['is_pengeluaran' => $status]);
+            return true;
+        } catch (Exception $e) {
+            return false;            
+        }
+    }
+
     private function setQueryPengeluaran($request){
-        $queryPengeluaran = DB::table('pengeluaran')
-            ->join('shadaqah', 'pengeluaran.id_shadaqah', '=', 'shadaqah.id')
-            ->select('pengeluaran.*', 'shadaqah.keterangan');
+        $queryPengeluaran = DB::table('pengeluaran');
         if(!empty($request)){
             if(!empty($request['bulan'])){
-                $queryPengeluaran->where('pengeluaran.bulan', $request['bulan']);
+                $queryPengeluaran->where('bulan', $request['bulan']);
             }
             if(!empty($request['jenis_dana'])){
-                $queryPengeluaran->where('pengeluaran.jenis_dana', $request['jenis_dana']);
+                $queryPengeluaran->where('jenis_dana', $request['jenis_dana']);
             }
         }
                 
@@ -117,7 +132,7 @@ class PengeluaranController extends Controller
                 'kebutuhan' => 'required|string',
                 'jenis_dana' => 'required|string',
                 'berat_beras' => 'exclude_if:jenis_dana,Shadaqah|required_if:nominal,false|nullable|decimal:0,2',
-                'id_shadaqah' => 'exclude_unless:jenis_dana,Shadaqah|required|numeric',
+                'nama_barang' => 'exclude_unless:jenis_dana,Shadaqah|required|string',
                 'jumlah_mustahiq' => 'nullable|numeric',
                 'nominal' => 'exclude_if:jenis_dana,Shadaqah|required_if:berat_beras,false|nullable|numeric',
                 'bulan' => 'numeric',
@@ -146,7 +161,7 @@ class PengeluaranController extends Controller
                 'kebutuhan' => 'required|string',
                 'jenis_dana' => 'required|string',
                 'berat_beras' => 'exclude_if:jenis_dana,Shadaqah|required_without:nominal|nullable|decimal:0,2',
-                'id_shadaqah' => 'exclude_unless:jenis_dana,Shadaqah|required|numeric',
+                'nama_barang' => 'exclude_unless:jenis_dana,Shadaqah|required|string',
                 'jumlah_mustahiq' => 'nullable|numeric',
                 'nominal' => 'exclude_if:jenis_dana,Shadaqah|required_without:berat_beras|nullable|numeric',
                 'bulan' => 'numeric',
