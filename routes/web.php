@@ -141,6 +141,7 @@ Route::middleware(['isLogin'])->group(function() {
         
         //ASNAF
         Route::get('/asnaf', [AsnafController::class, 'index'])->name('asnaf.index');
+        Route::get('/asnaf/{id}', [AsnafController::class, 'show'])->name('asnaf.show');
         Route::get('/asnaf/add', [AsnafController::class, 'create'])->name('asnaf.create');
 
         //API SHA
@@ -171,6 +172,9 @@ Route::middleware(['isLogin'])->group(function() {
 
         //API ASNAF
         Route::post('/asnaf', [AsnafController::class, 'store'])->name('asnaf.store');
+        Route::delete('/asnaf/{id}', [AsnafController::class, 'destroy'])->name('asnaf.destroy');
+        Route::get('/getAsnafById/{id}', [AsnafController::class, 'getAsnafById'])->name('asnaf.getAsnafById');
+        Route::put('/asnaf/{id}', [AsnafController::class, 'update'])->name('asnaf.update');
     });
 
     Route::middleware(['IsAdminBendaharaPemeliharaan'])->group(function(){
