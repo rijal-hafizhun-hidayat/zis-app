@@ -31,9 +31,16 @@ class DonasiController extends Controller
         return response()->json($response, 200);
     }
 
-    public function store(){
+    public function store(Request $request){
         $credential = $this->formRequest();
         if($credential['jenis_donasi'] == 'Zakat Fitrah' || $credential['jenis_donasi'] == 'Zakat Maal'){
+            if($credential['jenis_donasi'] == 'Zakat Maal'){
+                $nisabZakat = $this->getNisabZakat();
+                if($credential['nisab_zakat'] < $nisabZakat){
+                    return $this->responseStoreDonasi(404, 'gagal', 'belum mencapai nishab zakat');
+                }
+            }
+            $this->storeZakatAsnaf($credential);
             $this->storeZakat($credential);
             return $this->responseStoreDonasi(200, 'berhasil', 'Terima Kasih Telah Menunaikan '.$credential['jenis_donasi']);
         }
@@ -72,6 +79,15 @@ class DonasiController extends Controller
             'code' => 200
         ];
         return response()->json($response, 200);
+    }
+
+    private function getNisabZakat(){
+        $sha = Sha::where('nama', 'emas')->first();
+        return $sha->harga;
+    }
+
+    private function storeZakatAsnaf($credential){
+        $pembagianZakatAsnaf = ($credential['nominal'] / 100) * 12.5;
     }
 
     private function storeZakat($credential){
@@ -136,6 +152,7 @@ class DonasiController extends Controller
             'sha_id' => 'nullable|numeric',
             'jumlah' => 'nullable|numeric',
             'nominal' => 'nullable|numeric',
+            'nisab_zakat' => 'nullable|numeric',
             'berat_beras' => 'nullable|decimal:0,2',
             'bulan' => 'required|numeric',
             'metode_pembayaran' => 'required|string',

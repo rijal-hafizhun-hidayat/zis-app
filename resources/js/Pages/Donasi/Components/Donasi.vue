@@ -139,6 +139,7 @@ export default{
                 sha_id: donasi.satuan,
                 jumlah: donasi.jumlah,
                 nominal: donasi.nominal,
+                nisab_zakat: donasi.nisab_zakat,
                 berat_beras: donasi.berat_beras,
                 metode_pembayaran: donasi.metode_pembayaran,
                 bulan: month,
@@ -156,10 +157,19 @@ export default{
                     title: res.data.title,
                     text: res.data.text
                 })
-                NProgress.done()
             })
             .catch((err) => {
-                validation.value = err.response.data.errors
+                if(err.response.data.errors != null){
+                    validation.value = err.response.data.errors
+                }
+                else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: err.response.data.title,
+                        text: err.response.data.text
+                    })
+                }
+                
             })
             .finally(() => {
                 NProgress.done()
