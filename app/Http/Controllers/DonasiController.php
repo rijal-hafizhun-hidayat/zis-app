@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Asnaf;
 use App\Models\Infaq;
 use App\Models\Pengeluaran;
 use App\Models\Sha;
@@ -31,7 +32,7 @@ class DonasiController extends Controller
         return response()->json($response, 200);
     }
 
-    public function store(Request $request){
+    public function store(){
         $credential = $this->formRequest();
         if($credential['jenis_donasi'] == 'Zakat Fitrah' || $credential['jenis_donasi'] == 'Zakat Maal'){
             if($credential['jenis_donasi'] == 'Zakat Maal'){
@@ -88,6 +89,13 @@ class DonasiController extends Controller
 
     private function storeZakatAsnaf($credential){
         $pembagianZakatAsnaf = ($credential['nominal'] / 100) * 12.5;
+        //dd($pembagianZakatAsnaf);
+        for ($i=1; $i <=8; $i++) { 
+            $asnaf = Asnaf::find($i);
+            $asnaf->total = $asnaf->total + $pembagianZakatAsnaf;
+            $asnaf->save();
+        }
+        return true;
     }
 
     private function storeZakat($credential){
