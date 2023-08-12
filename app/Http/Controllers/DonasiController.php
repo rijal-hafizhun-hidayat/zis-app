@@ -8,7 +8,6 @@ use App\Models\Pengeluaran;
 use App\Models\Sha;
 use App\Models\Shadaqah;
 use App\Models\Zakat;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class DonasiController extends Controller
@@ -89,7 +88,6 @@ class DonasiController extends Controller
 
     private function storeZakatAsnaf($credential){
         $pembagianZakatAsnaf = ($credential['nominal'] / 100) * 12.5;
-        //dd($pembagianZakatAsnaf);
         for ($i=1; $i <=8; $i++) { 
             $asnaf = Asnaf::find($i);
             $asnaf->total = $asnaf->total + $pembagianZakatAsnaf;

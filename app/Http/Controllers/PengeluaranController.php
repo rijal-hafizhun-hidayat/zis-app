@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Asnaf;
 use App\Models\Pengeluaran;
 use App\Models\Shadaqah;
 use Illuminate\Http\Request;
@@ -21,7 +22,9 @@ class PengeluaranController extends Controller
     }
 
     public function create(){
-        return Inertia::render('Pengeluaran/Create');
+        return Inertia::render('Pengeluaran/Create', [
+            'asnafs' => Asnaf::all()
+        ]);
     }
 
     public function show($id){
@@ -32,21 +35,26 @@ class PengeluaranController extends Controller
 
     public function store(){
         $credential = $this->formRequest();
-        //dd($credential);
         $credential['bulan'] = $this->setMonth($credential['bulan']);
-        Pengeluaran::create($credential);
         if($credential['jenis_dana'] == 'Shadaqah'){
+            Pengeluaran::create($credential);
             $this->setIsPengeluaranShadaqah($credential['nama_barang'], 1);
+        }
+        else if($credential['jenis_dana'] == 'Zakat'){
+            if($this->checkIfTotalNotMinus($credential) == false){
+                return $this->responseApi(false, 'gagal', 'dana tidak cukup', 404); 
+            }
+            else{
+                $this->storePengeluaranZakat($credential);
+            }
         }
         return $this->responseApi(true, 'Berhasil', 'berhasil tambah data', 200);
     }
 
     public function destroy($id){
         $this->destroyImage($id);
-        // Pengeluaran::destroy($id);
         $pengeluaran = Pengeluaran::find($id);
-        dd(is_null($pengeluaran->id_shadaqah));
-        //$flight->delete();
+        $pengeluaran->delete();
         return $this->responseApi(true, 'Berhasil', 'berhasil hapus data', 200);
     }
 
@@ -69,11 +77,50 @@ class PengeluaranController extends Controller
         return $this->responseApi(true, 'Berhasil', 'konfirmasi pengeluaran berhasil', 200);
     }
 
+    private function storePengeluaranZakat($credential){
+        $this->updateTotalAsnaf($credential);
+        return $this->storePengeluaranZakatAsnafToDb($credential);
+    }
+
+    private function updateTotalAsnaf($credential){
+        try {
+            $asnaf = Asnaf::where('golongan_zakat', $credential['jenis_asnaf'])->first();
+            $asnaf->total = $asnaf->total - $credential['nominal'];
+            $asnaf->save();
+        } catch (\Throwable $th) {
+            return $this->responseApi(false, 'gagal', $th, 404);
+        }
+    }
+
+    private function storePengeluaranZakatAsnafToDb($credential){
+        return Pengeluaran::create([
+            'nama_organisasi' => $credential['nama_organisasi'],
+            'kebutuhan' => $credential['kebutuhan'],
+            'nominal' => $credential['nominal'],
+            'jenis_dana' => $credential['jenis_asnaf'],
+            'bulan' => $credential['bulan'],
+            'berat_beras' => $credential['berat_beras'],
+            'jumlah_mustahiq' => $credential['jumlah_mustahiq'],
+            'bukti_pengeluaran' => $credential['bukti_pengeluaran'],
+            'confirmed' => $credential['confirmed']
+        ]);
+    }
+
+    private function checkIfTotalNotMinus($credential){
+        $asnaf = Asnaf::where('golongan_zakat', $credential['jenis_asnaf'])->first();
+        if($asnaf->total < $credential['nominal']){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
     private function setIsPengeluaranShadaqah($keterangan, $status){
         try {
             Shadaqah::where('keterangan', $keterangan)->update(['is_pengeluaran' => $status]);
             return true;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return false;            
         }
     }
@@ -131,12 +178,13 @@ class PengeluaranController extends Controller
                 'nama_organisasi' => 'nullable|string',
                 'kebutuhan' => 'required|string',
                 'jenis_dana' => 'required|string',
+                'jenis_asnaf' => 'required_if:jenis_dana,Zakat',
                 'berat_beras' => 'exclude_if:jenis_dana,Shadaqah|required_if:nominal,false|nullable|decimal:0,2',
                 'nama_barang' => 'exclude_unless:jenis_dana,Shadaqah|required|string',
                 'jumlah_mustahiq' => 'nullable|numeric',
                 'nominal' => 'exclude_if:jenis_dana,Shadaqah|required_if:berat_beras,false|nullable|numeric',
                 'bulan' => 'numeric',
-                'bukti_pengeluaran' => 'mimes:jpg,jpeg,png',
+                'bukti_pengeluaran' => 'nullable|mimes:jpg,jpeg,png',
                 'confirmed' => 'required|numeric|max_digits:1'
             ], [
                 'nama_organisasi.string' => 'wajib dalam bentuk teks',
@@ -160,11 +208,13 @@ class PengeluaranController extends Controller
                 'nama_organisasi' => 'nullable|string',
                 'kebutuhan' => 'required|string',
                 'jenis_dana' => 'required|string',
+                'jenis_asnaf' => 'required_if:jenis_dana,Zakat',
                 'berat_beras' => 'exclude_if:jenis_dana,Shadaqah|required_without:nominal|nullable|decimal:0,2',
                 'nama_barang' => 'exclude_unless:jenis_dana,Shadaqah|required|string',
                 'jumlah_mustahiq' => 'nullable|numeric',
                 'nominal' => 'exclude_if:jenis_dana,Shadaqah|required_without:berat_beras|nullable|numeric',
                 'bulan' => 'numeric',
+                'bukti_pengeluaran' => 'nullable|mimes:jpg,jpeg,png',
                 'confirmed' => 'required|numeric|max_digits:1'
             ], [
                 'nama_organisasi.string' => 'wajib dalam bentuk teks',

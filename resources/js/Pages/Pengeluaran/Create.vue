@@ -28,6 +28,13 @@
                                         {{ validation.jenis_dana[0] }}
                                     </div>
                                 </div>
+                                <div class="mb-3" v-if="form.jenis_dana == 'Zakat'">
+                                    <label for="rekening" class="form-label">Golongan Asnaf</label>
+                                    <select class="form-select" v-model="form.jenis_asnaf" aria-label="Default select example" :class="{ 'is-invalid': validation.jenis_dana }">
+                                        <option disabled selected value="">-- pilih --</option>
+                                        <option v-for="asnaf in asnafs">{{ asnaf.golongan_zakat }}</option>
+                                    </select>
+                                </div>
                                 <div v-if="form.jenis_dana == 'Shadaqah'" class="mb-3">
                                     <label for="barang" class="form-label">Pilih Barang</label>
                                     <select class="form-select" id="barang" v-model="form.nama_barang">
@@ -97,11 +104,16 @@ import { reactive, ref, watch, onMounted } from 'vue';
 import NProgress from 'nprogress';
 export default{
     components: { Navbar, Footer, Head },
-    setup(){
+    props: {
+        asnafs: Array
+    },
+    setup(props){
+        console.log(props.asnafs)
         const form = reactive({
             kebutuhan: '',
             nama_organisasi: '',
             jenis_dana: '',
+            jenis_asnaf: '',
             nama_barang: '',
             nominal: '',
             berat_beras: '',
@@ -134,6 +146,7 @@ export default{
                 nama_organisasi: form.nama_organisasi,
                 kebutuhan: form.kebutuhan,
                 jenis_dana: form.jenis_dana,
+                jenis_asnaf: form.jenis_asnaf,
                 nama_barang: form.nama_barang,
                 nominal: form.nominal,
                 bulan: d.getMonth(),
@@ -155,8 +168,16 @@ export default{
                 router.get('/pengeluaran')
             })
             .catch((err) => {
-                validation.value = err.response.data.errors
-                console.log(validation.value)
+                if(err.response.data.errors){
+                    validation.value = err.response.data.errors
+                }
+                else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: err.response.data.title,
+                        text: err.response.data.text
+                    })
+                }
             })
             .finally(() => {
                 NProgress.done()

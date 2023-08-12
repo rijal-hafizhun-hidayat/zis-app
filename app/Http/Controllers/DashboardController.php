@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Asnaf;
 use App\Models\Infaq;
 use App\Models\Pengeluaran;
 use App\Models\Shadaqah;
@@ -18,10 +19,14 @@ class DashboardController extends Controller
     public function getSumZIS(){
         $response = [
             'status' => true,
-            'zakat' => Zakat::whereYear('created_at', date("Y"))->sum('nominal') - Pengeluaran::where([
-                ['jenis_dana', 'Zakat'],
-                ['confirmed', 1]
-            ])->sum('nominal'),
+            'zakat_fakir' => Asnaf::find(1)->total,
+            'zakat_miskin' => Asnaf::find(2)->total,
+            'zakat_amil' => Asnaf::find(3)->total,
+            'zakat_muallaf' => Asnaf::find(4)->total,
+            'zakat_riqab' => Asnaf::find(5)->total,
+            'zakat_gharimin' => Asnaf::find(6)->total,
+            'zakat_fisabilillah' => Asnaf::find(7)->total,
+            'zakat_ibnu_sabil' => Asnaf::find(8)->total,
             'infaq' => Infaq::whereYear('created_at', date("Y"))->sum('nominal') - Pengeluaran::where([
                 ['jenis_dana', 'Infaq'],
                 ['confirmed', 1]

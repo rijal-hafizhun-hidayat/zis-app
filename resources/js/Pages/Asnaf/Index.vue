@@ -14,6 +14,10 @@ const routeCreateAsnaf = () => {
     })
 }
 
+const numberWithDots = (x) => {
+    return 'Rp. ' + x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
 const show = (id) => {
     router.get(`/asnaf/${id}`)
 }
@@ -52,7 +56,7 @@ const show = (id) => {
                                         <tr v-for="(asnaf, index) in asnafs" :key="asnaf.id">
                                             <td>{{ index+1 }}</td>
                                             <td>{{ asnaf.golongan_zakat }}</td>
-                                            <td>{{ asnaf.total }}</td>
+                                            <td>{{ numberWithDots(asnaf.total) }}</td>
                                             <td>
                                                 <button @click="destroy(asnaf.id)" class="btn btn-danger me-2"><i class="fa-solid fa-trash"></i></button>
                                                 <button @click="show(asnaf.id)" class="btn btn-warning me-2"><i class="fa-solid fa-pen-to-square"></i></button>

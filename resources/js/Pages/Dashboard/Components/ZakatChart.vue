@@ -18,7 +18,7 @@ export default{
             NProgress.start()
             axios.get('/getZakat')
             .then((res) => {
-
+                console.log(res)
                 //parse total
                 let jumlah = res.data.data
                 let parseTotal = jumlah.map(a => a.total);
