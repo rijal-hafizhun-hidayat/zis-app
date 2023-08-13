@@ -55,7 +55,7 @@ class ShadaqahController extends Controller
 
     public function getBarangShadaqah(){
         try {
-            $shadaqah = Shadaqah::all();
+            $shadaqah = Shadaqah::where('is_pengeluaran', null)->get();
             return $this->sendResponse($shadaqah, 200);
         } catch (\Throwable $th) {
             return $this->sendResponse($th, 404);
