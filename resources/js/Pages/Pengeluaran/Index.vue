@@ -15,9 +15,16 @@
                         <div class="ms-3">
                             <select v-model="filter.jenis_dana" class="form-select" aria-label="Default select example">
                                 <option selected disabled value="">-- Pilih Jenis Dana --</option>
-                                <option value="Zakat">Zakat</option>
-                                <option value="Infaq">Infaq</option>
-                                <option value="Shadaqah">Shadaqah</option>
+                                <option>Zakat Fakir</option>
+                                <option>Zakat Miskin</option>
+                                <option>Zakat Amil</option>
+                                <option>Zakat mu'allaf</option>
+                                <option>Zakat Riqab</option>
+                                <option>Zakat Gharimin</option>
+                                <option>Zakat Fisabilillah</option>
+                                <option>Zakat Ibnu Sabil</option>
+                                <option>Infaq</option>
+                                <option>Shadaqah</option>
                             </select>
                         </div>
                         <div class="ms-3">
