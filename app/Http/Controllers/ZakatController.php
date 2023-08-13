@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Asnaf;
 use App\Models\Infaq;
 use App\Models\Pengeluaran;
 use App\Models\Sha;
@@ -45,7 +46,8 @@ class ZakatController extends Controller
 
     public function create(){
         return Inertia::render('Zakat/Create', [
-            'shas' => Sha::select('id', 'nama')->get()
+            'shas' => Sha::select('id', 'nama')->get(),
+            'nisab_zakat' => Sha::find(3)
         ]);
     }
 
@@ -59,6 +61,7 @@ class ZakatController extends Controller
     public function store(){
         $credential = $this->formRequest();
         $credential['bulan'] = $this->setMonth($credential['bulan']);
+        $this->setQueryToZakatAsnaf($credential);
         Zakat::create($credential);
         return $this->responseApi(true, 'Berhasil', 'berhasil tambah data', 200);
     }
@@ -104,6 +107,16 @@ class ZakatController extends Controller
 
     public function showImage($image){
         return Storage::download('image/Zakat/'.$image);
+    }
+
+    private function setQueryToZakatAsnaf($credential){
+        $pembagianZakatAsnaf = ($credential['nominal'] / 100) * 12.5;
+        for ($i=1; $i <=8; $i++) { 
+            $asnaf = Asnaf::find($i);
+            $asnaf->total = $asnaf->total + $pembagianZakatAsnaf;
+            $asnaf->save();
+        }
+        return true;
     }
 
     private function setQueryZakats($queryZakats, $request){

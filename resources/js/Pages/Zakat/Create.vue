@@ -14,7 +14,7 @@
                         <div class="card-body">
                             <form @submit.prevent="submit" ref="inputFile">
                                 <div class="mb-3">
-                                    <label for="nama_donatur" class="form-label">Nama Donatur</label>
+                                    <label for="nama_donatur" class="form-label">Nama Muzakki</label>
                                     <input type="text" v-model="zakat.nama_donatur" class="form-control" id="nama_donatur" :class="{ 'is-invalid': validation.nama_donatur }">
                                     <div v-if="validation.nama_donatur" class="invalid-feedback">
                                         {{ validation.nama_donatur[0] }}
@@ -64,13 +64,22 @@
                                             {{ validation.berat_beras[0] }}
                                         </div>
                                     </div>
-                                    
+                                </div>
+                                <div v-if="zakat.jenis_zakat == 'Zakat Maal'" class="mb-3">
+                                    <label for="nisab_zakat" class="form-label">Penghasilan /tahun</label>
+                                    <div class="input-group has-validation">
+                                        <span class="input-group-text" id="basic-addon1">Rp.</span>
+                                        <input type="text" v-model="nisabZakat" class="form-control" @change="setNominal()" v-on:keypress="NumbersOnly()" id="nisab_zakat  ">
+                                    </div>
+                                    <div v-if="nisab_zakat.harga > nisabZakat" class="alert alert-danger mt-3" role="alert">
+                                        Minimal Nishab Zakat Yaitu Rp. {{  formatRupiah(nisab_zakat.harga) }}
+                                    </div>
                                 </div>
                                 <div v-if="zakat.sha_id == 2 || zakat.jenis_zakat == 'Zakat Maal'" class="mb-3">
                                     <label for="jumlah" class="form-label">Nominal</label>
                                     <div class="input-group has-validation">
                                         <span class="input-group-text" id="basic-addon1">Rp.</span>
-                                        <input type="text" :disabled="zakat.jenis_zakat == 'Zakat Fitrah'" v-model="nominal" class="form-control" v-on:keypress="NumbersOnly()" @input="formatInput" id="jumlah" :class="{ 'is-invalid': validation.nominal }">
+                                        <input type="text" disabled v-model="nominal" class="form-control" v-on:keypress="NumbersOnly()" @input="formatInput" id="jumlah" :class="{ 'is-invalid': validation.nominal }">
                                         <div v-if="validation.nominal" class="invalid-feedback">
                                             {{ validation.nominal[0] }}
                                         </div>
@@ -105,13 +114,16 @@ export default{
     components: { NavBar, Footer, Head },
     props: {
         shas: Object,
-        errors: Object
+        errors: Object,
+        nisab_zakat: Array
     },
-    setup() {
+    setup(props) {
+        //console.log(props.nisab_zakat)
         const zakat = reactive({
             nama_donatur: '',
             nomor_hp: '',
             jenis_zakat: '',
+            nisab_zakat: '',
             sha_id: '',
             berat_beras: '',
             jumlah: '',
@@ -122,6 +134,7 @@ export default{
         const validation = ref([])
         const empty = ref(null)
         const nominal = ref('')
+        const nisabZakat = ref('')
 
         function NumbersOnly(evt) {
             evt = (evt) ? evt : window.event;
@@ -134,6 +147,7 @@ export default{
         }
 
         function submit(){
+            //console.log(zakat)
             NProgress.start()
             const d = new Date();
             let month = d.getMonth();
@@ -206,9 +220,32 @@ export default{
             nominal.value = value;
         };
 
+        function setNominal(){
+            nominal.value = (nisabZakat.value / 100) * 2.5
+            zakat.nominal = nominal.value
+        }
+
+        // const formatInputNisabZakat = (event) => {
+        //     let value = event.target.value.replace(/\./g, ''); // Remove existing dots
+        //     value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Add dots every three digits
+        //     nisabZakat.value = value;
+        // }
+
+        function formatRupiah(val){
+            return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        }
+
         watch(nominal, (newValue) => {
             zakat.nominal = newValue.toString().replace(/\./g, ''); // Remove dots for the actual value
         });
+
+        // watch(nisabZakat, (newValue) => {
+        //     nominal.value = newValue // Remove dots for the actual value
+        //     zakat.nominal = (newValue.toString().replace(/\./g, '') / 100) * 2.5
+        //     nominal.value = zakat.nominal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+        //     // nominal.value = (zakat.nisab_zakat / 100) * 2.5
+        //     // zakat.nominal = nominal.value
+        // });
 
         return {
             submit,
@@ -217,10 +254,13 @@ export default{
             setBeratBeras,
             setForm,
             formatInput,
+            formatRupiah,
+            setNominal,
             zakat,
             empty,
             validation,
-            nominal
+            nominal,
+            nisabZakat
         }
     },
 }
